@@ -11,7 +11,7 @@
 
     Plotly.d3.json(myURL, function(error, data) {
       for (var i=0; i< data.length; i++){
-        myX.push(new Date(data[i].timestamp))
+        myX.push(new Date(data[i].timestamp - 120*60*1000))
         myY.push(data[i].sensor) }
       let trace = {
         x: myX,
