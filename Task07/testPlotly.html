@@ -3,7 +3,8 @@
 	<script src="plotly-latest.min.js"></script>
 </head>
 <body>
-  <div id="tester" style="width:90%;height:450px;"></div>
+  <div id="test01" style="width:90%;height:450px;"></div>
+
   <script>
     let myURL = 'http://pi2p.site/api/temp'
     let myX = []
@@ -14,9 +15,36 @@
         myX.push(new Date(data[i].timestamp - 120*60*1000))
         myY.push(data[i].sensor) }
       let trace = {
+				//type: "scatter",
+				//mode: "lines",
+				//name: '°C',
+				line: {color: '#17BECF'},
         x: myX,
         y: myY }
-      Plotly.plot(document.getElementById('tester'), [trace]);
+			let layout = {
+				title: 'Temperature in °C',
+				xaxis: {
+    			autorange: true,
+    			rangeselector: { buttons: [
+		        {
+		          count: 1,
+		          label: '1d',
+		          step: 'day',
+		          stepmode: 'backward'
+		        },
+		        {
+		          count: 2,
+		          label: '2d',
+		          step: 'day',
+		          stepmode: 'backward'
+		        },
+		        {step: 'all'}
+		      ]},
+					rangeslider: {range: [myX[0], myX[myX.length - 1]]},
+					type: 'date'
+				}
+			}
+      Plotly.plot(document.getElementById('test01'), [trace], layout);
     });
   </script>
 </body>
