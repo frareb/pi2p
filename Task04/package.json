@@ -1,0 +1,23 @@
+{
+  "name": "task04",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "hbs": "^4.1.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pg": "^8.0.2",
+    "pg-hstore": "^2.3.3",
+    "postgresql": "0.0.1",
+    "sequelize": "^5.21.6"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}
