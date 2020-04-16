@@ -2,18 +2,21 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const Sensors = sequelize.define("Sensors", {
-		id: {
-			allowNull: false,
-			autoIncrement: true,
-			primaryKey: true,
-			type: DataTypes.INTEGER
-		},
+		gatewayId: DataTypes.INTEGER,
 		name: DataTypes.STRING,
-		location: DataTypes.INTEGER,
-		unit: DataTypes.STRING
+		unit: DataTypes.STRING,
 	}, {});
+
 	Sensors.associate = function(models) {
-		// associations can be defined here
+		Sensors.belongsTo(models.Gateways, {
+			foreignKey: "gatewayId",
+			as: "gateway",
+		});
+
+		Sensors.hasMany(models.Datas, {
+			as: "datas",
+		});
 	};
+
 	return Sensors;
 };

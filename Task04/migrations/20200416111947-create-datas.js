@@ -2,21 +2,25 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable("Sensors", {
+		return queryInterface.createTable("Datas", {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			name: {
-				type: Sequelize.STRING,
-			},
-			location: {
+			sensorId: {
 				type: Sequelize.INTEGER,
+				references: {
+					model: "Sensors",
+					key: "id",
+				},
 			},
-			unit: {
-				type: Sequelize.STRING,
+			value: {
+				type: Sequelize.REAL,
+			},
+			timestamp: {
+				type: Sequelize.DATE,
 			},
 			createdAt: {
 				allowNull: false,
@@ -29,6 +33,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable("Sensors");
+		return queryInterface.dropTable("Datas");
 	},
 };
