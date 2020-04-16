@@ -1,27 +1,27 @@
+//CAPTEUR DHT11
+//AGHILES LE 16/04/2020
+//Vcc to 5V ; Gnd to ground ; S to digital pin 8
+// lib from sketch / manage librairies "Adafruit dht sensor" (https://github.com/adafruit/DHT-sensor-library)
+
+
+
 #include <LiquidCrystal.h>             
-#include "DHT.h"                       
+#include "DHT.h"                              
 
 #define DHTPIN 8                       
 #define DHTTYPE DHT11                  
 
 LiquidCrystal lcd(1, 2, 4, 5, 6, 7);   
 DHT dht(DHTPIN, DHTTYPE);              
-
-const int yellowLED = 9;               
-const int blueLED = 10;                
-const int whiteLED = 11;               
+               
 
 void setup() {
   lcd.begin(16, 2);                    
   lcd.setCursor(0, 0);                 
-  pinMode(blueLED, OUTPUT);            
-  pinMode(yellowLED, OUTPUT);          
-  pinMode(whiteLED, OUTPUT);           
+          
 
   dht.begin();                         
-  digitalWrite(blueLED,LOW);           
-  digitalWrite(yellowLED,LOW);         
-  digitalWrite(whiteLED, LOW);         
+          
 
   lcd.print("Temperature:");           
   
@@ -30,31 +30,13 @@ void setup() {
 }
 
 void loop() {
-  delay(500);                         
-  float T = dht.readTemperature();    
-  float H = dht.readHumidity();       
+  delay(500);     //ATTENDRE 0.5 secondes avant de charger les valeurs                
+  float T = dht.readTemperature();    // lire la temperature en celsius
+  float H = dht.readHumidity();       // lire l'humidité en pourcentage
 
   if (isnan(H) && isnan(T)) {          
     lcd.print("ERROR");               
     return;                           
-  }
-
-  if(T>22){                           
-    digitalWrite(yellowLED, HIGH);    
-    digitalWrite(blueLED, LOW);       
-    digitalWrite(whiteLED, LOW);      
-    
-  }
-  else if(T<22){                      
-    digitalWrite(blueLED, HIGH);      
-    digitalWrite(yellowLED, LOW);     
-    digitalWrite(whiteLED, LOW);      
-  }
-
-  else if(T=22){                      
-    digitalWrite(whiteLED, HIGH);     
-    digitalWrite(yellowLED, LOW);     
-    digitalWrite(blueLED, LOW);       
   }
 
   lcd.setCursor(12, 0);               
