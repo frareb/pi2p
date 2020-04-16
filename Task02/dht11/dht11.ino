@@ -1,6 +1,6 @@
 //CAPTEUR DHT11
 //AGHILES LE 16/04/2020
-//Vcc to 5V ; Gnd to ground ; S to digital pin 8
+//Vcc to 5V ;Gnd to ground ; S to digital pin 8
 // lib from sketch / manage librairies "Adafruit dht sensor" (https://github.com/adafruit/DHT-sensor-library)
 
 
@@ -30,9 +30,9 @@ void setup() {
 }
 
 void loop() {
-  delay(500);     //ATTENDRE 0.5 secondes avant de charger les valeurs                
-  float T = dht.readTemperature();    // lire la temperature en celsius
-  float H = dht.readHumidity();       // lire l'humidité en pourcentage
+  delay(500);     //ATTENDRE 0.5 secondes avant de charger les valeurs.               
+  float T = dht.readTemperature();    // lire la temperature en celsius.
+  float H = dht.readHumidity();       // lire l'humidité en pourcentage.
 
   if (isnan(H) && isnan(T)) {          
     lcd.print("ERROR");               
