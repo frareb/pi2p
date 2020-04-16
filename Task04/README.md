@@ -23,6 +23,10 @@ Une fois la base de données créé, il faut lancer les migrations pour s'assure
 
 Pour faciliter les tests, le projet possède pendant toute la phase de développement une interface de lancement rapide mono-processus ; il suffit de lancer `npm start`, et le projet tourne sur le port local 3000 (`http://localhost:3000`).
 
+### Données de test
+
+Quelques données de démonstration sont disponibles ; pour les obtenir, il suffit de lancer `sequelize db:seed:all` ; ces données sont bien évidemment temporaires et de représentent aucune réalité physique.
+
 ### Tests et démonstration
 
 Le projet n'en est encore qu'à ses premier balbutiements, mais il dipose déjà d'une page d'accueil rudimentaire à l'adresse mentionné ci-dessus, il suffit de s'y rendre dans un navigateur. Cette page, en fait générée dynamiquement, est une simple démonstration des possibilités d'express.

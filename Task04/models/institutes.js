@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	Institutes.associate = function(models) {
 		Institutes.hasMany(models.Gateways, {
+			foreignKey: "instituteId",
 			as: "gateways",
 		});
 	};

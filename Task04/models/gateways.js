@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 		});
 
 		Gateways.hasMany(models.Sensors, {
+			foreignKey: "gatewayId",
 			as: "sensors",
 		});
 	};
