@@ -99,12 +99,19 @@ Plotly.d3.json(myURL, function(error, data) {
   }
   // console.log("myTrace", myTrace);
 
-  var layout = {
+  let layout = {
     yaxis: {
       title: 'temperature by day',
       zeroline: false
     },
-    showlegend:false
+    showlegend:false,
+    margin: {
+      l: 50,
+      r: 5,
+      b: 50,
+      t: 5,
+      pad: 4
+    }
   };
 
   Plotly.newPlot('boxplot01', myTrace, layout);
