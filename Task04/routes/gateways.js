@@ -21,7 +21,7 @@ router.get("/", (req, res) => {
 				["id", "DESC"],
 			],
 		})
-		.then(inst => res.json(inst))
+		.then(gateway => res.json(gateway))
 		.catch(error => res.status(500).json({error}));
 });
 
@@ -31,9 +31,22 @@ router.get("/:gatewayId", (req, res) => {
 
 	// filter using primary key (id)
 	models.Gateways
-		.findByPk(id, { include: "sensors" })
-		.then(inst => {
-			if(inst !== null) res.json(inst);
+		.findByPk(id, { include: [
+			// add informations on local sensors
+			{
+				model: models.Sensors,
+				as: "sensors",
+				attributes: ["id", "name"],
+			},
+			// add informations on parent institute
+			{
+				model: models.Institutes,
+				as: "institute",
+				attributes: ["id", "name"],
+			},
+		]})
+		.then(gateway => {
+			if(gateway !== null) res.json(gateway);
 			// when "null" is returned, the ressource hasn't been found
 			else res.status(404).json({
 				error: {
@@ -42,6 +55,36 @@ router.get("/:gatewayId", (req, res) => {
 				},
 			});
 		})
+		.catch(error => res.status(500).json({error}));
+});
+
+// add a new gateway
+router.post("/", (req, res) => {
+	const {
+		instituteId,
+		name,
+		lat,
+		lon,
+	} = req.body;
+
+	// never trust user input
+	if(	typeof instituteId !== "number" ||
+		typeof name !== "string" ||
+		typeof lat !== "number" ||
+		typeof lon !== "number") {
+		return res.status(500).json({ error: {
+			message: "Argument types are incorrect",
+		}});
+	}
+
+	models.Gateways
+		.create({
+			instituteId,
+			name,
+			lat,
+			lon,
+		})
+		.then(() => res.status(201).send())
 		.catch(error => res.status(500).json({error}));
 });
 

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 		});
 
 		Sensors.hasMany(models.Datas, {
+			foreignKey: "sensorId",
 			as: "datas",
 		});
 	};

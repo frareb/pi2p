@@ -28,7 +28,7 @@ module.exports = {
 				queryInterface.removeColumn(
 					"Sensors",
 					"gatewayId",
-					{ transaction }
+					{ transaction },
 				),
 			]);
 		});

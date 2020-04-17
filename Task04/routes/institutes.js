@@ -31,7 +31,7 @@ router.get("/:instituteId", (req, res) => {
 
 	// filter using primary key (id)
 	models.Institutes
-		// TODO: check if this is better oven `/gateways?institute=1`
+		// TODO: check if this is better over `/gateways?institute=1`
 		.findByPk(id, { include: [{
 			model: models.Gateways,
 			as: "gateways",
@@ -56,6 +56,14 @@ router.post("/", (req, res) => {
 		name,
 		countryCode,
 	} = req.body;
+
+	// never trust user input
+	if(	typeof name !== "string" ||
+		typeof countryCode !== "string") {
+		return res.status(500).json({ error: {
+			message: "Argument types are incorrect",
+		}});
+	}
 
 	models.Institutes
 		.create({
