@@ -37,7 +37,7 @@ router.get("/:sensorId", (req, res) => {
 			{
 				model: models.Datas,
 				as: "datas",
-				limit: 20,
+				limit: 5,
 				// return the latest datas
 				order: [
 					["createdAt", "DESC"],
@@ -69,12 +69,16 @@ router.post("/", (req, res) => {
 		gatewayId,
 		name,
 		unit,
+		model,
+		description,
 	} = req.body;
 
 	// never trust user input
 	if(	typeof gatewayId !== "number" ||
 		typeof name !== "string" ||
-		typeof unit !== "string") {
+		typeof unit !== "string" ||
+		typeof model !== "string" ||
+		typeof description !== "string") {
 		return res.status(500).json({ error: {
 			message: "Argument types are incorrect",
 		}});
@@ -85,6 +89,8 @@ router.post("/", (req, res) => {
 			gatewayId,
 			name,
 			unit,
+			model,
+			description,
 		})
 		.then(() => res.status(201).send())
 		.catch(error => res.status(500).json({error}));

@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 		gatewayId: DataTypes.INTEGER,
 		name: DataTypes.STRING,
 		unit: DataTypes.STRING,
+		model: DataTypes.STRING,
+		description: DataTypes.TEXT,
 	}, {});
 
 	Sensors.associate = function(models) {

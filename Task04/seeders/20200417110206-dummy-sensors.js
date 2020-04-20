@@ -5,15 +5,19 @@ module.exports = {
 		return queryInterface.bulkInsert("Sensors", [
 			{
 				gatewayId: 1,
-				name: "Température sol",
+				name: "Température",
 				unit: " °C",
+				model: "DS1820",
+				description: "Proche du sol",
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
 			{
 				gatewayId: 1,
-				name: "Humidité sol",
+				name: "Humidité",
 				unit: " %",
+				model: "DHT22",
+				description: "Proche du sol",
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
