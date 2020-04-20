@@ -4,7 +4,7 @@ module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.bulkInsert("Gateways", [
 			{
-				instituteId: 10,
+				instituteId: 1,
 				name: "Raspberry Pi EGCE 01",
 				lat: 48.42341,
 				lon: 2.09404,
@@ -12,7 +12,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				instituteId: 10,
+				instituteId: 1,
 				name: "Raspberry Pi EGCE 02",
 				lat: null,
 				lon: null,
@@ -20,7 +20,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				instituteId: 12,
+				instituteId: 3,
 				name: "Raspberry Pi Nairobi",
 				lat: null,
 				lon: null,
@@ -28,7 +28,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				instituteId: 14,
+				instituteId: 5,
 				name: "Raspberry Pi La Paz Chasquipampa",
 				lat: null,
 				lon: null,
@@ -36,7 +36,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				instituteId: 15,
+				instituteId: 6,
 				name: "Raspberry Pi El Alto",
 				lat: null,
 				lon: null,
@@ -44,7 +44,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				instituteId: 13,
+				instituteId: 4,
 				name: "Raspberry Pi Khipakhipani",
 				lat: null,
 				lon: null,
