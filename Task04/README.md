@@ -30,5 +30,3 @@ Quelques données de démonstration sont disponibles ; pour les obtenir, il suff
 ### Tests et démonstration
 
 Le projet n'en est encore qu'à ses premier balbutiements, mais il dipose déjà d'une page d'accueil rudimentaire à l'adresse mentionné ci-dessus, il suffit de s'y rendre dans un navigateur. Cette page, en fait générée dynamiquement, est une simple démonstration des possibilités d'express.
-
-Afin de tester l'API, un premier point d'accès a été mis en place (même s'il est très rudimentaire), à l'adresse `http://localhost:3000/sensors`, il accepte les requêtes POST, avec pour paramètres `{name, location, unit}` et une requête GET retourne l'ensemble des capteurs précédemment enregistrés.

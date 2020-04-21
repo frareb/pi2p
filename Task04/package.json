@@ -12,6 +12,7 @@
     "hbs": "^4.1.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "path-to-regexp": "^6.1.0",
     "pg": "^8.0.2",
     "pg-hstore": "^2.3.3",
     "postgresql": "0.0.1",

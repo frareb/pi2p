@@ -25,6 +25,30 @@ router.get("/", (req, res) => {
 		.catch(error => res.status(500).json({error}));
 });
 
+// add a new institute
+router.post("/", (req, res) => {
+	const {
+		name,
+		countryCode,
+	} = req.body;
+
+	// never trust user input
+	if(	typeof name !== "string" ||
+		typeof countryCode !== "string") {
+		return res.status(500).json({ error: {
+			message: "Argument types are incorrect",
+		}});
+	}
+
+	models.Institutes
+		.create({
+			name,
+			countryCode,
+		})
+		.then(() => res.status(201).send())
+		.catch(error => res.status(500).json({error}));
+});
+
 // get informations about a specific institute
 router.get("/:instituteId", (req, res) => {
 	const id = req.params.instituteId;
@@ -47,30 +71,6 @@ router.get("/:instituteId", (req, res) => {
 				},
 			});
 		})
-		.catch(error => res.status(500).json({error}));
-});
-
-// add a new institute
-router.post("/", (req, res) => {
-	const {
-		name,
-		countryCode,
-	} = req.body;
-
-	// never trust user input
-	if(	typeof name !== "string" ||
-		typeof countryCode !== "string") {
-		return res.status(500).json({ error: {
-			message: "Argument types are incorrect",
-		}});
-	}
-
-	models.Institutes
-		.create({
-			name,
-			countryCode,
-		})
-		.then(() => res.status(201).send())
 		.catch(error => res.status(500).json({error}));
 });
 
