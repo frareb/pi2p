@@ -1,6 +1,6 @@
 const { match } = require("path-to-regexp");
 
-module.exports = config => (req, res, next) => {
+module.exports = config => async (req, res, next) => {
 	// extract datas from request
 	const {
 		method,
@@ -15,7 +15,7 @@ module.exports = config => (req, res, next) => {
 		token = token.substring(7);
 
 		// try to match escalation
-		authenticatorResult = config.authenticator(token);
+		authenticatorResult = await config.authenticator(token);
 	}
 
 	// if role is unknown, fallback to default

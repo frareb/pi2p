@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(authorization({
 	groups: require("./config/auth.json"),
 	default: "guest",
-	authenticator: require("./authorization/dummy-authenticator"),
+	authenticator: require("./authorization/authenticator"),
 }));
 
 // serve static content
