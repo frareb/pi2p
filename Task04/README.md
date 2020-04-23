@@ -1,6 +1,7 @@
 # Tâche 4. Création d'une API REST
 
 **Responsable** : Titouan
+
 **Date de restitution** : ?
 
 Une fois les données récupérées par la *gateway*, il faut fournir une interface permettant d'enregistrer ces données en base de données ; par la même occasion, cette interface permettra également de récupérer ces données par la suite afin de réaliser des graphes interactifs côté client.
@@ -23,9 +24,25 @@ Une fois la base de données créé, il faut lancer les migrations pour s'assure
 
 Pour faciliter les tests, le projet possède pendant toute la phase de développement une interface de lancement rapide mono-processus ; il suffit de lancer `npm start`, et le projet tourne sur le port local 3000 (`http://localhost:3000`).
 
+### Authentification
+
+L'accès à l'API est restreint ; l'accès se subdivise en trois groupes :
+
+- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, institutes, capeurs, données, etc) ;
+- `gateway`, dont le seul droit est d'ajouter des données au capteurs que possède la *gateway* ;
+- `admin`, qui dispose de tous les droits sur tout les points d'accès.
+
+L'authentification est gérée avec des clefs générées aléatoirement et cryptographiquement sûres. La clef, pour être prise en compte, doit être ajoutée dans l'entête `Authorization` de la requête, sous forme de `Bearer`. Le groupe par défaut est `guest`, il sera utilisé si la clef est invalide ou absente.
+
 ### Données de test
 
 Quelques données de démonstration sont disponibles ; pour les obtenir, il suffit de lancer `sequelize db:seed:all` ; ces données sont bien évidemment temporaires et de représentent aucune réalité physique.
+
+Pour l'authentification, une clef administrateur par défaut est générée de manière **non-aléatoire**, afin de permettre un premier accès. Cette clef est `firstUniqueId` ; pour utiliser cette clef, on passe en entête :
+
+```
+Authorization: Bearer firstUniqueId
+```
 
 ### Tests et démonstration
 
