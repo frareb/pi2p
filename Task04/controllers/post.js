@@ -15,8 +15,6 @@ module.exports = config => (req, res) => {
 		bodyOpts[param] = req.body[param];
 	}
 
-	console.log(bodyOpts);
-
 	config.model
 		.create(bodyOpts)
 		.then(() => res.status(201).send())

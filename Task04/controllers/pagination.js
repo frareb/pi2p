@@ -15,6 +15,10 @@ module.exports = config => (req, res) => {
 		],
 	});
 
+	if(!config.find.attributes.includes("id")) {
+		config.find.attributes.push("id");
+	}
+
 	const pageCheckPromise = config.model.count();
 	const modelGetPromise = config.model.findAll(findArgs);
 

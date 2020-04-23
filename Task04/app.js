@@ -32,6 +32,8 @@ app.use("/", require("./routes/index"));
 app.use("/institutes", require("./routes/institutes"));
 app.use("/gateways", require("./routes/gateways"));
 app.use("/sensors", require("./routes/sensors"));
+app.use("/groups", require("./routes/groups"));
+app.use("/keys", require("./routes/api-keys"));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

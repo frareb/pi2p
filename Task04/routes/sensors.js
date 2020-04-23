@@ -39,7 +39,7 @@ router.post("/", postController({
 	},
 }));
 
-// fetch datas from date to date
+// fetch datas from date to date (specific handler)
 router.get("/:sensorId/datas", (req, res) => {
 	// TODO: check user data
 	const sensorId = req.params.sensorId;
@@ -58,7 +58,7 @@ router.get("/:sensorId/datas", (req, res) => {
 		.then(data => res.json(data));
 });
 
-// add a new data to sensor
+// add a new data to sensor (specific handler)
 router.post("/:sensorId/datas", (req, res) => {
 	const sensorId = req.params.sensorId;
 	const value = req.body.value;
