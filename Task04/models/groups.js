@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	Groups.associate = function(models) {
 		Groups.hasMany(models.ApiKeys, {
-			foreignKey: "gid",
+			foreignKey: "groupId",
 			as: "keys",
 		});
 	};

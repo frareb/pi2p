@@ -45,12 +45,14 @@ module.exports = config => (req, res) => {
 				.forEach(props => {
 					const [model, isUnique] = props;
 
-					if(isUnique) {
+					if(isUnique && data[model]) {
 						data.link[model] =
 							`${baseUrl}/${model}/${data[model].dataValues.id}`;
-					} else {
+					} else if(data[model]) {
 						data.link[model] = data[model].map(a =>
 							`${baseUrl}/${model}/${a.dataValues.id}`);
+					} else {
+						data.link[model] = null;
 					}
 
 					delete data[model];

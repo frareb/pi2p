@@ -5,12 +5,13 @@ const cryptoRandomString = require("crypto-random-string");
 const models = require("../models");
 const paginationController = require("../controllers/pagination");
 const detailsController = require("../controllers/details");
+const postController = require("../controllers/post");
 
 // list all the keys
 router.get("/", paginationController({
 	model: models.ApiKeys,
 	find: {
-		attributes: ["gid", "description"],
+		attributes: ["groupId", "gatewayId", "description"],
 	},
 }));
 
@@ -23,35 +24,36 @@ router.get("/:keyId", detailsController({
 			model: models.Groups,
 			isUnique: true,
 		},
+		"gateway": {
+			model: models.Gateways,
+			isUnique: true,
+		},
 	},
 }));
 
 // add a new key (specific handler)
 router.post("/", (req, res) => {
-	const {
-		gid,
-		description,
-	} = req.body;
+	const bodyOpts = postController({
+		model: models.ApiKeys,
+		body: {
+			groupId: "number",
+			gatewayId: ["number", "null"],
+			description: "string",
+		},
+		formatOnly: true,
+	})(req, res);
 
-	// never trust user input
-	if(	typeof gid !== "number" ||
-		typeof description !== "string") {
-		return res.status(500).json({ meta: { error: {
-			message: "Arguments types are unexpected",
-		}}});
+	if(bodyOpts && !res._headerSent) {
+		// BE CAREFUL: the RNG must have a STRONG source of randomness!
+		Object.assign(bodyOpts, {
+			key: cryptoRandomString({length: 64, type: "base64"}),
+		});
+
+		models.ApiKeys
+			.create(bodyOpts)
+			.then(data => res.status(201).json({data}))
+			.catch(error => res.status(500).json({error}));
 	}
-
-	// BE CAREFUL: the RNG must have a STRONG source of randomness!
-	const key = cryptoRandomString({length: 64, type: "base64"});
-
-	models.ApiKeys
-		.create({
-			gid,
-			key,
-			description,
-		})
-		.then(data => res.status(201).json({data}))
-		.catch(error => res.status(500).json({error}));
 });
 
 module.exports = router;

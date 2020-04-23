@@ -41,7 +41,7 @@ module.exports = config => (req, res, next) => {
 				.filter(a => isNaN(parseInt(a[0])))
 				.forEach(a => {
 					const [k, v] = a;
-					console.log(authenticatorResult.props[k], v);
+					
 					if(!authenticatorResult.props[k].includes(parseInt(v))) {
 						paramsValid = false;
 					}
