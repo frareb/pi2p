@@ -18,7 +18,7 @@ Ce projet est basé sur [Node.js](https://nodejs.org/en/), et se base en particu
 
 La configuration des base de données s'effectue via le fichier `config/config.json` ; pour le développement, une base de données locale PostgreSQL est utilisée, de nom `pi2p`, et avec un utilisateur éponyme disposant de tous les droits sur la base.
 
-Une fois la base de données créé, il faut lancer les migrations pour s'assurer que les tables sont correctes en lançant `sequelize db:migrate` ; la commande ne devrait pas échouer ; si c'est le cas, inutile d'aller plus loin, vérifiez votre configuration.
+Une fois la base de données créée, il faut lancer les migrations pour s'assurer que les tables sont correctes en lançant `sequelize db:migrate` ; la commande ne devrait pas échouer ; si c'est le cas, inutile d'aller plus loin, vérifiez votre configuration.
 
 ### Lancement du projet
 
@@ -28,15 +28,15 @@ Pour faciliter les tests, le projet possède pendant toute la phase de développ
 
 L'accès à l'API est restreint ; l'accès se subdivise en trois groupes :
 
-- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, institutes, capeurs, données, etc) ;
-- `gateway`, dont le seul droit est d'ajouter des données au capteurs que possède la *gateway* ;
-- `admin`, qui dispose de tous les droits sur tout les points d'accès.
+- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, instituts, capeurs, données, etc) ;
+- `gateway`, dont le seul droit est d'ajouter des données aux capteurs que possède la *gateway* ;
+- `admin`, qui dispose de tous les droits sur tous les points d'accès.
 
 L'authentification est gérée avec des clefs générées aléatoirement et cryptographiquement sûres. La clef, pour être prise en compte, doit être ajoutée dans l'entête `Authorization` de la requête, sous forme de `Bearer`. Le groupe par défaut est `guest`, il sera utilisé si la clef est invalide ou absente.
 
 ### Données de test
 
-Quelques données de démonstration sont disponibles ; pour les obtenir, il suffit de lancer `sequelize db:seed:all` ; ces données sont bien évidemment temporaires et de représentent aucune réalité physique.
+Quelques données de démonstration sont disponibles ; pour les obtenir, il suffit de lancer `sequelize db:seed:all` ; ces données sont bien évidemment temporaires et ne représentent aucune réalité physique.
 
 Pour l'authentification, une clef administrateur par défaut est générée de manière **non-aléatoire**, afin de permettre un premier accès. Cette clef est `firstUniqueId` ; pour utiliser cette clef, on passe en entête :
 
@@ -46,4 +46,4 @@ Authorization: Bearer firstUniqueId
 
 ### Tests et démonstration
 
-Le projet n'en est encore qu'à ses premier balbutiements, mais il dipose déjà d'une page d'accueil rudimentaire à l'adresse mentionné ci-dessus, il suffit de s'y rendre dans un navigateur. Cette page, en fait générée dynamiquement, est une simple démonstration des possibilités d'express.
+Le projet n'en est encore qu'à ses premiers balbutiements, mais il dipose déjà d'une page d'accueil rudimentaire à l'adresse mentionnée ci-dessus, il suffit de s'y rendre dans un navigateur. Cette page, en fait générée dynamiquement, est une simple démonstration des possibilités d'express.
