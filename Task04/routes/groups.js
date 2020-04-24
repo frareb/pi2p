@@ -6,29 +6,29 @@ const paginationController = require("../controllers/pagination");
 const detailsController = require("../controllers/details");
 const postController = require("../controllers/post");
 
-// list all the institutes
+// list all the groups
 router.get("/", paginationController({
-	model: models.Institutes,
+	model: models.Groups,
 	find: {
-		attributes: ["id", "name", "countryCode"],
+		attributes: ["id", "name", "description"],
 	},
 }));
 
-// get informations about a specific institute
-router.get("/:instituteId", detailsController({
-	param: "instituteId",
-	model: models.Institutes,
+// get informations about a specific group
+router.get("/:gid", detailsController({
+	param: "gid",
+	model: models.Groups,
 	include: {
-		"gateways": models.Gateways,
+		"keys": models.ApiKeys,
 	},
 }));
 
-// add a new institute
+// add a new group
 router.post("/", postController({
-	model: models.Institutes,
+	model: models.Groups,
 	body: {
 		name: "string",
-		countryCode: "string",
+		description: "string",
 	},
 }));
 
