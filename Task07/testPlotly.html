@@ -6,22 +6,24 @@
   <div id="test01" style="width:90%;height:450px;"></div>
 
   <script>
-    let myURL = 'http://pi2p.site/api/temp'
-    let myX = []
-    let myY = []
+		"use strict";
+
+    let myURL = 'http://localhost:3000/Sensors/1/datas?start=0&end=1587408023000';
+    let myX = [];
+    let myY = [];
 
     Plotly.d3.json(myURL, function(error, data) {
       for (var i=0; i< data.length; i++){
-        myX.push(new Date(data[i].timestamp - 120*60*1000))
-        myY.push(data[i].sensor) }
-      let trace = {
+        myX.push(new Date(data[i].createdAt )) //- 120*60*1000
+        myY.push(data[i].value) }
+      let trace01 = {
 				//type: "scatter",
 				//mode: "lines",
 				//name: '°C',
 				line: {color: '#17BECF'},
         x: myX,
         y: myY }
-			let layout = {
+			let layout01 = {
 				title: 'Temperature in °C',
 				xaxis: {
     			autorange: true,
@@ -44,7 +46,23 @@
 					type: 'date'
 				}
 			}
-      Plotly.plot(document.getElementById('test01'), [trace], layout);
+      Plotly.plot(document.getElementById('test01'), [trace01], layout01);
     });
+
+		myURL = 'http://localhost:3000/Sensors/17/datas?start=0&end=1587408023000';
+		let myXX = [];
+		let myYY = [];
+
+    Plotly.d3.json(myURL, function(error, data) {
+      for (var i=0; i< data.length; i++){
+        myXX.push(new Date(data[i].createdAt )) //- 120*60*1000
+        myYY.push(data[i].value) }
+      let trace02 = {
+				line: {color: '#17FFFF'},
+        x: myXX,
+        y: myYY }
+      Plotly.addTraces(document.getElementById('test01'), [trace02]);
+    });
+
   </script>
 </body>
