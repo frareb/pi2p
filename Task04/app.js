@@ -4,11 +4,11 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const authorization = require("./authorization/plugin");
-const cors = require('cors');
+const cors = require("cors");
 
 const app = express();
 
-// enabling Cross Origin Requests
+// CORS: allow requests FROM ALL ORIGINS
 app.use(cors());
 
 // view engine setup

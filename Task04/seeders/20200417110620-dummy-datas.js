@@ -1,29 +1,23 @@
 "use strict";
 
-module.exports = {
-	up: (queryInterface, Sequelize) => {
-		// generate random temperature values around 19 °C
-		// one value per 5 minutes
-		const meanTemp = 19;
-		const varTemp = 1;
-		// 5 minutes
-		const period = 5 * 60 * 1000;
-		// 30 days
-		const totalTime = 30 * 24 * 60 * 60 * 1000;
-		const valCount = totalTime / period;
-		const baseDate = Date.now();
+const axios = require("axios");
+const API_TEMP_URL = "http://pi2p.site/api/temp";
 
-		// generate A LOT of objects
-		const datas = Array.from({ length: valCount }, (v, k) => ({
+module.exports = {
+	up: async (queryInterface) => {
+		// fetch datas from the old API
+		const oldApiRes = await axios.get(API_TEMP_URL);
+
+		const datas = oldApiRes.data.map(e => ({
 			sensorId: 1,
-			value: meanTemp + (varTemp * 2 * Math.random() - varTemp),
-			createdAt: new Date(baseDate - period * (valCount - k)),
-			updatedAt: new Date(baseDate - period * (valCount - k)),
+			value: e.sensor,
+			createdAt: new Date(e.timestamp),
+			updatedAt: new Date(e.timestamp),
 		}));
 
 		return queryInterface.bulkInsert("Datas", datas);
 	},
-	down: (queryInterface, Sequelize) => {
+	down: (queryInterface) => {
 		return queryInterface.bulkDelete("Datas", null, {});
 	},
 };

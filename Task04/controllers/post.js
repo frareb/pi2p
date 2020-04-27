@@ -30,7 +30,8 @@ module.exports = config => (req, res) => {
 
 			// send internal server error (TODO: check codes)
 			return res.status(500).json({ meta: { error: {
-				message: `Argument ${param} is of type ${type} (${fmtTypes} expected).`,
+				message:
+				`Argument ${param} is of type ${type} (${fmtTypes} expected).`,
 			}}});
 		}
 

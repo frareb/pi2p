@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-	up: (queryInterface, Sequelize) => {
+	up: (queryInterface) => {
 		// generate random temperature values around 19 °C
 		// one value per 5 minutes
 		const meanTemp = 19;
@@ -23,7 +23,7 @@ module.exports = {
 
 		return queryInterface.bulkInsert("Datas", datas);
 	},
-	down: (queryInterface, Sequelize) => {
+	down: (queryInterface) => {
 		return queryInterface.bulkDelete("Datas", null, {});
 	},
 };

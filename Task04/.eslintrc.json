@@ -15,10 +15,10 @@
 	"rules": {
 		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"linebreak-style": ["error", "unix"],
-		"quotes": ["warn", "double"],
+		"quotes": ["error", "double"],
 		"semi": ["error", "always"],
-		"eol-last": ["warn", "always"],
-		"comma-dangle": ["warn", "always-multiline"],
+		"eol-last": ["error", "always"],
+		"comma-dangle": ["error", "always-multiline"],
 		"max-len": ["error", { "code": 80 }]
 	}
 }

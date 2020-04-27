@@ -3,7 +3,7 @@
 const cryptoRandomString = require("crypto-random-string");
 
 module.exports = {
-	up: (queryInterface, Sequelize) => {
+	up: (queryInterface) => {
 		return queryInterface.bulkInsert("ApiKeys", [
 			{
 				// without this key, no one can access the others
@@ -33,7 +33,7 @@ module.exports = {
 			},
 		]);
 	},
-	down: (queryInterface, Sequelize) => {
+	down: (queryInterface) => {
 		return queryInterface.bulkDelete("ApiKeys", null, {});
 	},
 };
