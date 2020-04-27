@@ -62,6 +62,7 @@ router.get("/:sensorId/datas", (req, res) => {
 router.post("/:sensorId/datas", (req, res) => {
 	const sensorId = req.params.sensorId;
 	const value = req.body.value;
+	let createdAt = req.body.createdAt;
 
 	// never trust user input
 	if(typeof value !== "number") {
@@ -70,10 +71,18 @@ router.post("/:sensorId/datas", (req, res) => {
 		}});
 	}
 
+	// if timestamp is given, parse it
+	if(typeof createdAt === "number") {
+		createdAt = new Date(parseInt(createdAt));
+	} else {
+		createdAt = new Date();
+	}
+
 	models.Datas
 		.create({
 			sensorId,
 			value,
+			createdAt,
 		})
 		.then(() => res.status(201).send())
 		.catch(error => res.status(500).json({error}));
