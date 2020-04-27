@@ -4,7 +4,16 @@
 	<script src="plotly-latest.min.js"></script>
 </head>
 <body>
-  <div id="test01" style="width:90%;height:450px;"></div>
+		<!-- <form class="" action="testPlotly.html" method="post">
+		<select id="feature" name="feature">
+			<option value="temperature">Temperature</option>
+			<option value="humidity">Relative humidity</option>
+			<option value="xxx">...</option>
+		</select>
+		<input type="submit">
+	</form>-->
+
+	<div id="test01" style="width:90%;height:650px;"></div>
 
   <script>
 		"use strict";
@@ -23,7 +32,8 @@
 				//name: '°C',
 				line: {color: '#17BECF'},
         x: myX,
-        y: myY }
+        y: myY,
+				name: 'EGCE' }
 			let layout01 = {
 				title: 'Temperature in °C',
 				xaxis: {
@@ -50,7 +60,7 @@
       Plotly.plot(document.getElementById('test01'), [trace01], layout01);
     });
 
-		myURL = 'http://localhost:3000/Sensors/17/datas?start=0&end=1587408023000';
+		myURL = 'http://localhost:3000/Sensors/4/datas?start=0&end=15874080230000';
 		let myXX = [];
 		let myYY = [];
 
@@ -59,10 +69,27 @@
         myXX.push(new Date(data[i].createdAt )) //- 120*60*1000
         myYY.push(data[i].value) }
       let trace02 = {
-				line: {color: '#17FFFF'},
+				line: {color: '#eb2315'},
         x: myXX,
-        y: myYY }
+        y: myYY,
+				name: 'PROINPA' }
       Plotly.addTraces(document.getElementById('test01'), [trace02]);
+    });
+
+		myURL = 'http://localhost:3000/Sensors/5/datas?start=0&end=15874080230000';
+		let myXXX = [];
+		let myYYY = [];
+
+    Plotly.d3.json(myURL, function(error, data) {
+      for (var i=0; i< data.length; i++){
+        myXXX.push(new Date(data[i].createdAt )) //- 120*60*1000
+        myYYY.push(data[i].value) }
+      let trace03 = {
+				line: {color: '#27592a'},
+        x: myXXX,
+        y: myYYY,
+				name: 'ICIPE' }
+      Plotly.addTraces(document.getElementById('test01'), [trace03]);
     });
 
   </script>
