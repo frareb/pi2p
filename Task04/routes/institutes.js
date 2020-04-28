@@ -4,6 +4,11 @@ const router = express.Router();
 const models = require("../models");
 const controllers = require("../controllers");
 
+const bodyTypes = {
+	name: "string",
+	countryCode: "string",
+};
+
 // list all the institutes
 router.get("/", controllers.pagination({
 	model: models.Institutes,
@@ -24,10 +29,14 @@ router.get("/:instituteId", controllers.details({
 // add a new institute
 router.post("/", controllers.post({
 	model: models.Institutes,
-	body: {
-		name: "string",
-		countryCode: "string",
-	},
+	body: bodyTypes,
+}));
+
+// update a institute
+router.patch("/:instituteId", controllers.patch({
+	param: "instituteId",
+	model: models.Institutes,
+	body: bodyTypes,
 }));
 
 // destroy all institutes

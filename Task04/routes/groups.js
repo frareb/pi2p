@@ -4,6 +4,11 @@ const router = express.Router();
 const models = require("../models");
 const controllers = require("../controllers");
 
+const bodyTypes = {
+	name: "string",
+	description: "string",
+};
+
 // list all the groups
 router.get("/", controllers.pagination({
 	model: models.Groups,
@@ -24,10 +29,14 @@ router.get("/:gid", controllers.details({
 // add a new group
 router.post("/", controllers.post({
 	model: models.Groups,
-	body: {
-		name: "string",
-		description: "string",
-	},
+	body: bodyTypes,
+}));
+
+// update a key
+router.patch("/:keyId", controllers.patch({
+	param: "keyId",
+	model: models.Keys,
+	body: bodyTypes,
 }));
 
 // destroy all groups

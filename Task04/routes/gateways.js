@@ -4,6 +4,13 @@ const router = express.Router();
 const models = require("../models");
 const controllers = require("../controllers");
 
+const bodyTypes = {
+	instituteId: "number",
+	name: "string",
+	lat: "number",
+	lon: "number",
+};
+
 // list all the gateways
 router.get("/", controllers.pagination({
 	model: models.Gateways,
@@ -28,12 +35,14 @@ router.get("/:gatewayId", controllers.details({
 // add a new gateway
 router.post("/", controllers.post({
 	model: models.Gateways,
-	body: {
-		instituteId: "number",
-		name: "string",
-		lat: "number",
-		lon: "number",
-	},
+	body: bodyTypes,
+}));
+
+// update a gateway
+router.patch("/:gatewayId", controllers.patch({
+	param: "gatewayId",
+	model: models.Gateways,
+	body: bodyTypes,
 }));
 
 // destroy ALL GATEWAYS

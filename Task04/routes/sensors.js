@@ -5,6 +5,14 @@ const Op = require("sequelize").Op;
 const models = require("../models");
 const controllers = require("../controllers");
 
+const bodyTypes = {
+	gatewayId: "number",
+	name: "string",
+	unit: "string",
+	model: "string",
+	description: "string",
+};
+
 // list all the sensors
 router.get("/", controllers.pagination({
 	model: models.Sensors,
@@ -29,13 +37,14 @@ router.get("/:sensorId", controllers.details({
 // add a new sensor
 router.post("/", controllers.post({
 	model: models.Sensors,
-	body: {
-		gatewayId: "number",
-		name: "string",
-		unit: "string",
-		model: "string",
-		description: "string",
-	},
+	body: bodyTypes,
+}));
+
+// update a sensor
+router.patch("/:sensorId", controllers.patch({
+	param: "sensorId",
+	model: models.Sensors,
+	body: bodyTypes,
 }));
 
 // destroy all sensors
