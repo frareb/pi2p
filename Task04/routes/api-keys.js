@@ -3,12 +3,10 @@ const router = express.Router();
 const cryptoRandomString = require("crypto-random-string");
 
 const models = require("../models");
-const paginationController = require("../controllers/pagination");
-const detailsController = require("../controllers/details");
-const postController = require("../controllers/post");
+const controllers = require("../controllers");
 
 // list all the keys
-router.get("/", paginationController({
+router.get("/", controllers.pagination({
 	model: models.ApiKeys,
 	find: {
 		attributes: ["groupId", "gatewayId", "description"],
@@ -16,7 +14,7 @@ router.get("/", paginationController({
 }));
 
 // get informations about a specific key
-router.get("/:keyId", detailsController({
+router.get("/:keyId", controllers.details({
 	param: "keyId",
 	model: models.ApiKeys,
 	include: {
@@ -33,7 +31,7 @@ router.get("/:keyId", detailsController({
 
 // add a new key (specific handler)
 router.post("/", (req, res) => {
-	const bodyOpts = postController({
+	const bodyOpts = controllers.post({
 		model: models.ApiKeys,
 		body: {
 			groupId: "number",
@@ -55,5 +53,17 @@ router.post("/", (req, res) => {
 			.catch(error => res.status(500).json({error}));
 	}
 });
+
+// destroy all keys
+router.delete("/", controllers.delete({
+	model: models.ApiKeys,
+	delete: "*",
+}));
+
+// delete a given key
+router.delete("/:keyId", controllers.delete({
+	model: models.ApiKeys,
+	delete: "keyId",
+}));
 
 module.exports = router;

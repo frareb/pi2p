@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const models = require("../models");
-const paginationController = require("../controllers/pagination");
-const detailsController = require("../controllers/details");
-const postController = require("../controllers/post");
+const controllers = require("../controllers");
 
 // list all the gateways
-router.get("/", paginationController({
+router.get("/", controllers.pagination({
 	model: models.Gateways,
 	find: {
 		attributes: ["id", "name", "instituteId"],
@@ -15,7 +13,7 @@ router.get("/", paginationController({
 }));
 
 // get informations about a specific gateway
-router.get("/:gatewayId", detailsController({
+router.get("/:gatewayId", controllers.details({
 	param: "gatewayId",
 	model: models.Gateways,
 	include: {
@@ -28,7 +26,7 @@ router.get("/:gatewayId", detailsController({
 }));
 
 // add a new gateway
-router.post("/", postController({
+router.post("/", controllers.post({
 	model: models.Gateways,
 	body: {
 		instituteId: "number",
@@ -36,6 +34,18 @@ router.post("/", postController({
 		lat: "number",
 		lon: "number",
 	},
+}));
+
+// destroy ALL GATEWAYS
+router.delete("/", controllers.delete({
+	model: models.Gateways,
+	delete: "*",
+}));
+
+// delete a given gateway
+router.delete("/:gatewayId", controllers.delete({
+	model: models.Gateways,
+	delete: "gatewayId",
 }));
 
 module.exports = router;

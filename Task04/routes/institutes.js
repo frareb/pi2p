@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const models = require("../models");
-const paginationController = require("../controllers/pagination");
-const detailsController = require("../controllers/details");
-const postController = require("../controllers/post");
+const controllers = require("../controllers");
 
 // list all the institutes
-router.get("/", paginationController({
+router.get("/", controllers.pagination({
 	model: models.Institutes,
 	find: {
 		attributes: ["id", "name", "countryCode"],
@@ -15,7 +13,7 @@ router.get("/", paginationController({
 }));
 
 // get informations about a specific institute
-router.get("/:instituteId", detailsController({
+router.get("/:instituteId", controllers.details({
 	param: "instituteId",
 	model: models.Institutes,
 	include: {
@@ -24,12 +22,24 @@ router.get("/:instituteId", detailsController({
 }));
 
 // add a new institute
-router.post("/", postController({
+router.post("/", controllers.post({
 	model: models.Institutes,
 	body: {
 		name: "string",
 		countryCode: "string",
 	},
+}));
+
+// destroy all institutes
+router.delete("/", controllers.delete({
+	model: models.Institutes,
+	delete: "*",
+}));
+
+// delete a given institute
+router.delete("/:instituteId", controllers.delete({
+	model: models.Institutes,
+	delete: "instituteId",
 }));
 
 module.exports = router;

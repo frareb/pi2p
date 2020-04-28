@@ -29,7 +29,9 @@ module.exports = config => (req, res) => {
 			const [count, data] = promiseResults;
 
 			// handle pagination
-			const maxPage = Math.ceil(count / page_size) - 1;
+			let maxPage = Math.ceil(count / page_size) - 1;
+			// weird case: max page is page -1 when there are no datas
+			if(maxPage < 0) maxPage = 0;
 			const baseUrl = "http://" + req.headers.host + req.baseUrl;
 			const links = [];
 

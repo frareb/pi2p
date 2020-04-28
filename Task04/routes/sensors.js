@@ -3,19 +3,18 @@ const router = express.Router();
 const Op = require("sequelize").Op;
 
 const models = require("../models");
-const paginationController = require("../controllers/pagination");
-const detailsController = require("../controllers/details");
-const postController = require("../controllers/post");
+const controllers = require("../controllers");
 
 // list all the sensors
-router.get("/", paginationController({
+router.get("/", controllers.pagination({
 	model: models.Sensors,
 	find: {
 		attributes: ["id", "name", "gatewayId"],
 	},
 }));
 
-router.get("/:sensorId", detailsController({
+// get a specific sensor
+router.get("/:sensorId", controllers.details({
 	param: "sensorId",
 	model: models.Sensors,
 	include: {
@@ -28,7 +27,7 @@ router.get("/:sensorId", detailsController({
 }));
 
 // add a new sensor
-router.post("/", postController({
+router.post("/", controllers.post({
 	model: models.Sensors,
 	body: {
 		gatewayId: "number",
@@ -37,6 +36,18 @@ router.post("/", postController({
 		model: "string",
 		description: "string",
 	},
+}));
+
+// destroy all sensors
+router.delete("/", controllers.delete({
+	model: models.Sensors,
+	delete: "*",
+}));
+
+// delete a given sensor
+router.delete("/:sensorId", controllers.delete({
+	model: models.Sensors,
+	delete: "sensorId",
 }));
 
 // fetch datas from date to date (specific handler)
