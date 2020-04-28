@@ -1,6 +1,6 @@
 "use strict";
 
-let myURL = 'http://localhost:3000/Sensors/1/datas?start=0&end=1587408023000';
+let myURL = 'http://localhost:3000/Sensors/1/datas?start=0&end=15874080230000';
 let myX = [];
 let myY = [];
 let myTrace = [];
@@ -52,15 +52,17 @@ function generateColor(colorStart,colorEnd,colorCount){
 
 Plotly.d3.json(myURL, function(error, data) {
   let byday={};
-  function groupday(value, index, array)
+  function groupday(x, index, array)
   {
-      let d = new Date(value['createdAt']);
+      let d = new Date(x['createdAt']);
       d = Math.floor(d.getTime()/(1000*60*60*24)); // *24
       byday[d]=byday[d]||[];
-      byday[d].push(value);
+      byday[d].push({value:x['value'], createdAt:d*(1000*60*60*24)}); // x['createdAt']
   }
   data.map(groupday);
   console.log(byday);
+  // let txx = new Date(byday['18348'][1]['createdAt']);
+  // console.log( new Date(Math.floor(txx.getTime()/(1000*60*60*24)) * (1000*60*60*24)) );
 
   let boxColors = generateColor('#ff1100', '#060e7a', 100);
   // console.log(boxColors);
@@ -72,7 +74,7 @@ Plotly.d3.json(myURL, function(error, data) {
     let myY2 = [];
     for(let j=0; j<byday[i].length; j++){
       // let x = new Date(byday[i][j].createdAt - 120*60*1000);
-      let x = new Date(byday[i][j].createdAt);
+      let x = new Date(byday[i][j].createdAt); //new Date
       // console.log(x);
       let date = x.getDate();
       let month = x.getMonth() + 1;
@@ -80,7 +82,7 @@ Plotly.d3.json(myURL, function(error, data) {
       // let hour = x.getHours() + 1;
       // if (hour < 10) {hour = '0' + hour};
       // let xx = new Date(year + '-' + month + '-' + date + ' ' + hour + ':00:00');
-      let xx = new Date(year + '-' + month + '-' + date);
+      let xx = new Date(year + '-' + month + '-' + date + ' 00:00:00');
       myX2.push(xx);
       myY2.push(byday[i][j].value);
     };
@@ -88,8 +90,8 @@ Plotly.d3.json(myURL, function(error, data) {
     let meanTemp = Math.round(
       myY2.reduce((previous, current) => current += previous) / myY2.length
     );
-    let minTemp = 17;
-    let maxTemp = 21;
+    let minTemp = 0;
+    let maxTemp = 30;
     let colNum = Math.round((meanTemp - minTemp)/(maxTemp - minTemp) * 100);
     let traceXY = {
       y: myY2,
