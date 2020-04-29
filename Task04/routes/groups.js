@@ -2,12 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 const models = require("../models");
-const paginationController = require("../controllers/pagination");
-const detailsController = require("../controllers/details");
-const postController = require("../controllers/post");
+const controllers = require("../controllers");
+
+const bodyTypes = {
+	name: "string",
+	description: "string",
+};
 
 // list all the groups
-router.get("/", paginationController({
+router.get("/", controllers.pagination({
 	model: models.Groups,
 	find: {
 		attributes: ["id", "name", "description"],
@@ -15,7 +18,7 @@ router.get("/", paginationController({
 }));
 
 // get informations about a specific group
-router.get("/:gid", detailsController({
+router.get("/:gid", controllers.details({
 	param: "gid",
 	model: models.Groups,
 	include: {
@@ -24,12 +27,28 @@ router.get("/:gid", detailsController({
 }));
 
 // add a new group
-router.post("/", postController({
+router.post("/", controllers.post({
 	model: models.Groups,
-	body: {
-		name: "string",
-		description: "string",
-	},
+	body: bodyTypes,
+}));
+
+// update a key
+router.patch("/:keyId", controllers.patch({
+	param: "keyId",
+	model: models.Keys,
+	body: bodyTypes,
+}));
+
+// destroy all groups
+router.delete("/", controllers.delete({
+	model: models.Groups,
+	delete: "*",
+}));
+
+// delete a given group
+router.delete("/:groupId", controllers.delete({
+	model: models.Groups,
+	delete: "groupId",
 }));
 
 module.exports = router;

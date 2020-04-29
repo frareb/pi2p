@@ -3,12 +3,10 @@ const router = express.Router();
 const cryptoRandomString = require("crypto-random-string");
 
 const models = require("../models");
-const paginationController = require("../controllers/pagination");
-const detailsController = require("../controllers/details");
-const postController = require("../controllers/post");
+const controllers = require("../controllers");
 
 // list all the keys
-router.get("/", paginationController({
+router.get("/", controllers.pagination({
 	model: models.ApiKeys,
 	find: {
 		attributes: ["groupId", "gatewayId", "description"],
@@ -16,7 +14,7 @@ router.get("/", paginationController({
 }));
 
 // get informations about a specific key
-router.get("/:keyId", detailsController({
+router.get("/:keyId", controllers.details({
 	param: "keyId",
 	model: models.ApiKeys,
 	include: {
@@ -33,27 +31,54 @@ router.get("/:keyId", detailsController({
 
 // add a new key (specific handler)
 router.post("/", (req, res) => {
-	const bodyOpts = postController({
-		model: models.ApiKeys,
-		body: {
+	let bodyOpts;
+
+	try {
+		bodyOpts = controllers.body({
 			groupId: "number",
 			gatewayId: ["number", "null"],
 			description: "string",
-		},
-		formatOnly: true,
-	})(req, res);
-
-	if(bodyOpts && !res._headerSent) {
-		// BE CAREFUL: the RNG must have a STRONG source of randomness!
-		Object.assign(bodyOpts, {
-			key: cryptoRandomString({length: 64, type: "base64"}),
-		});
-
-		models.ApiKeys
-			.create(bodyOpts)
-			.then(data => res.status(201).json({data}))
-			.catch(error => res.status(500).json({error}));
+		}, req.body);
+	} catch(message) {
+		// send client-side error
+		return res.status(400).json({ meta: { error: { message }}});
 	}
+
+	// BE CAREFUL: the RNG must have a STRONG source of randomness!
+	Object.assign(bodyOpts, {
+		key: cryptoRandomString({length: 64, type: "base64"}),
+	});
+
+	models.ApiKeys
+		.create(bodyOpts)
+		.then(data => res.status(201).json({data}))
+		.catch(error => res.status(500).json({error}));
 });
+
+// patch is special for keys
+// allow only to reset the key
+router.patch("/:keyId", async (req, res) => {
+	const id = req.params.keyId;
+	const newKey = cryptoRandomString({length: 64, type: "base64"});
+
+	await models.ApiKeys.update({ key: newKey }, { where: { id } });
+
+	models.ApiKeys
+		.findByPk(id)
+		.then(d => res.status(200).send(d))
+		.catch(error => res.status(500).json({error}));
+});
+
+// destroy all keys
+router.delete("/", controllers.delete({
+	model: models.ApiKeys,
+	delete: "*",
+}));
+
+// delete a given key
+router.delete("/:keyId", controllers.delete({
+	model: models.ApiKeys,
+	delete: "keyId",
+}));
 
 module.exports = router;
