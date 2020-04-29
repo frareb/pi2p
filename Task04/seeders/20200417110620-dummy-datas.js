@@ -1,7 +1,7 @@
 "use strict";
 
 const axios = require("axios");
-const API_TEMP_URL = "http://pi2p.site/api/temp";
+const API_TEMP_URL = "http://pi2p.site/api/b827eb64a017/temperature";
 
 module.exports = {
 	up: async (queryInterface) => {
@@ -10,9 +10,9 @@ module.exports = {
 
 		const datas = oldApiRes.data.map(e => ({
 			sensorId: 1,
-			value: e.sensor,
-			createdAt: new Date(e.timestamp),
-			updatedAt: new Date(e.timestamp),
+			value: e.value,
+			createdAt: new Date(e.createdAt),
+			updatedAt: new Date(e.createdAt),
 		}));
 
 		return queryInterface.bulkInsert("Datas", datas);
