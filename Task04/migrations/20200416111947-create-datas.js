@@ -10,6 +10,7 @@ module.exports = {
 				type: Sequelize.INTEGER,
 			},
 			sensorId: {
+				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: {
 					model: "Sensors",
@@ -17,6 +18,7 @@ module.exports = {
 				},
 			},
 			value: {
+				allowNull: false,
 				type: Sequelize.REAL,
 			},
 			timestamp: {

@@ -7,12 +7,18 @@ module.exports = {
 				queryInterface.addColumn(
 					"Sensors",
 					"model",
-					{ type: Sequelize.DataTypes.STRING },
+					{
+						allowNull: true,
+						type: Sequelize.DataTypes.STRING,
+					},
 					{ transaction }),
 				queryInterface.addColumn(
 					"Sensors",
 					"description",
-					{ type: Sequelize.DataTypes.TEXT },
+					{
+						allowNull: true,
+						type: Sequelize.DataTypes.TEXT,
+					},
 					{ transaction },
 				),
 			]);

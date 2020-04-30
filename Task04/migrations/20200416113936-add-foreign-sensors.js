@@ -5,6 +5,7 @@ module.exports = {
 		return queryInterface.sequelize.transaction(transaction => {
 			return Promise.all([
 				queryInterface.addColumn("Sensors", "gatewayId", {
+					allowNull: true,
 					type: Sequelize.DataTypes.INTEGER,
 					references: {
 						model: "Gateways",

@@ -4,8 +4,14 @@ module.exports = (sequelize, DataTypes) => {
 	const ApiKeys = sequelize.define("ApiKeys", {
 		key: DataTypes.STRING,
 		groupId: DataTypes.INTEGER,
-		gatewayId: DataTypes.INTEGER,
-		description: DataTypes.TEXT,
+		gatewayId: {
+			allowNull: true,
+			type: DataTypes.INTEGER,
+		},
+		description: {
+			allowNull: true,
+			type: DataTypes.TEXT,
+		},
 	}, {});
 
 	ApiKeys.associate = function(models) {
