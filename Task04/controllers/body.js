@@ -1,5 +1,27 @@
-module.exports = (model, body, optionalFields, strict = true) => {
+module.exports = config => {
+	const {
+		model,
+		optionalFields,
+		inject,
+		strict = true,
+	} = config;
+
+	// force id as optional fields
+	if(!optionalFields.includes("id")) optionalFields.push("id");
+
+	const injects = {};
 	const bodyOpts = {};
+
+	// execute injectors if any
+	for(const [field, injector] of Object.entries(inject)) {
+		if(typeof injector === "function") {
+			injects[field] = injector();
+		} else {
+			injects[field] = injector;
+		}
+	}
+
+	const body = Object.assign({}, config.body, injects);
 
 	for(const [field, checker] of Object.entries(model.rawAttributes)) {
 		// skip excluded params that are not in body
@@ -25,8 +47,7 @@ module.exports = (model, body, optionalFields, strict = true) => {
 
 			if(checker.type.validate(fieldValue)) bodyOpts[field] = fieldValue;
 		} catch(e) {
-			const message = e.toString();
-			throw message;
+			throw e.toString();
 		}
 	}
 

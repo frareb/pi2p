@@ -1,5 +1,5 @@
 module.exports = config => (req, res) => {
-	const id = req.params[config.param];
+	const id = req.params.modelId;
 	// include children models
 	const include = Object.entries(config.include)
 		.map(a => {

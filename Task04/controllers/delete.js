@@ -2,8 +2,8 @@ module.exports = config => (req, res) => {
 	let filter = {};
 
 	// allow to delete EVERYTHING
-	if(config.delete !== "*") {
-		filter.id = req.params[config.delete];
+	if(config.deleteAll !== true) {
+		filter.id = req.params.modelId;
 	}
 
 	config.model

@@ -1,27 +1,14 @@
 const bodyParser = require("./body");
 
 module.exports = config => async (req, res) => {
-	const exclude = config.optionalFields || [];
-	exclude.push("id");
-
-	const id = req.params[config.param];
-	const injects = {};
+	const id = req.params.modelId;
 	let bodyOpts = {};
 
-	// TODO: merge this with `body.js`
-	// execute injectors if any
-	for(const [field, injector] of Object.entries(config.inject)) {
-		if(typeof injector === "function") {
-			injects[field] = injector();
-		} else {
-			injects[field] = injector;
-		}
-	}
-
-	const body = Object.assign({}, req.body, injects);
-
 	try {
-		bodyOpts = bodyParser(config.model, body, exclude, false);
+		bodyOpts = bodyParser(Object.assign(config, {
+			body: req.body,
+			strict: false,
+		}));
 	} catch(message) {
 		// send client-side error
 		return res.status(400).json({ meta: { error: { message }}});
