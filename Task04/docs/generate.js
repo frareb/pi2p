@@ -6,12 +6,19 @@ const remarkParse = require("remark-parse");
 const remarkRehype = require("remark-rehype");
 const rehypeFormat = require("rehype-format");
 const rehypeDocument = require("rehype-document");
+const rehypeHighlight = require("rehype-highlight");
 const rehypeStringify = require("rehype-stringify");
+
+const refTitle = { title: "None" };
 
 const processor = unified()
 	.use(remarkParse)
 	.use(remarkRehype)
-	.use(rehypeDocument, { title: "Demo doc" })
+	.use(rehypeHighlight)
+	.use(rehypeDocument, {
+		css: ["https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/github.min.css"],
+		title: refTitle.title,
+	})
 	.use(rehypeFormat)
 	.use(rehypeStringify);
 
@@ -27,6 +34,8 @@ function processAllFiles(files) {
 		const fullPath = `${__dirname}/${sourceDir}/${filename}`;
 		const renderedName =
 			`${__dirname}/${resultDir}/${filename.slice(0, -3)}.html`;
+
+		refTitle.title = filename;
 
 		return readFile(fullPath, { encoding: "utf8" })
 			.then(processor.process)
