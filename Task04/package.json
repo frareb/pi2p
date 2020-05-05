@@ -19,7 +19,8 @@
     "pg": "^8.0.2",
     "pg-hstore": "^2.3.3",
     "postgresql": "0.0.1",
-    "sequelize": "^5.21.6"
+    "sequelize": "^5.21.6",
+    "unist-util-visit": "^2.0.2"
   },
   "devDependencies": {
     "axios": "^0.19.2",
