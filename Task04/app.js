@@ -33,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // serve local routes
 app.use("/", require("./routes/index"));
+app.use("/documentation", require("./routes/documentation"));
 app.use("/institutes", require("./routes/institutes"));
 app.use("/gateways", require("./routes/gateways"));
 app.use("/sensors", require("./routes/sensors"));

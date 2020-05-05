@@ -36,7 +36,7 @@ const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
 const sourceDir = "source";
-const resultDir = "public";
+const resultDir = "../public/documentation";
 
 function processAllFiles(files) {
 	return Promise.all(files.map(filename => {
