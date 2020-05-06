@@ -2,23 +2,23 @@
 
 ## Principe général
 
-Plutôt qu'une gestion d'accès par utilisateur, le contrôle d'accès mis en place propose une séparation en groupes, avec un affinage possible au sein des groupes pour l'accès à certaines URL. Chaque groupe dipose d'une ou plusieurs clefs d'API, lui donnant accès aux ressources de son groupe, et éventuellement à des ressources spécifiques.
+Plutôt qu'une gestion d'accès par utilisateur, le contrôle d'accès mis en place propose une séparation en groupes, avec un affinage possible au sein des groupes pour l'accès à certaines URL. Chaque groupe dispose d'une ou plusieurs clefs d'API, lui donnant accès aux ressources de son groupe, et éventuellement à des ressources spécifiques.
 
-Ces clefs d'API sont générées aléatoirement et cryptographiquement sûres ; pour être prise en compte, la clef doit être ajoutée dans l'entête `Authorization` de la requête, sous forme de `Bearer`. Une clef invalide ou une absence de clef fera basculer automatiquement l'utilisateur dans le groupe par défaut.
+Ces clefs d'API sont générées aléatoirement et cryptographiquement sûres ; pour être prise en compte, la clef doit être ajoutée dans l'entête `Authorization` de la requête, sous forme de `Bearer`. Une clef invalide ou une absence de clef fera automatiquement basculer l'utilisateur dans le groupe par défaut.
 
 ## Modèles de données
 
-Le modèle `Groups` permet d'identifier un groupe par son nom, qui est l'identifiant unique utilisé dans le fichier de configuration pour gérer les permissions, et par une description, qui n'est pas utilisée par le système d'authentification, et sert simplement à l'administrateur du système pour connaitre l'utilité du groupe.
+Le modèle `Groups` permet d'identifier un groupe par son nom, qui est l'identifiant unique utilisé dans le fichier de configuration pour gérer les permissions, et par une description, qui n'est pas utilisée par le système d'authentification, et sert simplement renseigner la raison d'être du groupe pour l'administrateur de l'API.
 
-Le modèle `ApiKeys` décrit une clef d'accès ; associée logiquement à un groupe, ces clefs possèdent aussi ici une clef étrangère `gatewayId`, permettant la gestion fine des permissions pour les *gateways*. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'indentifier.
+Le modèle `ApiKeys` décrit une clef d'accès ; associée logiquement à un groupe, ces clefs possèdent également une clef étrangère `gatewayId`, permettant la gestion fine des permissions pour les *gateways*. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'identifier.
 
 ## Organisation du code
 
 Le code de la gestion d'accès se décompose globalement en trois fichiers : 
 
 - un plugin fonctionnant comme *middleware* express, et gérant les accès de façon générique ; il est très modulaire afin de pouvoir changer les méthodes d'authentification simplement ;
-- un *authenticator* (ou authentificateur), module pour le plugin sus-mentionné, qui renvoie les permissions associés à une clef d'accès via des requêtes en base de données ;
-- un fichier de configuration de groupes, que j'aimerais voir disparaître à terme, et qui spécifie quel groupe a accès à quelles ressources.
+- un *authenticator* (ou authentificateur), module pour le plugin sus-mentionné, qui renvoie les permissions associées à une clef d'accès via des requêtes en base de données ;
+- un fichier de configuration de groupes, qui devrait idéalement disparaître à terme, et qui spécifie quel groupe a accès à quelles ressources.
 
 ## Configuration générale du plugin
 
@@ -64,12 +64,12 @@ Les URL peuvent contenir des paramètres, et leur accès est alors limité aux p
 }
 ```
 
-Ici, si l'authentificateur retourne simplement le groupe `gateway`, aucun accès ne sera conféré ; il faut qu'il retourne également `{ props: { sensorId: [1, 5] } }`, par exemple, qui permettra à la clef d'accès en question d'accèder à `/sensors/1/datas` et `/sensors/5/datas` mais pas à `/sensors/3/datas`.
+Ici, si l'authentificateur retourne simplement le groupe `gateway`, aucun accès ne sera conféré ; il faut qu'il retourne également `{ props: { sensorId: [1, 5] } }`, par exemple, qui permettra au possesseur de la clef en question d'accéder à `/sensors/1/datas` et `/sensors/5/datas` mais pas à `/sensors/3/datas`.
 
 ## Groupes utilisés
 
 Dans l'API REST ici réalisée, on distingue trois groupes distincts :
 
 - `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, institutes, capeurs, données, etc) ;
-- `gateway`, dont le seul droit est d'ajouter des données au capteurs que possède la *gateway* (filtrés via des accès différenciés) ;
-- `admin`, qui dispose de tous les droits sur tout les points d'accès.
+- `gateway`, dont le seul droit est d'ajouter des données aux capteurs que possède la *gateway* (filtrés via des accès différenciés) ;
+- `admin`, qui dispose de tous les droits sur tous les points d'accès.

@@ -47,3 +47,11 @@ Authorization: Bearer firstUniqueId
 ### Tests et démonstration
 
 Le projet n'en est encore qu'à ses premiers balbutiements, mais il dipose déjà d'une page d'accueil rudimentaire à l'adresse mentionnée ci-dessus, il suffit de s'y rendre dans un navigateur. Cette page, en fait générée dynamiquement, est une simple démonstration des possibilités d'express.
+
+### Génération de la documentation
+
+La documentation du projet est séparée en deux parties : d'une part Swagger génère une documentation de l'API interactive, permettant de tester les différents points d'accès ; cette documentation est générée à partir du fichier de description `config/swagger.json`, qui suit le standard [OpenAPI v3.0](https://swagger.io/specification/).
+
+D'autre part, des documentations statiques sont rédigées manuellement, et decrivent en détails le fonctionnement du code. Pour une plus grande facilité d'écriture, ces documentations sont écrites en Markdown, puis générées par la suite ; la génération est faite en utilisant `npm run doc`, qui appellera le bon script.
+
+Une fois générées, cette documentation statiques est accessible sur `/documentation/*.html`, pour chacun des fichiers Markdown. La documentation générée par Swagger est quant à elle disponible sur `/documentation/api`, puis il suffit de suivre les chemins internes ensuite.

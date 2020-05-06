@@ -2,15 +2,15 @@
 
 ## Intérêt global
 
-Les contrôleurs sont une couche d'abstraction au-dessus de l'ORM ; grâce à eux, on obtient un modèle MVC complet ; ils visent en particulier à éviter les rédondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.
+Les contrôleurs sont une couche d'abstraction au-dessus de l'ORM ; grâce à eux, on obtient un modèle MVC complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.
 
 Bien qu'il ne soit pas un contrôleur à proprement parler, le fonctionnement de `routes/factory` sera documenté ici, car son cadre de réutilisation est similaire à celui des contrôleurs.
 
 ## Contrôleurs POST et PATCH
 
-Les deux contrôleurs POST et PATCH ont une structure très simple et reposent en grande partie sur un contrôleur externe : le `bodyParser`, chargé de vérifier que le contenu du corps de la requête correspond bien au modèle.
+Les deux contrôleurs POST et PATCH ont une structure très simple et reposent en grande partie sur un contrôleur connexe : le `bodyParser`, chargé de vérifier que le contenu du corps de la requête correspond bien au modèle.
 
-Globalement, ces deux contrôleurs tentent de récupérer les arguments de la requête via ce parseur, puis exécutent la méthode correspondante en base de données (UPDATE pour PATCH et INSERT pour POST), et retournent l'élement inséré ou modifié ; c'est pourquoi le PATCH exécute deux requêtes : une pour modifier les données, et une pour récupérer les données modifiées.
+Globalement, ces deux contrôleurs tentent de récupérer les arguments de la requête via ce parseur, puis exécutent la méthode correspondante en base de données (UPDATE pour PATCH et INSERT pour POST), et retournent l'élément inséré ou modifié ; c'est pourquoi le PATCH exécute deux requêtes : une pour modifier les données, et une pour récupérer les données modifiées.
 
 Ces deux contrôleurs ne prennent qu'un seul argument : `model`, qui est le modèle à traiter ; tous les autres arguments, s'il y en a, seront passés au `bodyParser`. Ce parseur, plutôt complexe mais très modulaire, accepte quant à lui les paramètres suivants :
 
@@ -21,7 +21,7 @@ Ces deux contrôleurs ne prennent qu'un seul argument : `model`, qui est le mod�
 
 ## Contrôleurs GET
 
-Deux contrôleurs coexistent pour la méthode *GET* ; l'un permet de filtrer une collection de données, quand l'autre accède à un élement individuel de la collection (une ressource membre). Ces deux contrôleurs semblent complexes parce qu'ils construisent des liens absolus, mais sont en réalité très simples d'utilisation. Les paramètres possibles sont les suivants :
+Deux contrôleurs coexistent pour la méthode *GET* ; l'un permet de filtrer une collection de données, quand l'autre accède à un élément individuel de la collection (une ressource membre). Ces deux contrôleurs semblent complexes parce qu'ils construisent des liens absolus, mais sont en réalité très simples d'utilisation. Les paramètres possibles sont les suivants :
 
 - `model` : modèle de la base de données à traiter ;
 - `find` : paramètres passés à la méthode [`find*`](https://sequelize.org/v5/class/lib/model.js~Model.html#static-method-findAll) de Sequelize pour filtrer les résultats ; certains paramètres sont forcés par le contrôleur, en particulier pour la pagination ou l'ordonnancement ;
@@ -50,4 +50,4 @@ Le constructeur de routes (`routes/factory`) n'est pas un contrôleur à proprem
 - `router` : routeur à utiliser comme base des requêtes ;
 - `optionalFields` : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents lors des POST ; les champs `id`, `createdAt` et `updatedAt` sont ajoutés automatiquement, il est donc inutile de les mettre manuellement.
 
-Depuis ces informations, les modèles enfants sont immédiatements récupérés et pris en compte lors des requêtes *GET*.
+Depuis ces informations, les modèles enfants sont immédiatement récupérés et pris en compte lors des requêtes *GET*.
