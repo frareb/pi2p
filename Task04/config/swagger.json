@@ -1,1 +1,376 @@
-{}
+{
+	"openapi" : "3.0.3",
+	"info" : {
+		"title" : "API PI2P",
+		"description" : "Récupération des informations de capteurs pour\nl\\'étude du milieu de vie d\\'insectes.\n",
+		"contact" : {
+			"email" : "francois.rebaudo@ird.fr"
+		},
+		"license" : {
+			"name" : "Propriétaire"
+		},
+		"version" : "1.0.0"
+	},
+	"servers" : [ {
+		"url" : "http://127.0.0.1:3000/",
+		"description" : "Point d'accès unique"
+	} ],
+	"tags" : [ {
+		"name" : "admins",
+		"description" : "Points d'accès réservés aux administrateurs"
+	}, {
+		"name" : "gateways",
+		"description" : "Points d'accès pour les gateways"
+	}, {
+		"name" : "guests",
+		"description" : "Opérations accessibles à tous"
+	} ],
+	"paths" : {
+		"/institutes" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Liste les instituts hébergeant des capteurs",
+				"description" : "Permet de filtrer les instituts par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"operationId" : "listInstitutes",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre de données par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Institute"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"post" : {
+				"tags" : [ "admins" ],
+				"summary" : "Créé un nouvel institut",
+				"description" : "Créé un nouvel institut, avec toutes ses propriétés\n",
+				"operationId" : "addInstitute",
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										}, {
+											"$ref" : "#/components/schemas/Institute"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime tous les instituts",
+				"description" : "Supprime de manière définitive tous les instituts ainsi que tous les éléments enfants de chaque institut.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"operationId" : "deleteInstitutes",
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/institutes/{instituteId}" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Affiche les détails d'un institut",
+				"description" : "Affiche un institut avec toutes ses informations et relations\n",
+				"operationId" : "getInstitute",
+				"parameters" : [ {
+					"name" : "instituteId",
+					"in" : "path",
+					"description" : "identifiant de l'institut à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										}, {
+											"$ref" : "#/components/schemas/Institute"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"404" : {
+						"description" : "la ressource n'a pas été trouvée"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime un institut",
+				"description" : "Supprime de manière définitive un institut ainsi que ses éléments enfants\n",
+				"operationId" : "deleteInstitute",
+				"parameters" : [ {
+					"name" : "instituteId",
+					"in" : "path",
+					"description" : "identifiant de l'institut à supprimer\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"204" : {
+						"description" : "ressource supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"patch" : {
+				"tags" : [ "admins" ],
+				"summary" : "Met à jour un institut",
+				"description" : "Modifie les propriétés d'un institut\n",
+				"operationId" : "updateInstitute",
+				"parameters" : [ {
+					"name" : "instituteId",
+					"in" : "path",
+					"description" : "identifiant de l'institut à modifier\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_1"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"200" : {
+						"description" : "mise à jour de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										}, {
+											"$ref" : "#/components/schemas/Institute"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		}
+	},
+	"components" : {
+		"schemas" : {
+			"Identifier" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				}
+			},
+			"Datation" : {
+				"type" : "object",
+				"properties" : {
+					"createdAt" : {
+						"type" : "string",
+						"format" : "date-time"
+					},
+					"updatedAt" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}
+			},
+			"Institute" : {
+				"type" : "object",
+				"properties" : {
+					"name" : {
+						"type" : "string",
+						"example" : "GQE-Le Moulon"
+					},
+					"countryCode" : {
+						"type" : "string",
+						"example" : "FRA"
+					}
+				}
+			},
+			"body" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Institute"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_1" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Institute"
+				} ]
+			}
+		},
+		"securitySchemes" : {
+			"bearerAuth" : {
+				"type" : "http",
+				"scheme" : "bearer"
+			}
+		}
+	}
+}

@@ -2,7 +2,7 @@ module.exports = config => {
 	const {
 		model,
 		optionalFields,
-		inject,
+		inject = {},
 		strict = true,
 	} = config;
 
