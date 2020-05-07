@@ -34,11 +34,7 @@ L'accès à l'API est restreint ; l'accès se subdivise en trois groupes :
 
 L'authentification est gérée avec des clefs générées aléatoirement et cryptographiquement sûres. La clef, pour être prise en compte, doit être ajoutée dans l'entête `Authorization` de la requête, sous forme de `Bearer`. Le groupe par défaut est `guest`, il sera utilisé si la clef est invalide ou absente.
 
-### Données de test
-
-Quelques données de démonstration sont disponibles ; pour les obtenir, il suffit de lancer `sequelize db:seed:all` ; ces données sont bien évidemment temporaires et ne représentent aucune réalité physique.
-
-Pour l'authentification, une clef administrateur par défaut est générée de manière **non-aléatoire**, afin de permettre un premier accès. Cette clef est `firstUniqueId` ; pour utiliser cette clef, on passe en entête :
+Une clef administrateur par défaut est générée de manière **non-aléatoire**, afin de permettre un premier accès. Cette clef est `firstUniqueId` pour la version de développement (il faudra évidemment la changer en production) ; pour utiliser cette clef, on passe en entête :
 
 ```
 Authorization: Bearer firstUniqueId
