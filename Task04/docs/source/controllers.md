@@ -2,7 +2,7 @@
 
 ## Intérêt global
 
-Les contrôleurs sont une couche d'abstraction au-dessus de l'ORM ; grâce à eux, on obtient un modèle MVC complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.
+Les contrôleurs sont une couche d'abstraction au-dessus de l'*object-relational mapping* ([ORM](https://fr.wikipedia.org/wiki/Mapping_objet-relationnel)) ; grâce à eux, on obtient un patron de conception Modèle-Vue-Contrôleur ([MVC](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur)) complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.
 
 Bien qu'il ne soit pas un contrôleur à proprement parler, le fonctionnement de `routes/factory` sera documenté ici, car son cadre de réutilisation est similaire à celui des contrôleurs.
 
@@ -15,7 +15,7 @@ Globalement, ces deux contrôleurs tentent de récupérer les arguments de la re
 Ces deux contrôleurs ne prennent qu'un seul argument : `model`, qui est le modèle à traiter ; tous les autres arguments, s'il y en a, seront passés au `bodyParser`. Ce parseur, plutôt complexe mais très modulaire, accepte quant à lui les paramètres suivants :
 
 - `model` : modèle de la base de données à traiter ;
-- `optionalFields` : champs du modèle optionnels, qui seront insérés automatiquement s'ils sont absents ; cela concerne en particulier les champs `createdAt` et `updatedAt`, qui ne sont pas obligatoires dans une requête ;
+- `optionalFields` : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents ; cela concerne en particulier les champs `createdAt` et `updatedAt`, qui ne sont pas obligatoires dans une requête ;
 - `inject` : liste clef : valeur de paramètres fictifs rajoutés au contenu du corps de la requête avant traitement. La clef est le nom du paramètre, la valeur est une chaine de caractères à insérer, ou une fonction retournant une chaine de caractères ;
 - `strict` : précise si une erreur est renvoyée lorsqu'un ou plusieurs des paramètres du modèle, hormis ceux mentionnés dans `optionalFields`, sont absents ; le mode strict est activé par défaut, mais n'est pas utile pour les requêtes *PATCH* par exemple.
 
@@ -48,6 +48,6 @@ Le constructeur de routes (`routes/factory`) n'est pas un contrôleur à proprem
 
 - `model` : modèle de la base de données à traiter ;
 - `router` : routeur à utiliser comme base des requêtes ;
-- `optionalFields` : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents lors des POST ; les champs `id`, `createdAt` et `updatedAt` sont ajoutés automatiquement, il est donc inutile de les mettre manuellement.
+- `optionalFields` : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents lors des POST ; les champs `id`, `createdAt` et `updatedAt` sont ajoutés automatiquement, il est donc inutile de les mettre manuellement, sauf dans les cas ou la date de création est différente de la date actuelle (cas des données des capteurs).
 
 Depuis ces informations, les modèles enfants sont immédiatement récupérés et pris en compte lors des requêtes *GET*.
