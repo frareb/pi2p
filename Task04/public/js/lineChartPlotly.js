@@ -7,17 +7,19 @@
 // Problème #1 : la liste des capteurs disponibles est limitée à
 // l'affichage dans /gateways/:gatewayId (10), donc la liste est
 // incomplète. Même chose pour la liste des gateways et la liste
-// des instituts. 
+// des instituts.
 
 // Problème #2 : il y a un décalage dans les timestamps de deux
-// heures (UTC versus paramètres locaux ?). 
+// heures (UTC versus paramètres locaux ?).
 
 // Problème #3 : la fonction de moyenne mobile fait une moyenne
 // sur un nombre de points plutôt que sur une période de temps
 // ce qui posera problème si deux capteurs ont des données à des
 // pas de temps différents.
 
-let urlListInst = "http://127.0.0.1:3000/institutes?page_size=100"
+const urlBase = 'http://localhost:3000'
+
+let urlListInst = urlBase + "/institutes?page_size=100"
 $.getJSON(urlListInst, function(x) {
   var select = document.getElementById("selectInst");
   select.options.length = 0; // vider les options
@@ -31,7 +33,7 @@ $("#selectInst").on('change',function(){
   selectGate.options.length = 0;
   selectGate.options[selectGate.options.length] = new Option("---", 0)
   let value = $(this).val();
-  let urlListGate = "http://127.0.0.1:3000/institutes/" + value;
+  let urlListGate = urlBase + "/institutes/" + value;
   $.getJSON(urlListGate, function(x) {
     for (let i = 0; i < x.metadata.link.gateways.length; i++) {
       $.getJSON(x.metadata.link.gateways[i], function(y) {
@@ -47,7 +49,7 @@ $("#selectGate").on('change',function(){
   selectSens.options[selectSens.options.length] = new Option("---", null)
   let value = $(this).val();
   // console.log("gatewayId: ", value);
-  let urlListSens = "http://127.0.0.1:3000/gateways/" + value;
+  let urlListSens = urlBase + "/gateways/" + value;
   $.getJSON(urlListSens, function(x) {
     for (let i = 0; i < x.metadata.link.sensors.length; i++) {
       $.getJSON(x.metadata.link.sensors[i], function(y) {
@@ -64,12 +66,12 @@ $("#selectSens").on('change',function(){
   let sensorId = $(this).val();
   // console.log("sensorId: ", sensorId);
   if (sensorId != null){
-    $.getJSON('http://localhost:3000/Sensors/'+ sensorId, function(len1) {
+    $.getJSON(urlBase + '/Sensors/'+ sensorId, function(len1) {
       let nameVar = len1.data.name + len1.data.unit + " (" + len1.data.model + ")";
       let gatewayId = len1.data.gatewayId;
-      $.getJSON('http://localhost:3000/Gateways/'+ gatewayId, function(len2) {
+      $.getJSON(urlBase + '/Gateways/'+ gatewayId, function(len2) {
         let instituteId = len2.data.instituteId;
-        $.getJSON('http://localhost:3000/Institutes/'+ instituteId, function(len3) {
+        $.getJSON(urlBase + '/Institutes/'+ instituteId, function(len3) {
           let nameInst = len3.data.name;
           makeSimpleLineSensor(sensorId, nameVar, nameInst)
         });
@@ -82,7 +84,7 @@ function makeSimpleLineSensor(sensorId=1, nameVar="xxx", nameInst="yyy") {
 
   let timestampNow = Date.now();
   let timestamp30d = timestampNow - (30*24*60*60*1000) // -30 days
-  let myURL = 'http://localhost:3000/Sensors/'+ sensorId +'/datas?start=' + timestamp30d + '&end=' + timestampNow;
+  let myURL = urlBase + '/Sensors/'+ sensorId +'/datas?start=' + timestamp30d + '&end=' + timestampNow;
   // console.log(myURL);
   let myX = [];
   let myY = [];
