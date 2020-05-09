@@ -7,7 +7,9 @@
 // Problème #1 : la liste des capteurs disponibles est limitée à
 // l'affichage dans /gateways/:gatewayId (10), donc la liste est
 // incomplète. Même chose pour la liste des gateways et la liste
-// des instituts.
+// des instituts. Dans /controllers/details.js on peut mettre
+// props.limit = 30 lignes 12 et 15 pour avoir jusqu'à 30
+// capteurs ?
 
 // Problème #2 : il y a un décalage dans les timestamps de deux
 // heures (UTC versus paramètres locaux ?).
@@ -117,12 +119,12 @@ function makeSimpleLineSensor(sensorId=1, nameVar="xxx", nameInst="yyy") {
         myX.push(new Date(x.data[i].createdAt )) //- 120*60*1000
         myY.push(x.data[i].value) }
       let myTrace = {
-        line: {color: '#17BECF'},
+        line: {color: '#1a13a8'},
         x: myX,
         y: myY,
         name: 'raw' } //'EGCE'
       let myMATrace = { // trace with moving average
-          line: {color: '#17FFFF'},
+          line: {color: '#cc291b'},
           x: myX,
           y: oneDayMovingAverage.reverse(),
           name: '1d mov. av.' }
