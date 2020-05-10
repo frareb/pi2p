@@ -46,7 +46,7 @@ function generateColor(colorStart,colorEnd,colorCount){
 	return saida;
 }
 
-function makeSimpleBoxplotSensor(sensorId=1, nameVar="xxx", nameInst="yyy") {
+function makeSimpleBoxplotSensor(sensorId=1, nameVar="xxx", nameInst="yyy", nameGateway="") {
   let timestampNow = Date.now();
   let timestamp30d = timestampNow - (30*24*60*60*1000) // -30 days
   let myURL = urlBase + '/Sensors/'+ sensorId +'/datas?start=' + timestamp30d + '&end=' + timestampNow;
@@ -112,9 +112,9 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar="xxx", nameInst="yyy") {
       // console.log("myTrace", myTrace);
 
       let layout = {
-        title: nameVar + ' -' + nameInst + '-',
+        title: nameVar + ' -' + nameInst + ' ; ' + nameGateway + '-',
         yaxis: {
-          title: 'temperature by day',
+          // title: 'temperature by day',
           zeroline: false,
           hoverformat: '.1f'
         },
@@ -127,7 +127,38 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar="xxx", nameInst="yyy") {
           pad: 4
         }
       };
-      var config = {responsive: true};
+
+      var config = {
+        responsive: true,
+        editable: true,
+        modeBarButtonsToAdd: [
+          {
+            name: 'Download data',
+            icon: Plotly.Icons.disk,
+            click: function(gd) {
+              var json = data.data;
+              var fields = Object.keys(json[0])
+              var replacer = function(key, value) { return value === null ? '' : value }
+              var csv = json.map(function(row){
+                return fields.map(function(fieldName){
+                  return JSON.stringify(row[fieldName], replacer)
+                }).join(',')
+              })
+              csv.unshift(fields.join(',')) // add header column
+              csv = csv.join('\r\n');
+              var text = csv;
+
+              var blob = new Blob([text], {type: 'text/plain'});
+              var a = document.createElement('a');
+              const object_URL = URL.createObjectURL(blob);
+              a.href = object_URL;
+              a.download = 'data.csv';
+              document.body.appendChild(a);
+              a.click();
+              URL.revokeObjectURL(object_URL);
+            }}
+          ]}
+
       Plotly.newPlot(document.getElementById('simpleBoxplotChart'), myTrace, layout, config);
     } else {
       console.log("no data");
@@ -185,9 +216,10 @@ $("#selectSens").on('change',function(){
       let gatewayId = len1.data.gatewayId;
       $.getJSON(urlBase + '/Gateways/'+ gatewayId, function(len2) {
         let instituteId = len2.data.instituteId;
+        let nameGateway = len2.data.name;
         $.getJSON(urlBase + '/Institutes/'+ instituteId, function(len3) {
           let nameInst = len3.data.name;
-          makeSimpleBoxplotSensor(sensorId, nameVar, nameInst)
+          makeSimpleBoxplotSensor(sensorId, nameVar, nameInst, nameGateway)
         });
       });
     });
