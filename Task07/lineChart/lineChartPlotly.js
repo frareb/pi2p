@@ -61,8 +61,6 @@ $("#selectGate").on('change',function(){
     };
   });
 });
-
-
 $("#selectSens").on('change',function(){
   // graphique actuel avec choix du capteur 1
   let sensorId = $(this).val();
@@ -175,11 +173,13 @@ function makeSimpleLineSensor(sensorId=1, nameVar="xxx", nameInst="yyy") {
           type: 'date'
         },
         yaxis: {
-          automargin: true
+          automargin: true,
+          hoverformat: '.1f'
         }
       }
+      let config = {responsive: true};
       // Plotly.plot(document.getElementById('simpleLineChart'), [myTrace, myMATrace], myLayout);
-      Plotly.newPlot(document.getElementById('simpleLineChart'), [myTrace, myMATrace], myLayout);
+      Plotly.newPlot(document.getElementById('simpleLineChart'), [myTrace, myMATrace], myLayout, config);
     } else {
       console.log("no data");
     };
