@@ -9,7 +9,7 @@
   <body>
     <h1>Description des contrôleurs</h1>
     <h2>Intérêt global</h2>
-    <p>Les contrôleurs sont une couche d'abstraction au-dessus de l'ORM ; grâce à eux, on obtient un modèle MVC complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.</p>
+    <p>Les contrôleurs sont une couche d'abstraction au-dessus de l'<a href="(https://fr.wikipedia.org/wiki/Mapping_objet-relationnel)"><abbr title="Object-Relational Mapping">ORM</abbr></a> ; grâce à eux, on obtient un patron de conception <a href="https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur"><abbr title="Modèle-Vue-Contrôleur">MVC</abbr></a> complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.</p>
     <p>Bien qu'il ne soit pas un contrôleur à proprement parler, le fonctionnement de <code>routes/factory</code> sera documenté ici, car son cadre de réutilisation est similaire à celui des contrôleurs.</p>
     <h2>Contrôleurs POST et PATCH</h2>
     <p>Les deux contrôleurs POST et PATCH ont une structure très simple et reposent en grande partie sur un contrôleur connexe : le <code>bodyParser</code>, chargé de vérifier que le contenu du corps de la requête correspond bien au modèle.</p>
@@ -17,7 +17,7 @@
     <p>Ces deux contrôleurs ne prennent qu'un seul argument : <code>model</code>, qui est le modèle à traiter ; tous les autres arguments, s'il y en a, seront passés au <code>bodyParser</code>. Ce parseur, plutôt complexe mais très modulaire, accepte quant à lui les paramètres suivants :</p>
     <ul>
       <li><code>model</code> : modèle de la base de données à traiter ;</li>
-      <li><code>optionalFields</code> : champs du modèle optionnels, qui seront insérés automatiquement s'ils sont absents ; cela concerne en particulier les champs <code>createdAt</code> et <code>updatedAt</code>, qui ne sont pas obligatoires dans une requête ;</li>
+      <li><code>optionalFields</code> : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents ; cela concerne en particulier les champs <code>createdAt</code> et <code>updatedAt</code>, qui ne sont pas obligatoires dans une requête ;</li>
       <li><code>inject</code> : liste clef : valeur de paramètres fictifs rajoutés au contenu du corps de la requête avant traitement. La clef est le nom du paramètre, la valeur est une chaine de caractères à insérer, ou une fonction retournant une chaine de caractères ;</li>
       <li><code>strict</code> : précise si une erreur est renvoyée lorsqu'un ou plusieurs des paramètres du modèle, hormis ceux mentionnés dans <code>optionalFields</code>, sont absents ; le mode strict est activé par défaut, mais n'est pas utile pour les requêtes <em>PATCH</em> par exemple.</li>
     </ul>
@@ -47,7 +47,7 @@
     <ul>
       <li><code>model</code> : modèle de la base de données à traiter ;</li>
       <li><code>router</code> : routeur à utiliser comme base des requêtes ;</li>
-      <li><code>optionalFields</code> : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents lors des POST ; les champs <code>id</code>, <code>createdAt</code> et <code>updatedAt</code> sont ajoutés automatiquement, il est donc inutile de les mettre manuellement.</li>
+      <li><code>optionalFields</code> : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents lors des POST ; les champs <code>id</code>, <code>createdAt</code> et <code>updatedAt</code> sont ajoutés automatiquement, il est donc inutile de les mettre manuellement, sauf dans les cas ou la date de création est différente de la date actuelle (cas des données des capteurs).</li>
     </ul>
     <p>Depuis ces informations, les modèles enfants sont immédiatement récupérés et pris en compte lors des requêtes <em>GET</em>.</p>
   </body>

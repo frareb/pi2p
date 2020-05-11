@@ -2,7 +2,7 @@
 
 ## Intérêt global
 
-Les contrôleurs sont une couche d'abstraction au-dessus de l'*object-relational mapping* ([ORM](https://fr.wikipedia.org/wiki/Mapping_objet-relationnel)) ; grâce à eux, on obtient un patron de conception Modèle-Vue-Contrôleur ([MVC](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur)) complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.
+Les contrôleurs sont une couche d'abstraction au-dessus de l'[ORM]((https://fr.wikipedia.org/wiki/Mapping_objet-relationnel)) ; grâce à eux, on obtient un patron de conception [MVC](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur) complet ; ils visent en particulier à éviter les redondances dans le code des routes, qui doivent se contenter d'appeler un contrôleur associé.
 
 Bien qu'il ne soit pas un contrôleur à proprement parler, le fonctionnement de `routes/factory` sera documenté ici, car son cadre de réutilisation est similaire à celui des contrôleurs.
 
@@ -51,3 +51,6 @@ Le constructeur de routes (`routes/factory`) n'est pas un contrôleur à proprem
 - `optionalFields` : champs optionnels du modèle, qui seront insérés automatiquement s'ils sont absents lors des POST ; les champs `id`, `createdAt` et `updatedAt` sont ajoutés automatiquement, il est donc inutile de les mettre manuellement, sauf dans les cas ou la date de création est différente de la date actuelle (cas des données des capteurs).
 
 Depuis ces informations, les modèles enfants sont immédiatement récupérés et pris en compte lors des requêtes *GET*.
+
+*[MVC]: Modèle-Vue-Contrôleur
+*[ORM]: Object-Relational Mapping

@@ -10,7 +10,7 @@ Ces clefs d'API sont générées aléatoirement et cryptographiquement sûres ; 
 
 Le modèle `Groups` permet d'identifier un groupe par son nom (`name`), qui est l'identifiant unique utilisé dans le fichier de configuration pour gérer les permissions, et par une description (`description`), qui n'est pas utilisée par le système d'authentification, et sert simplement renseigner la raison d'être du groupe pour l'administrateur de l'API.
 
-Le modèle `ApiKeys` décrit une clef d'accès (`key`) ; associée logiquement à un groupe (`groupId`), ces clefs possèdent également une clef étrangère `gatewayId`, permettant la gestion fine des permissions pour les *gateways*. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'identifier (`description`).
+Le modèle `ApiKeys` décrit une clef d'accès (`key`) ; associée logiquement à un groupe (`groupId`), ces clefs possèdent également une clef étrangère (`gatewayId`), permettant la gestion fine des permissions pour les *gateways*. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'identifier (`description`).
 
 ## Organisation du code
 
@@ -70,6 +70,6 @@ Ici, si l'authentificateur retourne simplement le groupe `gateway`, aucun accès
 
 Dans l'API REST ici réalisée, on distingue trois groupes distincts :
 
-- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, *institutes*, capteurs, données, etc) ;
+- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, instituts, capteurs, données, etc) ;
 - `gateway`, dont le seul droit est d'ajouter des données aux capteurs que possède la *gateway* (filtrés via des accès différenciés) ;
 - `admin`, qui dispose de tous les droits sur tous les points d'accès.

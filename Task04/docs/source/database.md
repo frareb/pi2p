@@ -1,6 +1,6 @@
 # Gestion de la base de données
 
-Plutôt que de travailler en direct avec la base de données PostgreSQL, on utilise l'ORM ([*object-relational mapping*](https://fr.wikipedia.org/wiki/Mapping_objet-relationnel)) [Sequelize](https://sequelize.org/), permettant de gérer plus facilement la base de données. Le principe est que la base est abstraite en modèles, qui sont compatibles avec les modèles de donnés Javascript.
+Plutôt que de travailler en direct avec la base de données PostgreSQL, on utilise l'[ORM](https://fr.wikipedia.org/wiki/Mapping_objet-relationnel) [Sequelize](https://sequelize.org/), permettant de gérer plus facilement la base de données. Le principe est que la base est abstraite en modèles, qui sont compatibles avec les modèles de donnés Javascript.
 
 ## Connexion à la base
 
@@ -32,6 +32,8 @@ Pour lancer les migrations, il suffit d'exécuter la commande `sequelize db:migr
 
 ## Données de test
 
-Les *seeders* sont un moyen simple d'obtenir des données de test pendant la phase de développement. Ils consistent en une addition brute de données dans les tables ; pour les obtenir, il suffit de lancer `sequelize db:seed:all`. Pour les supprimer, il suffit d'exécuter la commande `sequelize db:seed:undo:all`.
+Les *seeders* sont un moyen simple d'obtenir des données de test pendant la phase de développement. Ils consistent en une addition brute de données dans les tables ; pour les obtenir, il suffit de lancer `sequelize db:seed:all`. Pour les supprimer, il faut exécuter la commande `sequelize db:seed:undo:all`.
 
 Le fonctionnement de Sequelize est très vaste, et seuls quelques points spécifiques au projet sont abordés ici ; en particulier, le travail avec les modèles (`find`, `update` et `delete`) n'est pas précisé, car il est bien détaillé dans la [documentation des modèles](https://sequelize.org/v5/class/lib/model.js~Model.html).
+
+*[ORM]: Object-Relational Mapping
