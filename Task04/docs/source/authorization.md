@@ -8,29 +8,29 @@ Ces clefs d'API sont générées aléatoirement et cryptographiquement sûres ; 
 
 ## Modèles de données
 
-Le modèle `Groups` permet d'identifier un groupe par son nom, qui est l'identifiant unique utilisé dans le fichier de configuration pour gérer les permissions, et par une description, qui n'est pas utilisée par le système d'authentification, et sert simplement renseigner la raison d'être du groupe pour l'administrateur de l'API.
+Le modèle `Groups` permet d'identifier un groupe par son nom (`name`), qui est l'identifiant unique utilisé dans le fichier de configuration pour gérer les permissions, et par une description (`description`), qui n'est pas utilisée par le système d'authentification, et sert simplement renseigner la raison d'être du groupe pour l'administrateur de l'API.
 
-Le modèle `ApiKeys` décrit une clef d'accès ; associée logiquement à un groupe, ces clefs possèdent également une clef étrangère `gatewayId`, permettant la gestion fine des permissions pour les *gateways*. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'identifier.
+Le modèle `ApiKeys` décrit une clef d'accès (`key`) ; associée logiquement à un groupe (`groupId`), ces clefs possèdent également une clef étrangère (`gatewayId`), permettant la gestion fine des permissions pour les *gateways*. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'identifier (`description`).
 
 ## Organisation du code
 
-Le code de la gestion d'accès se décompose globalement en trois fichiers : 
+Le code de la gestion d'accès se décompose globalement en trois fichiers :
 
-- un plugin fonctionnant comme *middleware* express, et gérant les accès de façon générique ; il est très modulaire afin de pouvoir changer les méthodes d'authentification simplement ;
-- un *authenticator* (ou authentificateur), module pour le plugin sus-mentionné, qui renvoie les permissions associées à une clef d'accès via des requêtes en base de données ;
-- un fichier de configuration de groupes, qui devrait idéalement disparaître à terme, et qui spécifie quel groupe a accès à quelles ressources.
+- un plugin fonctionnant comme *middleware* express, et gérant les accès de façon générique ; il est très modulaire afin de pouvoir changer les méthodes d'authentification simplement (`authorization/plugin.js`) ;
+- un *authenticator* (ou authentificateur), module pour le plugin sus-mentionné, qui renvoie les permissions associées à une clef d'accès via des requêtes en base de données (`authorization/authenticator.js`) ;
+- un fichier de configuration de groupes, qui devrait idéalement disparaître à terme, et qui spécifie quel groupe a accès à quelles ressources (`/config/auth.json`).
 
 ## Configuration générale du plugin
 
 Le plugin de gestion des permissions (`authorization/plugin.js`) contrôle toutes les requêtes passant par *express*. Il joue donc un rôle central dans l'application, et doit être configuré correctement. L'objet de configuration va comme suit :
 
 - `groups` : description des permissions des groupes ;
-- `default` : groupe utilisé en l'absence de clef d'accès, ou lorsqu'icelle est invalide ;
+- `default` : groupe utilisé en l'absence de clef d'accès, ou lorsqu'elle est invalide ;
 - `authenticator` : fonction appelée pour récupérer les permissions associées à une clef.
 
 ### Description des permissions des groupes
 
-L'objet de description des permissions doit contenir, *a minima*, les permissions associées au groupe par défaut ; il peut éventuellement gérer d'autres groupes si nécessaire. Les clefs correspondent au nom du groupe, et les valeurs sont un autre objet clef-valeur, associant à l'URL d'une requête les méthodes d'accès autorisés.
+L'objet de description des permissions (`/config/auth.json`) doit contenir, *a minima*, les permissions associées au groupe par défaut ; il peut éventuellement gérer d'autres groupes si nécessaire. Les clefs correspondent au nom du groupe, et les valeurs sont un autre objet clef-valeur, associant à l'URL d'une requête les méthodes d'accès autorisés.
 
 ```json
 {
@@ -47,7 +47,7 @@ L'objet ci-dessus confère au groupe `admin` le droit d'exécuter les méthodes 
 
 ### Description de l'authentificateur
 
-Un authentificateur est une fonction, à laquelle on passe une clef d'accès, et qui renvoie la liste des permissions associées ; ici, il fonctionne par requête en base de données, mais toute autre méthode peut être mise en place facilement. L'objet retourné contient les clefs suivantes :
+Un authentificateur est une fonction, à laquelle on passe une clef d'accès, et qui renvoie la liste des permissions associées ; ici (`authorization/authenticator.js`), il fonctionne par requête en base de données, mais toute autre méthode peut être mise en place facilement. L'objet retourné contient les clefs suivantes :
 
 - `group` : le groupe dans lequel se trouve la clef d'accès ;
 - `props` (optionnel) : les paramètres permettant la gestion d'accès différenciée.
@@ -70,6 +70,6 @@ Ici, si l'authentificateur retourne simplement le groupe `gateway`, aucun accès
 
 Dans l'API REST ici réalisée, on distingue trois groupes distincts :
 
-- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, institutes, capeurs, données, etc) ;
+- `guest`, qui peut uniquement accèder aux informations non-sensibles (*gateways*, instituts, capteurs, données, etc) ;
 - `gateway`, dont le seul droit est d'ajouter des données aux capteurs que possède la *gateway* (filtrés via des accès différenciés) ;
 - `admin`, qui dispose de tous les droits sur tous les points d'accès.

@@ -4,6 +4,7 @@ const promisify = require("util").promisify;
 const visit = require("unist-util-visit");
 const unified = require("unified");
 const remarkParse = require("remark-parse");
+const remarkAbbr = require("remark-abbr");
 const remarkRehype = require("remark-rehype");
 const rehypeFormat = require("rehype-format");
 const rehypeDocument = require("rehype-document");
@@ -12,6 +13,7 @@ const rehypeStringify = require("rehype-stringify");
 
 const processor = unified()
 	.use(remarkParse)
+	.use(remarkAbbr)
 	.use(remarkRehype)
 	.use(rehypeHighlight)
 	// extract page title from first h1
