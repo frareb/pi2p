@@ -5,10 +5,15 @@ module.exports = config => {
 	const {
 		model,
 		router,
+		paginationExclude = [],
 		optionalFields = [],
 	} = config;
+	// force excluded fields on pagination
+	paginationExclude.push(...["createdAt", "updatedAt"]);
+
 	// gather and filter out model attributes
-	const attributes = Object.keys(model.rawAttributes);
+	const attributes = Object.keys(model.rawAttributes)
+		.filter(a => !paginationExclude.includes(a));
 
 	// get models depending on the current model
 	const include = Object.keys(config.model.prototype)
@@ -44,6 +49,7 @@ module.exports = config => {
 	router.get("/:modelId", controllers.details({
 		model,
 		include,
+		unifyMultipleLinks: config.details && config.details.unifyMultipleLinks,
 	}));
 
 	// add a new element

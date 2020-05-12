@@ -6,6 +6,9 @@ const models = require("../models");
 require("./factory")({
 	model: models.Sensors,
 	router,
+	details: {
+		unifyMultipleLinks: true,
+	},
 });
 
 // fetch datas from date to date (specific handler)
@@ -16,6 +19,7 @@ router.get("/:sensorId/datas", (req, res) => {
 		model: models.Datas,
 		find: { where: { sensorId } },
 		pageSize: Number.MAX_SAFE_INTEGER,
+		removeModelUrl: true,
 	})(req, res);
 });
 

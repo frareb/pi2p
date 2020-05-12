@@ -48,9 +48,11 @@ module.exports = config => (req, res) => {
 					if(isUnique && data[model]) {
 						link[model] =
 							`${baseUrl}/${model}/${data[model].dataValues.id}`;
-					} else if(data[model]) {
+					} else if(!config.unifyMultipleLinks && data[model]) {
 						link[model] = data[model].map(a =>
 							`${baseUrl}/${model}/${a.dataValues.id}`);
+					} else if(data[model]) {
+						link[model] = `${baseUrl}${req.originalUrl}/${model}`;
 					} else {
 						link[model] = null;
 					}
@@ -59,8 +61,8 @@ module.exports = config => (req, res) => {
 				});
 
 			res.json({
-				data,
 				metadata: {link},
+				data,
 			});
 		})
 		.catch(error => res.status(500).json({error}));

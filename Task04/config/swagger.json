@@ -85,13 +85,23 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Institute"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Institute"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -199,15 +209,38 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Institute"
-										}, {
-											"$ref" : "#/components/schemas/Datation"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"type" : "object",
+											"properties" : {
+												"link" : {
+													"type" : "object",
+													"properties" : {
+														"gateways" : {
+															"type" : "array",
+															"items" : {
+																"type" : "string",
+																"format" : "uri",
+																"example" : "http://localhost:3000/gateways/1"
+															}
+														}
+													}
+												}
+											}
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Institute"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -374,13 +407,23 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Gateway"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Gateway"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -488,15 +531,43 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Gateway"
-										}, {
-											"$ref" : "#/components/schemas/Datation"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"type" : "object",
+											"properties" : {
+												"link" : {
+													"type" : "object",
+													"properties" : {
+														"institute" : {
+															"type" : "string",
+															"format" : "uri",
+															"example" : "http://localhost:3000/institutes/1"
+														},
+														"sensors" : {
+															"type" : "array",
+															"items" : {
+																"type" : "string",
+																"format" : "uri",
+																"example" : "http://localhost:3000/sensors/1"
+															}
+														}
+													}
+												}
+											}
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Gateway"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -663,13 +734,23 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Sensor"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Sensor"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -777,15 +858,40 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Sensor"
-										}, {
-											"$ref" : "#/components/schemas/Datation"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"type" : "object",
+											"properties" : {
+												"link" : {
+													"type" : "object",
+													"properties" : {
+														"gateway" : {
+															"type" : "string",
+															"format" : "uri",
+															"example" : "http://localhost:3000/gateways/1"
+														},
+														"datas" : {
+															"type" : "string",
+															"format" : "uri",
+															"example" : "http://localhost:3000/sensors/1/datas"
+														}
+													}
+												}
+											}
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Sensor"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -963,15 +1069,23 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Data"
-										}, {
-											"$ref" : "#/components/schemas/Datation"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Data"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -1049,7 +1163,7 @@
 		},
 		"/groups" : {
 			"get" : {
-				"tags" : [ "guests" ],
+				"tags" : [ "admins" ],
 				"summary" : "Liste les groupes hébergeant des capteurs",
 				"description" : "Permet de filtrer les groupes par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
 				"operationId" : "listGroups",
@@ -1106,17 +1220,30 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/Group"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Group"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
 									}
 								}
 							}
 						}
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
 					},
 					"416" : {
 						"description" : "la page est inaccessible"
@@ -1124,7 +1251,10 @@
 					"500" : {
 						"description" : "erreur interne du serveur"
 					}
-				}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
 			},
 			"post" : {
 				"tags" : [ "admins" ],
@@ -1198,7 +1328,7 @@
 		},
 		"/groups/{groupId}" : {
 			"get" : {
-				"tags" : [ "guests" ],
+				"tags" : [ "admins" ],
 				"summary" : "Affiche les détails d'un groupe",
 				"description" : "Affiche un groupe avec toutes ses informations et relations\n",
 				"operationId" : "getGroup",
@@ -1234,13 +1364,19 @@
 							}
 						}
 					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
 					"404" : {
 						"description" : "la ressource n'a pas été trouvée"
 					},
 					"500" : {
 						"description" : "erreur interne du serveur"
 					}
-				}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
@@ -1395,13 +1531,23 @@
 						"content" : {
 							"application/json" : {
 								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/ApiKey"
-										} ]
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/ApiKey"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
 									}
 								}
 							}
@@ -1413,7 +1559,10 @@
 					"500" : {
 						"description" : "erreur interne du serveur"
 					}
-				}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
 			},
 			"post" : {
 				"tags" : [ "admins" ],
@@ -1529,7 +1678,10 @@
 					"500" : {
 						"description" : "erreur interne du serveur"
 					}
-				}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
@@ -1633,7 +1785,8 @@
 				"properties" : {
 					"id" : {
 						"type" : "integer",
-						"format" : "uint32"
+						"format" : "uint32",
+						"example" : 1
 					}
 				}
 			},
@@ -1649,6 +1802,46 @@
 						"type" : "string",
 						"format" : "date-time",
 						"nullable" : true
+					}
+				}
+			},
+			"Url" : {
+				"type" : "object",
+				"properties" : {
+					"url" : {
+						"type" : "string",
+						"format" : "uri",
+						"example" : "http://localhost:3000/ressource/1"
+					}
+				}
+			},
+			"PaginationMeta" : {
+				"type" : "object",
+				"properties" : {
+					"link" : {
+						"type" : "object",
+						"properties" : {
+							"first" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=0&page_size=10"
+							},
+							"prev" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=1&page_size=10"
+							},
+							"next" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=3&page_size=10"
+							},
+							"last" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=5&page_size=10"
+							}
+						}
 					}
 				}
 			},

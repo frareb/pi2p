@@ -42,7 +42,11 @@ module.exports = config => {
 		try {
 			// special preprocessing for Dates
 			if(checker.type.constructor.name === "DATE") {
-				fieldValue = new Date(parseInt(fieldValue));
+				// allow both timestamp and date literal
+				if(typeof fieldValue === "number" || Number(fieldValue))
+					fieldValue = Number(fieldValue);
+
+				fieldValue = new Date(fieldValue);
 			}
 
 			if(checker.type.validate(fieldValue)) bodyOpts[field] = fieldValue;

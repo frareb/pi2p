@@ -27,7 +27,9 @@
       <li><code>model</code> : modèle de la base de données à traiter ;</li>
       <li><code>find</code> : paramètres passés à la méthode <a href="https://sequelize.org/v5/class/lib/model.js~Model.html#static-method-findAll"><code>find*</code></a> de Sequelize pour filtrer les résultats ; certains paramètres sont forcés par le contrôleur, en particulier pour la pagination ou l'ordonnancement ;</li>
       <li>(collection uniquement) <code>pageSize</code> : la taille de page par défaut pour le filtrage des données ;</li>
+      <li>(collection uniquement) <code>removeModelUrl</code> : ne pas retourner les liens des ressources enfant ;</li>
       <li>(ressource uniquement) <code>include</code> : modèles dépendants à inclure dans le corps de la réponse ;</li>
+      <li>(ressource uniquement) <code>unifyMultipleLinks</code> : pour les modèles dépendants multiples, les regrouper en un seul lien au lieu d'une collection.</li>
     </ul>
     <p>Le contrôleur de collection se base en outre sur les paramètres de la requête pour filtrer les résultats ; les <em>query strings</em> suivants sont utilisés pour faire du filtrage :</p>
     <ul>

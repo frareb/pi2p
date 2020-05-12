@@ -69,19 +69,20 @@ module.exports = config => (req, res) => {
 			// weird case: max page is page -1 when there are no datas
 			if(maxPage < 0) maxPage = 0;
 
-			const baseUrl = "http://" + req.headers.host + req.baseUrl;
-			const links = [];
+			const baseUrl =
+				"http://" + req.headers.host + req._parsedOriginalUrl.pathname;
+			const link = {};
 
-			const paginationLinkForge = (p, n) =>
-				`<${baseUrl}?page=${p}&page_size=${page_size}>; rel="${n}"`;
+			const paginationLinkForge = (p) =>
+				`${baseUrl}?page=${p}&page_size=${page_size}`;
 
-			links.push(paginationLinkForge(0, "first"));
+			link["first"] = paginationLinkForge(0);
 
 			if(page < maxPage) {
-				links.push(paginationLinkForge(page+1, "next"));
+				link["next"] = paginationLinkForge(page + 1);
 
 				if(page > 0) {
-					links.push(paginationLinkForge(page-1, "prev"));
+					link["prev"] = paginationLinkForge(page - 1);
 				}
 			// if we got beyond the last page, throw error
 			} else if(page > maxPage) {
@@ -91,14 +92,15 @@ module.exports = config => (req, res) => {
 				}}});
 			}
 
-			links.push(paginationLinkForge(maxPage, "last"));
-			res.header("Link", links);
+			link["last"] = paginationLinkForge(maxPage);
 
 			// send response datas
 			res.json({
-				data: data.map(i => Object.assign({}, i.dataValues, {
-					url: `${baseUrl}/${i.id}`,
-				})),
+				metadata: {link},
+				data: config.removeModelUrl ? data : 
+					data.map(i => Object.assign({}, i.dataValues, {
+						url: `${baseUrl}/${i.id}`,
+					})),
 			});
 		})
 		.catch(error => res.status(500).json({meta: {error}}));

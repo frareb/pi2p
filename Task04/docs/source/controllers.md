@@ -26,7 +26,9 @@ Deux contrôleurs coexistent pour la méthode *GET* ; l'un permet de filtrer une
 - `model` : modèle de la base de données à traiter ;
 - `find` : paramètres passés à la méthode [`find*`](https://sequelize.org/v5/class/lib/model.js~Model.html#static-method-findAll) de Sequelize pour filtrer les résultats ; certains paramètres sont forcés par le contrôleur, en particulier pour la pagination ou l'ordonnancement ;
 - (collection uniquement) `pageSize` : la taille de page par défaut pour le filtrage des données ;
+- (collection uniquement) `removeModelUrl` : ne pas retourner les liens des ressources enfant ;
 - (ressource uniquement) `include` : modèles dépendants à inclure dans le corps de la réponse ;
+- (ressource uniquement) `unifyMultipleLinks` : pour les modèles dépendants multiples, les regrouper en un seul lien au lieu d'une collection.
 
 Le contrôleur de collection se base en outre sur les paramètres de la requête pour filtrer les résultats ; les *query strings* suivants sont utilisés pour faire du filtrage :
 
