@@ -3,13 +3,16 @@
 module.exports = (sequelize, DataTypes) => {
 	const Groups = sequelize.define("Groups", {
 		name: DataTypes.STRING,
-		description: DataTypes.TEXT,
+		description: {
+			allowNull: true,
+			type: DataTypes.TEXT,
+		},
 	}, {});
 
 	Groups.associate = function(models) {
 		Groups.hasMany(models.ApiKeys, {
 			foreignKey: "groupId",
-			as: "keys",
+			as: "apiKeys",
 		});
 	};
 

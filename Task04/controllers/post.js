@@ -1,12 +1,11 @@
 const bodyParser = require("./body");
 
 module.exports = config => (req, res) => {
-	let bodyOpts;
+	let bodyOpts = {};
 
 	try {
-		bodyOpts = bodyParser(config.body, req.body);
-	} catch(e) {
-		const message = e.toString();
+		bodyOpts = bodyParser(Object.assign(config, { body: req.body }));
+	} catch(message) {
 		// send client-side error
 		return res.status(400).json({ meta: { error: { message }}});
 	}

@@ -1,5 +1,5 @@
 module.exports = config => (req, res) => {
-	const id = req.params[config.param];
+	const id = req.params.modelId;
 	// include children models
 	const include = Object.entries(config.include)
 		.map(a => {
@@ -39,26 +39,31 @@ module.exports = config => (req, res) => {
 			// prepare model links
 			const baseUrl = "http://" + req.headers.host;
 			const data = fetched.dataValues;
-			data.link = {};
+			const link = {};
 
 			include.map(i => [i.as, !i.limit])
 				.forEach(props => {
 					const [model, isUnique] = props;
 
 					if(isUnique && data[model]) {
-						data.link[model] =
+						link[model] =
 							`${baseUrl}/${model}/${data[model].dataValues.id}`;
-					} else if(data[model]) {
-						data.link[model] = data[model].map(a =>
+					} else if(!config.unifyMultipleLinks && data[model]) {
+						link[model] = data[model].map(a =>
 							`${baseUrl}/${model}/${a.dataValues.id}`);
+					} else if(data[model]) {
+						link[model] = `${baseUrl}${req.originalUrl}/${model}`;
 					} else {
-						data.link[model] = null;
+						link[model] = null;
 					}
 
 					delete data[model];
 				});
 
-			res.json({data});
+			res.json({
+				metadata: {link},
+				data,
+			});
 		})
 		.catch(error => res.status(500).json({error}));
 };

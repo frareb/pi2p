@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "doc": "node docs/generate.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -15,14 +16,24 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "path-to-regexp": "^6.1.0",
-    "pg": "^8.0.2",
+    "pg": "^8.0.3",
     "pg-hstore": "^2.3.3",
     "postgresql": "0.0.1",
-    "sequelize": "^5.21.6"
+    "sequelize": "^5.21.6",
+    "swagger-ui-express": "^4.1.4",
+    "unist-util-visit": "^2.0.2"
   },
   "devDependencies": {
     "axios": "^0.19.2",
     "eslint": "^6.8.0",
-    "sequelize-cli": "^5.5.1"
+    "rehype-document": "^5.0.0",
+    "rehype-format": "^3.0.1",
+    "rehype-highlight": "^4.0.0",
+    "rehype-stringify": "^7.0.0",
+    "remark-abbr": "^1.4.0",
+    "remark-parse": "^8.0.2",
+    "remark-rehype": "^6.0.0",
+    "sequelize-cli": "^5.5.1",
+    "unified": "^9.0.0"
   }
 }

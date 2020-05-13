@@ -10,6 +10,7 @@ module.exports = {
 				type: Sequelize.INTEGER,
 			},
 			instituteId: {
+				allowNull: true,
 				type: Sequelize.INTEGER,
 				references: {
 					model: "Institutes",
@@ -17,12 +18,15 @@ module.exports = {
 				},
 			},
 			name: {
+				allowNull: false,
 				type: Sequelize.STRING,
 			},
 			lat: {
+				allowNull: true,
 				type: Sequelize.REAL,
 			},
 			lon: {
+				allowNull: true,
 				type: Sequelize.REAL,
 			},
 			createdAt: {

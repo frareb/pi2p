@@ -1,41 +1,58 @@
-module.exports = (config, body, strict = true) => {
+module.exports = config => {
+	const {
+		model,
+		optionalFields,
+		inject = {},
+		strict = true,
+	} = config;
+
+	// force id as optional fields
+	if(!optionalFields.includes("id")) optionalFields.push("id");
+
+	const injects = {};
 	const bodyOpts = {};
 
-	for(let [param, expectedTypes] of Object.entries(config)) {
-		const type = typeof body[param];
+	// execute injectors if any
+	for(const [field, injector] of Object.entries(inject)) {
+		if(typeof injector === "function") {
+			injects[field] = injector();
+		} else {
+			injects[field] = injector;
+		}
+	}
 
-		// handle single type
-		if(typeof expectedTypes === "string") {
-			expectedTypes = [expectedTypes];
+	const body = Object.assign({}, config.body, injects);
+
+	for(const [field, checker] of Object.entries(model.rawAttributes)) {
+		// skip excluded params that are not in body
+		if(	optionalFields.includes(field) &&
+			!body[field]) continue;
+
+		let fieldValue = body[field];
+
+		// discard null or undefined fields:
+		// - on unstrict mode or;
+		// - when allow is explicitely allowed.
+		if(	(checker.allowNull === true || !strict) &&
+			(fieldValue === null || typeof fieldValue === "undefined")) {
+			continue;
 		}
 
-		const check = expectedTypes.reduce((acc, val) => {
-			return	acc ||
-					// special case: null is "object" type
-					(val === "null" && body[param] === null) ||
-					type === val;
-		// precheck: undefined is allowed on unstrict mode
-		}, !strict && type === "undefined");
+		// check body params and insert if valid
+		try {
+			// special preprocessing for Dates
+			if(checker.type.constructor.name === "DATE") {
+				// allow both timestamp and date literal
+				if(typeof fieldValue === "number" || Number(fieldValue))
+					fieldValue = Number(fieldValue);
 
-		// check parameter type
-		if(!check) {
-			// construct a comprehensive list of types
-			const fmtTypes = expectedTypes.reduce((acc, type, i) => {
-				if(i === 0) {
-					return `${type}`;
-				} else {
-					return `${acc} or ${type}`;
-				}
-			}, "");
+				fieldValue = new Date(fieldValue);
+			}
 
-			// send error to be catched
-			throw new Error(
-				`Argument ${param} is of type ${type} (${fmtTypes} expected).`,
-			);
+			if(checker.type.validate(fieldValue)) bodyOpts[field] = fieldValue;
+		} catch(e) {
+			throw e.toString();
 		}
-
-		// insert param into list
-		bodyOpts[param] = body[param];
 	}
 
 	return bodyOpts;

@@ -2,10 +2,19 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const Gateways = sequelize.define("Gateways", {
-		instituteId: DataTypes.INTEGER,
+		instituteId: {
+			allowNull: true,
+			type: DataTypes.INTEGER,
+		},
 		name: DataTypes.STRING,
-		lat: DataTypes.REAL,
-		lon: DataTypes.REAL,
+		lat: {
+			allowNull: true,
+			type: DataTypes.REAL,
+		},
+		lon: {
+			allowNull: true,
+			type: DataTypes.REAL,
+		},
 	}, {});
 
 	Gateways.associate = function(models) {

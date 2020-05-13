@@ -2,11 +2,23 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const Sensors = sequelize.define("Sensors", {
-		gatewayId: DataTypes.INTEGER,
+		gatewayId: {
+			allowNull: true,
+			type: DataTypes.INTEGER,
+		},
 		name: DataTypes.STRING,
-		unit: DataTypes.STRING,
-		model: DataTypes.STRING,
-		description: DataTypes.TEXT,
+		unit: {
+			allowNull: true,
+			type: DataTypes.STRING,
+		},
+		model: {
+			allowNull: true,
+			type: DataTypes.STRING,
+		},
+		description: {
+			allowNull: true,
+			type: DataTypes.TEXT,
+		},
 	}, {});
 
 	Sensors.associate = function(models) {

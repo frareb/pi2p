@@ -1,0 +1,2055 @@
+{
+	"openapi" : "3.0.3",
+	"info" : {
+		"title" : "API PI2P",
+		"description" : "Récupération des informations de capteurs pour\nl\\'étude du milieu de vie d\\'insectes.\n",
+		"contact" : {
+			"email" : "francois.rebaudo@ird.fr"
+		},
+		"license" : {
+			"name" : "Propriétaire"
+		},
+		"version" : "1.0.0"
+	},
+	"servers" : [ {
+		"url" : "http://127.0.0.1:3000/",
+		"description" : "Point d'accès unique"
+	} ],
+	"tags" : [ {
+		"name" : "admins",
+		"description" : "Points d'accès réservés aux administrateurs"
+	}, {
+		"name" : "gateways",
+		"description" : "Points d'accès pour les gateways"
+	}, {
+		"name" : "guests",
+		"description" : "Opérations accessibles à tous"
+	} ],
+	"paths" : {
+		"/institutes" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Liste les instituts hébergeant des capteurs",
+				"description" : "Permet de filtrer les instituts par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"operationId" : "listInstitutes",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre d'éléments par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Institute"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"post" : {
+				"tags" : [ "admins" ],
+				"summary" : "Créé un nouvel institut",
+				"description" : "Créé un nouvel institut, avec toutes ses propriétés\n",
+				"operationId" : "addInstitute",
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Institute"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime tous les instituts",
+				"description" : "Supprime de manière définitive tous les instituts ainsi que tous les éléments enfants de chaque institut.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"operationId" : "deleteInstitutes",
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/institutes/{instituteId}" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Affiche les détails d'un institut",
+				"description" : "Affiche un institut avec toutes ses informations et relations\n",
+				"operationId" : "getInstitute",
+				"parameters" : [ {
+					"name" : "instituteId",
+					"in" : "path",
+					"description" : "identifiant de l'institut à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"type" : "object",
+											"properties" : {
+												"link" : {
+													"type" : "object",
+													"properties" : {
+														"gateways" : {
+															"type" : "array",
+															"items" : {
+																"type" : "string",
+																"format" : "uri",
+																"example" : "http://localhost:3000/gateways/1"
+															}
+														}
+													}
+												}
+											}
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Institute"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404" : {
+						"description" : "la ressource n'a pas été trouvée"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime un institut",
+				"description" : "Supprime de manière définitive un institut ainsi que ses éléments enfants\n",
+				"operationId" : "deleteInstitute",
+				"parameters" : [ {
+					"name" : "instituteId",
+					"in" : "path",
+					"description" : "identifiant de l'institut à supprimer\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"204" : {
+						"description" : "ressource supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"patch" : {
+				"tags" : [ "admins" ],
+				"summary" : "Met à jour un institut",
+				"description" : "Modifie les propriétés d'un institut\n",
+				"operationId" : "updateInstitute",
+				"parameters" : [ {
+					"name" : "instituteId",
+					"in" : "path",
+					"description" : "identifiant de l'institut à modifier\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_1"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"200" : {
+						"description" : "mise à jour de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Institute"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/gateways" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Liste les gateways",
+				"description" : "Permet de filtrer les gateways par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"operationId" : "listGateways",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre d'éléments par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Gateway"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"post" : {
+				"tags" : [ "admins" ],
+				"summary" : "Créé un nouveau gateway",
+				"description" : "Créé un nouveau gateway, avec toutes ses propriétés\n",
+				"operationId" : "addGateway",
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_2"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Gateway"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime tous les gateways",
+				"description" : "Supprime de manière définitive tous les gateways ainsi que tous les éléments enfants de chaque gateway (les capteurs et données).\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"operationId" : "deleteGateways",
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/gateways/{gatewayId}" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Affiche les détails d'un gateway",
+				"description" : "Affiche un gateway avec toutes ses informations et relations\n",
+				"operationId" : "getGateway",
+				"parameters" : [ {
+					"name" : "gatewayId",
+					"in" : "path",
+					"description" : "identifiant du gateway à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"type" : "object",
+											"properties" : {
+												"link" : {
+													"type" : "object",
+													"properties" : {
+														"institute" : {
+															"type" : "string",
+															"format" : "uri",
+															"example" : "http://localhost:3000/institutes/1"
+														},
+														"sensors" : {
+															"type" : "array",
+															"items" : {
+																"type" : "string",
+																"format" : "uri",
+																"example" : "http://localhost:3000/sensors/1"
+															}
+														}
+													}
+												}
+											}
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Gateway"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404" : {
+						"description" : "la ressource n'a pas été trouvée"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime un gateway",
+				"description" : "Supprime de manière définitive un gateway\nainsi que ses éléments enfants (capteurs, données).\n",
+				"operationId" : "deleteGateway",
+				"parameters" : [ {
+					"name" : "gatewayId",
+					"in" : "path",
+					"description" : "identifiant du gateway à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"204" : {
+						"description" : "ressource supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"patch" : {
+				"tags" : [ "admins" ],
+				"summary" : "Met à jour un gateway",
+				"description" : "Modifie les propriétés d'un gateway\n",
+				"operationId" : "updateGateway",
+				"parameters" : [ {
+					"name" : "gatewayId",
+					"in" : "path",
+					"description" : "identifiant du gateway à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_3"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"200" : {
+						"description" : "mise à jour de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Gateway"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/sensors" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Liste les capteurs hébergeant des capteurs",
+				"description" : "Permet de filtrer les capteurs par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"operationId" : "listSensors",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre d'éléments par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Sensor"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"post" : {
+				"tags" : [ "admins" ],
+				"summary" : "Créé un nouveau capteur",
+				"description" : "Créé un nouveau capteur, avec toutes ses propriétés\n",
+				"operationId" : "addSensor",
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_4"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Sensor"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime tous les capteurs",
+				"description" : "Supprime de manière définitive tous les capteurs ainsi que tous les éléments enfants de chaque capteur.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"operationId" : "deleteSensors",
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/sensors/{sensorId}" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Affiche les détails d'un capteur",
+				"description" : "Affiche un capteur avec toutes ses informations et relations\n",
+				"operationId" : "getSensor",
+				"parameters" : [ {
+					"name" : "sensorId",
+					"in" : "path",
+					"description" : "identifiant du capteur à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"type" : "object",
+											"properties" : {
+												"link" : {
+													"type" : "object",
+													"properties" : {
+														"gateway" : {
+															"type" : "string",
+															"format" : "uri",
+															"example" : "http://localhost:3000/gateways/1"
+														},
+														"datas" : {
+															"type" : "string",
+															"format" : "uri",
+															"example" : "http://localhost:3000/sensors/1/datas"
+														}
+													}
+												}
+											}
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Sensor"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404" : {
+						"description" : "la ressource n'a pas été trouvée"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime un capteur",
+				"description" : "Supprime de manière définitive un capteur ainsi que ses éléments enfants\n",
+				"operationId" : "deleteSensor",
+				"parameters" : [ {
+					"name" : "sensorId",
+					"in" : "path",
+					"description" : "identifiant du capteur à supprimer\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"204" : {
+						"description" : "ressource supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"patch" : {
+				"tags" : [ "admins" ],
+				"summary" : "Met à jour un capteur",
+				"description" : "Modifie les propriétés d'un capteur\n",
+				"operationId" : "updateSensor",
+				"parameters" : [ {
+					"name" : "sensorId",
+					"in" : "path",
+					"description" : "identifiant du capteur à modifier\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_5"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"200" : {
+						"description" : "mise à jour de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Sensor"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/sensors/{sensorId}/datas" : {
+			"get" : {
+				"tags" : [ "guests" ],
+				"summary" : "Affiche les données liées à un capteur",
+				"description" : "Permet de filtrer les données d'un capteur par date de création,\nou simplement en les listant tous avec une pagination appropriée.\n",
+				"operationId" : "listSensorDatas",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre d'éléments par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "sensorId",
+					"in" : "path",
+					"description" : "identifiant du capteur dont les données seront affichées\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Data"
+												}, {
+													"$ref" : "#/components/schemas/Datation"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				}
+			},
+			"post" : {
+				"tags" : [ "admins", "gateways" ],
+				"summary" : "Ajoute une valeur aux données du capteur",
+				"description" : "Pour un capteur donné, ajoute une valeur. L'unité est celle précisée\ndans la description du capteur.\n",
+				"operationId" : "addSensorData",
+				"parameters" : [ {
+					"name" : "sensorId",
+					"in" : "path",
+					"description" : "identifiant du capteur auquel ajouter une valeur\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_6"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Data"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/groups" : {
+			"get" : {
+				"tags" : [ "admins" ],
+				"summary" : "Liste les groupes hébergeant des capteurs",
+				"description" : "Permet de filtrer les groupes par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"operationId" : "listGroups",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre d'éléments par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/Group"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"post" : {
+				"tags" : [ "admins" ],
+				"summary" : "Créé un nouveau groupe",
+				"description" : "Créé un nouvel groupe, avec toutes ses propriétés\n",
+				"operationId" : "addGroup",
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_7"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Group"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime tous les groupes",
+				"description" : "Supprime de manière définitive tous les groupes ainsi que tous les éléments enfants de chaque groupe.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"operationId" : "deleteGroups",
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/groups/{groupId}" : {
+			"get" : {
+				"tags" : [ "admins" ],
+				"summary" : "Affiche les détails d'un groupe",
+				"description" : "Affiche un groupe avec toutes ses informations et relations\n",
+				"operationId" : "getGroup",
+				"parameters" : [ {
+					"name" : "groupId",
+					"in" : "path",
+					"description" : "identifiant du groupe à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Group"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"404" : {
+						"description" : "la ressource n'a pas été trouvée"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime un groupe",
+				"description" : "Supprime de manière définitive un groupe ainsi que ses éléments enfants\n",
+				"operationId" : "deleteGroup",
+				"parameters" : [ {
+					"name" : "groupId",
+					"in" : "path",
+					"description" : "identifiant du groupe à supprimer\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"204" : {
+						"description" : "ressource supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"patch" : {
+				"tags" : [ "admins" ],
+				"summary" : "Met à jour un groupe",
+				"description" : "Modifie les propriétés d'un groupe\n",
+				"operationId" : "updateGroup",
+				"parameters" : [ {
+					"name" : "groupId",
+					"in" : "path",
+					"description" : "identifiant du groupe à modifier\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_8"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"200" : {
+						"description" : "mise à jour de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/Group"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/keys" : {
+			"get" : {
+				"tags" : [ "admins" ],
+				"summary" : "Liste les clef API disponibles",
+				"description" : "Permet de récupérer les clefs API déjà attribuées\npar date de création, ou simplement en les listant\ntoutes avec une pagination appropriée.\n",
+				"operationId" : "listKeys",
+				"parameters" : [ {
+					"name" : "start",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "end",
+					"in" : "query",
+					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}, {
+					"name" : "page",
+					"in" : "query",
+					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 0,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				}, {
+					"name" : "page_size",
+					"in" : "query",
+					"description" : "nombre d'éléments par page",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"minimum" : 1,
+						"type" : "integer",
+						"format" : "int32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "object",
+									"properties" : {
+										"metadata" : {
+											"$ref" : "#/components/schemas/PaginationMeta"
+										},
+										"data" : {
+											"type" : "array",
+											"items" : {
+												"allOf" : [ {
+													"$ref" : "#/components/schemas/Identifier"
+												}, {
+													"$ref" : "#/components/schemas/ApiKey"
+												}, {
+													"$ref" : "#/components/schemas/Url"
+												} ]
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"416" : {
+						"description" : "la page est inaccessible"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"post" : {
+				"tags" : [ "admins" ],
+				"summary" : "Créé une nouvelle clef d'accès",
+				"description" : "Insère une nouvelle clef d'accès, associée à un groupe\net éventuellement à un gateway.\nLa clef en elle-même ne peut pas être forcée par l'utilisateur :\nelle est générée automatiquement.\n",
+				"operationId" : "addKey",
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_9"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"201" : {
+						"description" : "création de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/ApiKey"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime toutes les clefs",
+				"description" : "Supprime de manière définitive toutes les clefs d'accès.\nCette requête peut être utile lorsqu'un accès administrateur est\ncompromis : on ne peut plus compter sur la confidentalité d'aucune\nclef, et il faut les révoquer toutes.\n",
+				"operationId" : "deleteKeys",
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		},
+		"/keys/{keyId}" : {
+			"get" : {
+				"tags" : [ "admins" ],
+				"summary" : "Affiche les détails d'un clef d'accès",
+				"description" : "Affiche une clefs d'accès API ainsi que toutes\nses informations et relations\n",
+				"operationId" : "getKey",
+				"parameters" : [ {
+					"name" : "keyId",
+					"in" : "path",
+					"description" : "identifiant de la clef à afficher\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"200" : {
+						"description" : "succès de la requête",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/ApiKey"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"404" : {
+						"description" : "la ressource n'a pas été trouvée"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Révoque une clef d'accès",
+				"description" : "Supprime de manière définitive une clef d'accès API\n",
+				"operationId" : "deleteKey",
+				"parameters" : [ {
+					"name" : "keyId",
+					"in" : "path",
+					"description" : "identifiant de la clef à supprimer\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"responses" : {
+					"204" : {
+						"description" : "ressource supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			},
+			"patch" : {
+				"tags" : [ "admins" ],
+				"summary" : "Remplace une clef d'accès par une nouvelle",
+				"description" : "Modifie les propriétés d'une clef d'accès, et REMPLACE LA CLEF\nPAR UNE NOUVELLE.\n",
+				"operationId" : "updateKey",
+				"parameters" : [ {
+					"name" : "keyId",
+					"in" : "path",
+					"description" : "identifiant de la clef à modifier\n",
+					"required" : true,
+					"style" : "simple",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				} ],
+				"requestBody" : {
+					"content" : {
+						"application/json" : {
+							"schema" : {
+								"$ref" : "#/components/schemas/body_10"
+							}
+						}
+					},
+					"required" : true
+				},
+				"responses" : {
+					"200" : {
+						"description" : "mise à jour de la ressource",
+						"content" : {
+							"application/json" : {
+								"schema" : {
+									"type" : "array",
+									"items" : {
+										"allOf" : [ {
+											"$ref" : "#/components/schemas/Identifier"
+										}, {
+											"$ref" : "#/components/schemas/ApiKey"
+										}, {
+											"$ref" : "#/components/schemas/Datation"
+										} ]
+									}
+								}
+							}
+						}
+					},
+					"400" : {
+						"description" : "les paramètres du corps de la requête sont invalides"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
+			}
+		}
+	},
+	"components" : {
+		"schemas" : {
+			"Identifier" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 1
+					}
+				}
+			},
+			"Datation" : {
+				"type" : "object",
+				"properties" : {
+					"createdAt" : {
+						"type" : "string",
+						"format" : "date-time",
+						"nullable" : true
+					},
+					"updatedAt" : {
+						"type" : "string",
+						"format" : "date-time",
+						"nullable" : true
+					}
+				}
+			},
+			"Url" : {
+				"type" : "object",
+				"properties" : {
+					"url" : {
+						"type" : "string",
+						"format" : "uri",
+						"example" : "http://localhost:3000/ressource/1"
+					}
+				}
+			},
+			"PaginationMeta" : {
+				"type" : "object",
+				"properties" : {
+					"link" : {
+						"type" : "object",
+						"properties" : {
+							"first" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=0&page_size=10"
+							},
+							"prev" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=1&page_size=10"
+							},
+							"next" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=3&page_size=10"
+							},
+							"last" : {
+								"type" : "string",
+								"format" : "uri",
+								"example" : "http://localhost:3000/ressource?page=5&page_size=10"
+							}
+						}
+					}
+				}
+			},
+			"Institute" : {
+				"type" : "object",
+				"properties" : {
+					"name" : {
+						"type" : "string",
+						"example" : "GQE-Le Moulon"
+					},
+					"countryCode" : {
+						"type" : "string",
+						"example" : "FRA"
+					}
+				}
+			},
+			"Gateway" : {
+				"type" : "object",
+				"properties" : {
+					"instituteId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 3
+					},
+					"name" : {
+						"type" : "string",
+						"example" : "Raspberry Pi Nairobi"
+					},
+					"lat" : {
+						"type" : "number",
+						"nullable" : true,
+						"example" : 1.177
+					},
+					"lon" : {
+						"type" : "number",
+						"nullable" : true,
+						"example" : 36.493
+					}
+				}
+			},
+			"Sensor" : {
+				"type" : "object",
+				"properties" : {
+					"gatewayId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 3
+					},
+					"name" : {
+						"type" : "string",
+						"example" : "Température"
+					},
+					"unit" : {
+						"type" : "string",
+						"example" : "°C"
+					},
+					"model" : {
+						"type" : "string",
+						"example" : "BME680"
+					},
+					"description" : {
+						"type" : "string",
+						"example" : "Sur Gateway"
+					}
+				}
+			},
+			"Data" : {
+				"type" : "object",
+				"properties" : {
+					"sensorId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 1
+					},
+					"value" : {
+						"type" : "number",
+						"example" : 32.05
+					}
+				}
+			},
+			"Group" : {
+				"type" : "object",
+				"properties" : {
+					"name" : {
+						"type" : "string",
+						"example" : "admin"
+					},
+					"description" : {
+						"type" : "string",
+						"example" : "Groupe des administrateurs ayant un accès complet à l'API"
+					}
+				}
+			},
+			"ApiKey" : {
+				"type" : "object",
+				"properties" : {
+					"key" : {
+						"type" : "string",
+						"example" : "randomString"
+					},
+					"groupId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 2
+					},
+					"gatewayId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 3
+					},
+					"description" : {
+						"type" : "string",
+						"example" : "Clef API de la Gateway 2"
+					}
+				}
+			},
+			"ApiKeyWithoutKey" : {
+				"type" : "object",
+				"properties" : {
+					"groupId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 2
+					},
+					"gatewayId" : {
+						"type" : "integer",
+						"format" : "uint32",
+						"example" : 3
+					},
+					"description" : {
+						"type" : "string",
+						"example" : "Clef API de la Gateway 2"
+					}
+				}
+			},
+			"body" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Institute"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_1" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Institute"
+				} ]
+			},
+			"body_2" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Gateway"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_3" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Gateway"
+				} ]
+			},
+			"body_4" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Sensor"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_5" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Sensor"
+				} ]
+			},
+			"body_6" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Data"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_7" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Group"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_8" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/Group"
+				} ]
+			},
+			"body_9" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/ApiKeyWithoutKey"
+				}, {
+					"$ref" : "#/components/schemas/Datation"
+				} ]
+			},
+			"body_10" : {
+				"allOf" : [ {
+					"$ref" : "#/components/schemas/ApiKeyWithoutKey"
+				} ]
+			}
+		},
+		"securitySchemes" : {
+			"bearerAuth" : {
+				"type" : "http",
+				"scheme" : "bearer"
+			}
+		}
+	}
+}

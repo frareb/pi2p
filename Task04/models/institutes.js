@@ -3,7 +3,10 @@
 module.exports = (sequelize, DataTypes) => {
 	const Institutes = sequelize.define("Institutes", {
 		name: DataTypes.STRING,
-		countryCode: DataTypes.STRING(3),
+		countryCode: {
+			allowNull: true,
+			type: DataTypes.STRING(3),
+		},
 	}, {});
 
 	Institutes.associate = function(models) {

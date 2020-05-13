@@ -1,45 +1,34 @@
 const models = require("../models");
+const sequelize = models.sequelize;
 
 module.exports = async token => {
-	// first query to find key group
-	const data = await models.ApiKeys
-		.findOne({
-			where: {
-				key: token,
-			},
-			include: [
-				{
-					model: models.Groups,
-					as: "group",
-					attributes: ["name"],
-				},
-			],
-		});
+	// Forge custom query to same time
+	const result = await sequelize.query(`
+		SELECT 
+			"Groups"."name" AS "group",
+			"Sensors"."id" AS "sensorId"
+		FROM "ApiKeys"
+		LEFT JOIN "Groups" ON "ApiKeys"."groupId" = "Groups"."id"
+		LEFT JOIN "Sensors" ON "ApiKeys"."gatewayId" = "Sensors"."gatewayId"
+		WHERE "ApiKeys"."key" = $1;
+	`, {
+		bind: [token],
+		type: sequelize.QueryTypes.SELECT,
+	});
 
-	// if no key was found, stay in default group
-	if(data === null) {
-		return;
-	}
+	// Reduce the results as
+	// - groups: a list of groups, discarded by authenticator;
+	// - group: the group to use;
+	// - params: list of authorized url parameters.
+	return result.reduce((acc, cur) => {
+		const { group, sensorId } = cur;
+		if(!acc.groups.includes(group)) {
+			acc.group = group;
+			acc.groups.push(group);
+		}
+		if(!acc.params.sensorId.includes(sensorId))
+			acc.params.sensorId.push(sensorId);
 
-	// if no gateway is associated, return group only
-	if(data.dataValues.gatewayId === null) {
-		return {
-			group: data.group.dataValues.name,
-		};
-	}
-
-	// one more query to find sensors that belong to the gateway
-	const sensorId = await models.Sensors
-		.findAll({
-			where: {
-				gatewayId: data.dataValues.gatewayId,
-			},
-			attributes: ["id"],
-		})
-		.map(s => s.dataValues.id);
-
-	return {
-		group: data.group.dataValues.name,
-		props: {sensorId},
-	};
+		return acc;
+	}, {groups: [], group: null, params: {sensorId: []}});
 };
