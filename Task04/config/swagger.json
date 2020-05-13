@@ -1070,6 +1070,42 @@
 				"security" : [ {
 					"bearerAuth" : [ ]
 				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime les données d'un capteur",
+				"description" : "Supprime de manière définitive les données sélectionnées d'un capteur.\nSans filtre, toutes les données seront supprimées !\n",
+				"operationId" : "deleteDatas",
+				"parameters" : [
+					{
+						"name" : "sensorId",
+						"in" : "path",
+						"description" : "identifiant du capteur auquel ajouter une valeur\n",
+						"required" : true,
+						"style" : "simple",
+						"explode" : true,
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
+					},
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" }
+				],
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
 			}
 		},
 		"/groups" : {
