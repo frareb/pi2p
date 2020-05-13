@@ -35,13 +35,10 @@ $("#selectInst").on('change',function(){
   selectGate.options.length = 0;
   selectGate.options[selectGate.options.length] = new Option("---", 0)
   let value = $(this).val();
-  let urlListGate = urlBase + "/institutes/" + value;
+  let urlListGate = `${urlBase}/gateways?instituteId=${value}&page_size=100`;
   $.getJSON(urlListGate, function(x) {
-    for (let i = 0; i < x.metadata.link.gateways.length; i++) {
-      $.getJSON(x.metadata.link.gateways[i], function(y) {
-        selectGate.options[selectGate.options.length] = new Option(y.data.name, y.data.id);
-        // console.log(x.data.id);
-      });
+    for (let i = 0; i < x.data.length; i++) {
+      selectGate.options[selectGate.options.length] = new Option(x.data[i].name, x.data[i].id);
     };
   });
 });
@@ -51,13 +48,10 @@ $("#selectGate").on('change',function(){
   selectSens.options[selectSens.options.length] = new Option("---", null)
   let value = $(this).val();
   // console.log("gatewayId: ", value);
-  let urlListSens = urlBase + "/gateways/" + value;
+  let urlListSens = `${urlBase}/sensors?gatewayId=${value}&page_size=100`;
   $.getJSON(urlListSens, function(x) {
-    for (let i = 0; i < x.metadata.link.sensors.length; i++) {
-      $.getJSON(x.metadata.link.sensors[i], function(y) {
-        selectSens.options[selectSens.options.length] = new Option(y.data.name, y.data.id);
-        // console.log(y.data.name + ': ' + y.data.id);
-      });
+    for (let i = 0; i < x.data.length; i++) {
+      selectSens.options[selectSens.options.length] = new Option(x.data[i].name, x.data[i].id);
     };
   });
 });

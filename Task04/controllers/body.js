@@ -24,9 +24,15 @@ module.exports = config => {
 	const body = Object.assign({}, config.body, injects);
 
 	for(const [field, checker] of Object.entries(model.rawAttributes)) {
-		// skip excluded params that are not in body
-		if(	optionalFields.includes(field) &&
-			!body[field]) continue;
+		// id should not be user-defined AT ALL
+		if(field === "id") continue;
+
+		if(optionalFields.includes(field)) {
+			// simply skip undefined optional parameters
+			if(!body[field]) continue;
+			// optionalFields are forbidden in unstrict mode
+			if(!strict) throw `${field} is not allowed in body`;
+		}
 
 		let fieldValue = body[field];
 

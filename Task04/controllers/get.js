@@ -1,4 +1,6 @@
+const bodyParser = require("./body");
 const sequelize = require("sequelize");
+const merge = require("deepmerge");
 
 const DataType = sequelize.DataTypes;
 const Op = sequelize.Op;
@@ -42,13 +44,21 @@ module.exports = config => (req, res) => {
 		"Missing page_size or page number",
 	}}});
 
-	const findArgs = Object.assign({}, config.find, specificFilter, {
+	const headerParams = bodyParser({
+		model: config.model,
+		body: req.query,
+		optionalFields: ["createdAt", "updatedAt"],
+		strict: false,
+	});
+
+	const findArgs = merge.all([config.find, specificFilter, {
+		where: headerParams,
 		// order by last creation date, and ids if dates are equal
 		order: [
 			["createdAt", "DESC"],
 			["id", "DESC"],
 		],
-	});
+	}]);
 
 	if(config.find.attributes && !config.find.attributes.includes("id")) {
 		config.find.attributes.push("id");
