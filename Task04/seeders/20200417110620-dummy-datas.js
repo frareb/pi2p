@@ -11,8 +11,8 @@ module.exports = {
 		const datas = oldApiRes.data.map(e => ({
 			sensorId: 1,
 			value: e.value,
-			createdAt: new Date(e.createdAt),
-			updatedAt: new Date(e.createdAt),
+			createdAt: new Date(e.createdAt - 2*60*60*1000),
+			updatedAt: new Date(e.createdAt - 2*60*60*1000),
 		}));
 
 		return queryInterface.bulkInsert("Datas", datas);
