@@ -6,6 +6,10 @@
 		"host": "127.0.0.1",
 		"dialect": "postgresql"
 	},
+	"tests": {
+		"use_dsn": "sqlite::memory:",
+		"logging": false
+	},
 	"production": {
 		"useEnvVariable": "DSN"
 	}

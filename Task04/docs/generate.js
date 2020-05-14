@@ -28,6 +28,7 @@ const processor = unified()
 		});
 	})
 	.use(rehypeDocument, {
+		// eslint-disable-next-line max-len
 		css: ["https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/github.min.css"],
 	})
 	.use(rehypeFormat)
