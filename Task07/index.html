@@ -1,8 +1,38 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+	  <!-- Plotly.js -->
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<h1>Interface to access a single sensor</h1>
+		<form>
+			<label for="selectChart">Chart:</label>
+			<select name="selectBox" id="selectChart">
+			<option value="line">Line chart</option>
+			<option value="boxplot">Boxplot chart</option>
+			</select>
+			
+			<label for="selectInst">Institution:</label>
+			<select name="selectBox" id="selectInst">
+			<option value="">--Please choose an option--</option>
+			</select>
+			
+			<label for="selectGate">Gateway:</label>
+			<select name="selectBox" id="selectGate">
+			<option value="">---</option>
+			</select>
+			
+			<label for="selectSens">Sensor:</label>
+			<select name="selectBox" id="selectSens">
+			<option value="">---</option>
+			</select>
 
-<p>
-<a href="lineChart/lineChartPlotly.html">Line chart with select boxes for Institutes/Gateways/Sensors</a>
-</p>
+		</form>
+		<div id="myChart" style="width:90%;height:70%;"></div>
 
-<p>
-<a href="boxplotChart/boxplotChartPlotly.html">Boxplot chart per day with select boxes for Institutes/Gateways/Sensors</a>
-</p>
+		<script src="./js/filterSelectBoxInstGateCap.js"></script>
+	</body>
+</html>
