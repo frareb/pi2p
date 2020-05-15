@@ -32,53 +32,30 @@
 				"summary" : "Liste les instituts hébergeant des capteurs",
 				"description" : "Permet de filtrer les instituts par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
 				"operationId" : "listInstitutes",
-				"parameters" : [ {
-					"name" : "start",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
+				"parameters" : [
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" },
+					{ "$ref" : "#/components/parameters/pageQuery" },
+					{ "$ref" : "#/components/parameters/pageSizeQuery" },
+					{
+						"name" : "name",
+						"in" : "query",
+						"description" : "filtrer les instituts par nom",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
+					},
+					{
+						"name" : "countryCode",
+						"in" : "query",
+						"description" : "filtrer les instituts par pays",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
 					}
-				}, {
-					"name" : "end",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
-					}
-				}, {
-					"name" : "page",
-					"in" : "query",
-					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 0,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "page_size",
-					"in" : "query",
-					"description" : "nombre d'éléments par page",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 1,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				} ],
+				],
 				"responses" : {
 					"200" : {
 						"description" : "succès de la requête",
@@ -124,7 +101,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body"
+								"$ref" : "#/components/bodies/body"
 							}
 						}
 					},
@@ -307,7 +284,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_1"
+								"$ref" : "#/components/bodies/body_1"
 							}
 						}
 					},
@@ -354,53 +331,31 @@
 				"summary" : "Liste les gateways",
 				"description" : "Permet de filtrer les gateways par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
 				"operationId" : "listGateways",
-				"parameters" : [ {
-					"name" : "start",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
+				"parameters" : [
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" },
+					{ "$ref" : "#/components/parameters/pageQuery" },
+					{ "$ref" : "#/components/parameters/pageSizeQuery" },
+					{
+						"name" : "instituteId",
+						"in" : "query",
+						"description" : "filtrer les instituts par identifiant de l'institut parent",
+						"style" : "simple",
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
+					},
+					{
+						"name" : "name",
+						"in" : "query",
+						"description" : "filtrer les gateways par nom",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
 					}
-				}, {
-					"name" : "end",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
-					}
-				}, {
-					"name" : "page",
-					"in" : "query",
-					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 0,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "page_size",
-					"in" : "query",
-					"description" : "nombre d'éléments par page",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 1,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				} ],
+				],
 				"responses" : {
 					"200" : {
 						"description" : "succès de la requête",
@@ -446,7 +401,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_2"
+								"$ref" : "#/components/bodies/body_2"
 							}
 						}
 					},
@@ -634,7 +589,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_3"
+								"$ref" : "#/components/bodies/body_3"
 							}
 						}
 					},
@@ -678,56 +633,52 @@
 		"/sensors" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Liste les capteurs hébergeant des capteurs",
+				"summary" : "Liste les capteurs contenant des données",
 				"description" : "Permet de filtrer les capteurs par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
 				"operationId" : "listSensors",
-				"parameters" : [ {
-					"name" : "start",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
+				"parameters" : [
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" },
+					{ "$ref" : "#/components/parameters/pageQuery" },
+					{ "$ref" : "#/components/parameters/pageSizeQuery" },
+					{
+						"name" : "gatewayId",
+						"in" : "query",
+						"description" : "filtrer les capteurs par identifiant du gateway parent",
+						"style" : "simple",
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
+					},
+					{
+						"name" : "name",
+						"in" : "query",
+						"description" : "filtrer les capteurs par nom",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
+					},
+					{
+						"name" : "unit",
+						"in" : "query",
+						"description" : "filtrer les capteurs par unité de la mesure qu'ils fournissent",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
+					},
+					{
+						"name" : "model",
+						"in" : "query",
+						"description" : "filtrer les capteurs par modèle du capteur utilisé",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
 					}
-				}, {
-					"name" : "end",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
-					}
-				}, {
-					"name" : "page",
-					"in" : "query",
-					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 0,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "page_size",
-					"in" : "query",
-					"description" : "nombre d'éléments par page",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 1,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				} ],
+				],
 				"responses" : {
 					"200" : {
 						"description" : "succès de la requête",
@@ -773,7 +724,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_4"
+								"$ref" : "#/components/bodies/body_4"
 							}
 						}
 					},
@@ -958,7 +909,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_5"
+								"$ref" : "#/components/bodies/body_5"
 							}
 						}
 					},
@@ -1005,64 +956,24 @@
 				"summary" : "Affiche les données liées à un capteur",
 				"description" : "Permet de filtrer les données d'un capteur par date de création,\nou simplement en les listant tous avec une pagination appropriée.\n",
 				"operationId" : "listSensorDatas",
-				"parameters" : [ {
-					"name" : "start",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
+				"parameters" : [
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" },
+					{ "$ref" : "#/components/parameters/pageQuery" },
+					{ "$ref" : "#/components/parameters/pageSizeQuery" },
+					{
+						"name" : "sensorId",
+						"in" : "path",
+						"description" : "identifiant du capteur dont les données seront affichées\n",
+						"required" : true,
+						"style" : "simple",
+						"explode" : true,
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
 					}
-				}, {
-					"name" : "end",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
-					}
-				}, {
-					"name" : "page",
-					"in" : "query",
-					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 0,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "page_size",
-					"in" : "query",
-					"description" : "nombre d'éléments par page",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 1,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "sensorId",
-					"in" : "path",
-					"description" : "identifiant du capteur dont les données seront affichées\n",
-					"required" : true,
-					"style" : "simple",
-					"explode" : true,
-					"schema" : {
-						"type" : "integer",
-						"format" : "uint32"
-					}
-				} ],
+				],
 				"responses" : {
 					"200" : {
 						"description" : "succès de la requête",
@@ -1120,7 +1031,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_6"
+								"$ref" : "#/components/bodies/body_6"
 							}
 						}
 					},
@@ -1159,6 +1070,42 @@
 				"security" : [ {
 					"bearerAuth" : [ ]
 				} ]
+			},
+			"delete" : {
+				"tags" : [ "admins" ],
+				"summary" : "Supprime les données d'un capteur",
+				"description" : "Supprime de manière définitive les données sélectionnées d'un capteur.\nSans filtre, toutes les données seront supprimées !\n",
+				"operationId" : "deleteDatas",
+				"parameters" : [
+					{
+						"name" : "sensorId",
+						"in" : "path",
+						"description" : "identifiant du capteur auquel ajouter une valeur\n",
+						"required" : true,
+						"style" : "simple",
+						"explode" : true,
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
+					},
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" }
+				],
+				"responses" : {
+					"204" : {
+						"description" : "collection supprimée"
+					},
+					"403" : {
+						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+					},
+					"500" : {
+						"description" : "erreur interne du serveur"
+					}
+				},
+				"security" : [ {
+					"bearerAuth" : [ ]
+				} ]
 			}
 		},
 		"/groups" : {
@@ -1167,53 +1114,21 @@
 				"summary" : "Liste les groupes hébergeant des capteurs",
 				"description" : "Permet de filtrer les groupes par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
 				"operationId" : "listGroups",
-				"parameters" : [ {
-					"name" : "start",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
+				"parameters" : [
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" },
+					{ "$ref" : "#/components/parameters/pageQuery" },
+					{ "$ref" : "#/components/parameters/pageSizeQuery" },
+					{
+						"name" : "name",
+						"in" : "query",
+						"description" : "filtrer les groupes par nom",
+						"style" : "simple",
+						"schema" : {
+							"type" : "string"
+						}
 					}
-				}, {
-					"name" : "end",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
-					}
-				}, {
-					"name" : "page",
-					"in" : "query",
-					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 0,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "page_size",
-					"in" : "query",
-					"description" : "nombre d'éléments par page",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 1,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				} ],
+				],
 				"responses" : {
 					"200" : {
 						"description" : "succès de la requête",
@@ -1265,7 +1180,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_7"
+								"$ref" : "#/components/bodies/body_7"
 							}
 						}
 					},
@@ -1431,7 +1346,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_8"
+								"$ref" : "#/components/bodies/body_8"
 							}
 						}
 					},
@@ -1478,53 +1393,32 @@
 				"summary" : "Liste les clef API disponibles",
 				"description" : "Permet de récupérer les clefs API déjà attribuées\npar date de création, ou simplement en les listant\ntoutes avec une pagination appropriée.\n",
 				"operationId" : "listKeys",
-				"parameters" : [ {
-					"name" : "start",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
+				"parameters" : [
+					{ "$ref" : "#/components/parameters/startQuery" },
+					{ "$ref" : "#/components/parameters/endQuery" },
+					{ "$ref" : "#/components/parameters/pageQuery" },
+					{ "$ref" : "#/components/parameters/pageSizeQuery" },
+					{
+						"name" : "groupId",
+						"in" : "query",
+						"description" : "filtrer les clefs API par identifiant du groupe auquel elles appartiennent",
+						"style" : "simple",
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
+					},
+					{
+						"name" : "gatewayId",
+						"in" : "query",
+						"description" : "filtrer les clefs API par identifiant de la gateway à laquelle elles se rapportent",
+						"style" : "simple",
+						"schema" : {
+							"type" : "integer",
+							"format" : "uint32"
+						}
 					}
-				}, {
-					"name" : "end",
-					"in" : "query",
-					"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"type" : "string",
-						"format" : "date-time"
-					}
-				}, {
-					"name" : "page",
-					"in" : "query",
-					"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 0,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				}, {
-					"name" : "page_size",
-					"in" : "query",
-					"description" : "nombre d'éléments par page",
-					"required" : false,
-					"style" : "form",
-					"explode" : true,
-					"schema" : {
-						"minimum" : 1,
-						"type" : "integer",
-						"format" : "int32"
-					}
-				} ],
+				],
 				"responses" : {
 					"200" : {
 						"description" : "succès de la requête",
@@ -1573,7 +1467,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_9"
+								"$ref" : "#/components/bodies/body_9"
 							}
 						}
 					},
@@ -1736,7 +1630,7 @@
 					"content" : {
 						"application/json" : {
 							"schema" : {
-								"$ref" : "#/components/schemas/body_10"
+								"$ref" : "#/components/bodies/body_10"
 							}
 						}
 					},
@@ -1779,6 +1673,58 @@
 		}
 	},
 	"components" : {
+		"parameters" : {
+			"startQuery" : {
+				"name" : "start",
+				"in" : "query",
+				"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+				"required" : false,
+				"style" : "form",
+				"explode" : true,
+				"schema" : {
+					"type" : "string",
+					"format" : "date-time"
+				}
+			},
+			"endQuery" : {
+				"name" : "end",
+				"in" : "query",
+				"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+				"required" : false,
+				"style" : "form",
+				"explode" : true,
+				"schema" : {
+					"type" : "string",
+					"format" : "date-time"
+				}
+			},
+			"pageQuery" : {
+				"name" : "page",
+				"in" : "query",
+				"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+				"required" : false,
+				"style" : "form",
+				"explode" : true,
+				"schema" : {
+					"minimum" : 0,
+					"type" : "integer",
+					"format" : "int32"
+				}
+			},
+			"pageSizeQuery" : {
+				"name" : "page_size",
+				"in" : "query",
+				"description" : "nombre d'éléments par page",
+				"required" : false,
+				"style" : "form",
+				"explode" : true,
+				"schema" : {
+					"minimum" : 1,
+					"type" : "integer",
+					"format" : "int32"
+				}
+			}
+		},
 		"schemas" : {
 			"Identifier" : {
 				"type" : "object",
@@ -1976,7 +1922,9 @@
 						"example" : "Clef API de la Gateway 2"
 					}
 				}
-			},
+			}
+		},
+		"bodies" : {
 			"body" : {
 				"allOf" : [ {
 					"$ref" : "#/components/schemas/Institute"

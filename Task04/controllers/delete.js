@@ -1,5 +1,5 @@
 module.exports = config => (req, res) => {
-	let filter = {};
+	let filter = config.filter || {};
 
 	// allow to delete EVERYTHING
 	if(config.deleteAll !== true) {
