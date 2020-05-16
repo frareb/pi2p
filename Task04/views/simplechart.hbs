@@ -1,0 +1,25 @@
+<h2>{{title}} interface to access a single sensor</h2>
+<form>
+  <label for="selectChart">Chart:</label>
+  <select name="selectBox" id="selectChart">
+  <option value="line">Line chart</option>
+  <option value="boxplot">Boxplot chart</option>
+  </select>
+
+  <label for="selectInst">Institution:</label>
+  <select name="selectBox" id="selectInst">
+  <option value="">---</option>
+  </select>
+
+  <label for="selectGate">Gateway:</label>
+  <select name="selectBox" id="selectGate">
+  <option value="">---</option>
+  </select>
+
+  <label for="selectSens">Sensor:</label>
+  <select name="selectBox" id="selectSens">
+  <option value="">---</option>
+  </select>
+</form>
+<div id="myChart" style="width:90%;height:70%;"></div>
+<script src="./js/filterSelectBoxInstGateCap.js"></script>
