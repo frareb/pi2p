@@ -9,7 +9,7 @@ module.exports = {
 		const oldApiRes = await axios.get(API_TEMP_URL);
 
 		const datas = oldApiRes.data.map(e => ({
-			sensorId: 17,
+			sensorId: 7,
 			value: e.value,
 			createdAt: new Date(e.createdAt + 4*60*60*1000),
 			updatedAt: new Date(e.createdAt + 4*60*60*1000),
