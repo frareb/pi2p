@@ -8,11 +8,11 @@ router.get("/", function(req, res) {
 
 // testing simplechart rendering
 router.get("/vizs1", function(req, res) {
-	res.render("simplechart", { title: "PI2P"});
+	res.render("simplechart", { title: "PI2P" });
 });
 
 router.get("/vizm1", function(req, res) {
-	res.render("multiplechart", { title: "PI2P", layout: "layout" });
+	res.render("multiplechart", { title: "PI2P" });
 });
 
 module.exports = router;
