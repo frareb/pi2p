@@ -69,7 +69,7 @@ module.exports = config => (req, res) => {
 	const modelGetPromise = config.model.findAll(findArgs);
 
 	// resolve page count and model query
-	Promise.all([pageCheckPromise, modelGetPromise])
+	return Promise.all([pageCheckPromise, modelGetPromise])
 		.then(promiseResults => {
 			// extract promises results
 			const [count, data] = promiseResults;

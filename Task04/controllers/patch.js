@@ -16,7 +16,7 @@ module.exports = config => async (req, res) => {
 
 	await config.model.update(bodyOpts, { where: { id } });
 
-	config.model
+	return config.model
 		.findByPk(id)
 		.then(d => res.status(200).send(d))
 		.catch(error => res.status(500).json({error}));

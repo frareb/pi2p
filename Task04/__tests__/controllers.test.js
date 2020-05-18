@@ -4,6 +4,15 @@ const models = require("../models");
 
 const model = models.Institutes;
 
+const DummyServer = function() {
+	this.stat = 0;
+	this.result = {};
+};
+
+DummyServer.prototype.status = function(s) { this.stat = s; return this; };
+DummyServer.prototype.send = function(r) { this.result = r; return this; };
+DummyServer.prototype.json = DummyServer.prototype.send;
+
 beforeAll(async () => {
 	// create the database
 	await require("../migrations/20200416105614-create-institutes")
@@ -138,5 +147,67 @@ describe("body parser", () => {
 
 		// force fail
 		return expect(true).toEqual(false);
+	});
+});
+
+describe("post - patch", () => {
+	const { post, patch } = controllers;
+
+	test("post - sucessfully", async () => {
+		const res = new DummyServer();
+
+		await post({
+			model,
+			optionalFields: ["createdAt", "updatedAt"],
+			inject: {
+				countryCode: () => "FRA",
+			},
+		})({
+			body: {
+				name: "IRD",
+			},
+		}, res);
+
+		expect(res.stat).toEqual(201);
+		expect(res.result.name).toEqual("IRD");
+		expect(res.result.countryCode).toEqual("FRA");
+	});
+
+	test("post - fail on error", async () => {
+		const res = new DummyServer();
+
+		await post({
+			model,
+			optionalFields: ["createdAt", "updatedAt"],
+		})({
+			body: {
+				countryCode: "IRD",
+			},
+		}, res);
+
+		expect(res.stat).toEqual(400);
+	});
+
+	test("patch - sucessfully", async () => {
+		const res = new DummyServer();
+
+		await patch({
+			model,
+			optionalFields: ["createdAt", "updatedAt"],
+			inject: {
+				countryCode: () => "FRA",
+			},
+		})({
+			body: {
+				name: "IRD",
+			},
+			params: {
+				modelId: 2,
+			},
+		}, res);
+
+		expect(res.stat).toEqual(200);
+		expect(res.result.name).toEqual("IRD");
+		expect(res.result.countryCode).toEqual("FRA");
 	});
 });

@@ -10,7 +10,7 @@ module.exports = config => (req, res) => {
 		return res.status(400).json({ meta: { error: { message }}});
 	}
 
-	config.model
+	return config.model
 		.create(bodyOpts)
 		.then(d => res.status(201).send(d))
 		.catch(error => res.status(500).json({error}));
