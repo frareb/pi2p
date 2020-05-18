@@ -38,7 +38,7 @@ $("#selectInst").on('change',function(){
   });
 });
 $("#selectGate").on('change',function(){
-  const selectSens = document.getElementById("selectSens");
+  const selectUnit = document.getElementById("selectUnit");
   selectUnit.options.length = 0;
   selectUnit.options[selectUnit.options.length] = new Option("...", null)
   const value = $(this).val();
@@ -49,6 +49,18 @@ $("#selectGate").on('change',function(){
     for (let i = 0; i < x.data.length; i++) {
       listSensName.push(x.data[i].name);
     };
-    console.log("listSensName", listSensName.filter(unique));
+    // console.log("listSensName", listSensName.filter(unique));
+    for(let index in listSensName.filter(unique)) {
+      selectUnit.options[selectUnit.options.length] = new Option(listSensName.filter(unique)[index], index)
+    };
   });
+});
+$("#selectSens").on('change',function(){
+  const varName = $(this).val();
+  // OBJ : graphique avec trace pour tous les capteurs + legende
+  // recuperer le gatewayId
+  // iterer sur les capteurs
+  // si capteur name == variable
+  // si graphique ajouter trace
+  // sinon faire graphique
 });
