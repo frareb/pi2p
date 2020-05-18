@@ -105,7 +105,7 @@ module.exports = config => (req, res) => {
 			link["last"] = paginationLinkForge(maxPage);
 
 			// send response datas
-			res.json({
+			res.status(200).json({
 				metadata: {link},
 				data: config.removeModelUrl ? data : 
 					data.map(i => Object.assign({}, i.dataValues, {

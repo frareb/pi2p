@@ -27,7 +27,7 @@ module.exports = config => (req, res) => {
 	const findArgs = Object.assign({}, config.find, {include});
 
 	// filter using primary key (id)
-	config.model
+	return config.model
 		.findByPk(id, findArgs)
 		.then(fetched => {
 			// when "null" is returned, the ressource hasn't been found
@@ -60,7 +60,7 @@ module.exports = config => (req, res) => {
 					delete data[model];
 				});
 
-			res.json({
+			res.status(200).json({
 				metadata: {link},
 				data,
 			});

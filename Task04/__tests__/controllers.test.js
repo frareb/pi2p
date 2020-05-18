@@ -150,6 +150,44 @@ describe("body parser", () => {
 	});
 });
 
+describe("get", () => {
+	const { get, details } = controllers;
+
+	test("collection - sucessfully", async () => {
+		const res = new DummyServer();
+
+		await get({
+			model,
+			find: {
+				attributes: ["id"],
+			},
+		})({
+			query: {},
+			headers: { host: "test.com" },
+			_parsedOriginalUrl: { pathname: "/none" },
+		}, res);
+
+		expect(res.result).toMatchSnapshot();
+		expect(res.stat).toEqual(200);
+	});
+
+	test("individual - sucessfully", async () => {
+		const res = new DummyServer();
+
+		await details({
+			model,
+			include: [],
+		})({
+			params: { modelId: 1 },
+			headers: { host: "test.com" },
+			originalUrl: "/none",
+		}, res);
+
+		expect(res.result).toMatchSnapshot();
+		expect(res.stat).toEqual(200);
+	});
+});
+
 describe("post - patch", () => {
 	const { post, patch } = controllers;
 
@@ -209,5 +247,32 @@ describe("post - patch", () => {
 		expect(res.stat).toEqual(200);
 		expect(res.result.name).toEqual("IRD");
 		expect(res.result.countryCode).toEqual("FRA");
+	});
+});
+
+describe("delete", () => {
+	const { delete: deleteCtl, details } = controllers;
+
+	test("correctly works", async () => {
+		const res = new DummyServer();
+
+		await deleteCtl({
+			model,
+		})({
+			params: { modelId: 1 },
+		}, res);
+
+		expect(res.stat).toEqual(204);
+
+		await details({
+			model,
+			include: [],
+		})({
+			params: { modelId: 1 },
+			headers: { host: "test.com" },
+			originalUrl: "/none",
+		}, res);
+
+		expect(res.stat).toEqual(404);
 	});
 });
