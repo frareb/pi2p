@@ -1,3 +1,5 @@
+"use strict";
+
 // FUNCTIONS TO GET X COLORS FROM X TO X : GRADIENT
 export function hex (c) {
   const s = "0123456789abcdef";
