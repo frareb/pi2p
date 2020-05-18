@@ -11,7 +11,7 @@
 // ce qui posera problème si deux capteurs ont des données à des
 // pas de temps différents.
 
-const urlBase = 'http://localhost:3000'
+const urlBase = '.'; //'http://localhost:3000'
 
 const urlListInst = `${urlBase}/institutes?page_size=100`;
 $.getJSON(urlListInst, function(x) {
