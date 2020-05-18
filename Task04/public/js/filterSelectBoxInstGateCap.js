@@ -43,7 +43,7 @@ $("#selectGate").on('change',function(){
   const urlListSens = `${urlBase}/sensors?gatewayId=${value}&page_size=100`;
   $.getJSON(urlListSens, function(x) {
     for (let i = 0; i < x.data.length; i++) {
-      selectSens.options[selectSens.options.length] = new Option(x.data[i].name, x.data[i].id);
+      selectSens.options[selectSens.options.length] = new Option(`${x.data[i].name} ${x.data[i].description}`, x.data[i].id);
     };
   });
 });
