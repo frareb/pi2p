@@ -4,7 +4,7 @@ module.exports = {
 	up: (queryInterface) => {
 		return queryInterface.bulkInsert("Institutes", [
 			{
-				name: "IRD",
+				name: "EGCE",
 				countryCode: "FRA",
 				createdAt: new Date("2020-05-18T12:21:47.027Z"),
 				updatedAt: new Date("2020-05-18T12:21:47.027Z"),

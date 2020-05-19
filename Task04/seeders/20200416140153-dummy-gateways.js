@@ -5,7 +5,7 @@ module.exports = {
 		return queryInterface.bulkInsert("Gateways", [
 			{
 				instituteId: 1,
-				name: "Raspberry Pi EGCE 01",
+				name: "Home",
 				lat: 48.42341,
 				lon: 2.09404,
 				createdAt: new Date(),
@@ -13,7 +13,7 @@ module.exports = {
 			},
 			{
 				instituteId: 1,
-				name: "Raspberry Pi EGCE 02",
+				name: "Lab",
 				lat: null,
 				lon: null,
 				createdAt: new Date(),
@@ -21,7 +21,7 @@ module.exports = {
 			},
 			{
 				instituteId: 3,
-				name: "Raspberry Pi Nairobi",
+				name: "Nairobi",
 				lat: null,
 				lon: null,
 				createdAt: new Date(),
@@ -29,7 +29,7 @@ module.exports = {
 			},
 			{
 				instituteId: 5,
-				name: "Raspberry Pi La Paz Chasquipampa",
+				name: "La Paz Chasquipampa",
 				lat: null,
 				lon: null,
 				createdAt: new Date(),
@@ -37,7 +37,7 @@ module.exports = {
 			},
 			{
 				instituteId: 6,
-				name: "Raspberry Pi El Alto",
+				name: "El Alto",
 				lat: null,
 				lon: null,
 				createdAt: new Date(),
@@ -45,7 +45,7 @@ module.exports = {
 			},
 			{
 				instituteId: 4,
-				name: "Raspberry Pi Khipakhipani",
+				name: "Khipakhipani",
 				lat: null,
 				lon: null,
 				createdAt: new Date(),
