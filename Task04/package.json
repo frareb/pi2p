@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "doc": "node docs/generate.js"
+    "doc": "node docs/generate.js",
+    "test": "NODE_ENV=tests jest"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "axios": "^0.19.2",
     "eslint": "^6.8.0",
+    "jest": "^26.0.1",
     "rehype-document": "^5.0.0",
     "rehype-format": "^3.0.1",
     "rehype-highlight": "^4.0.0",
@@ -35,6 +37,7 @@
     "remark-parse": "^8.0.2",
     "remark-rehype": "^6.0.0",
     "sequelize-cli": "^5.5.1",
+    "sqlite3": "^4.2.0",
     "unified": "^9.0.0"
   }
 }

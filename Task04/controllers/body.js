@@ -38,7 +38,7 @@ module.exports = config => {
 
 		// discard null or undefined fields:
 		// - on unstrict mode or;
-		// - when allow is explicitely allowed.
+		// - when null is explicitely allowed.
 		if(	(checker.allowNull === true || !strict) &&
 			(fieldValue === null || typeof fieldValue === "undefined")) {
 			continue;

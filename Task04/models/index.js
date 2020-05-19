@@ -14,6 +14,8 @@ let sequelize;
 // gather environment variables and connect
 if (config.use_env_variable) {
 	sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else if(config.use_dsn) {
+	sequelize = new Sequelize(config.use_dsn, config);
 } else {
 	sequelize = new Sequelize(config.database, config.username, config.password, config);
 }

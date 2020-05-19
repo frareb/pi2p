@@ -39,10 +39,15 @@ module.exports = config => async (req, res, next) => {
 			let paramsValid = true;
 			Object.entries(result.params)
 				.filter(a => isNaN(parseInt(a[0])))
+				// TODO: authenticator should be called anyway,
+				// to get path-authorization for guest group
 				.forEach(a => {
 					const [k, v] = a;
-					
-					if(!authenticatorResult.props[k].includes(parseInt(v))) {
+					//console.log(authenticatorResult.props[k], parseInt(v));
+
+					// TODO: allow non-integer parameters
+					if(	!authenticatorResult.props ||
+						!authenticatorResult.props[k].includes(parseInt(v))) {
 						paramsValid = false;
 					}
 				});

@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get collection - sucessfully 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "id": 7,
+      "url": "http://test.com/none/7",
+    },
+    Object {
+      "id": 6,
+      "url": "http://test.com/none/6",
+    },
+    Object {
+      "id": 5,
+      "url": "http://test.com/none/5",
+    },
+    Object {
+      "id": 4,
+      "url": "http://test.com/none/4",
+    },
+    Object {
+      "id": 3,
+      "url": "http://test.com/none/3",
+    },
+    Object {
+      "id": 2,
+      "url": "http://test.com/none/2",
+    },
+    Object {
+      "id": 1,
+      "url": "http://test.com/none/1",
+    },
+  ],
+  "metadata": Object {
+    "link": Object {
+      "first": "http://test.com/none?page=0&page_size=10",
+      "last": "http://test.com/none?page=0&page_size=10",
+    },
+  },
+}
+`;
+
+exports[`get individual - sucessfully 1`] = `
+Object {
+  "data": Object {
+    "countryCode": "FRA",
+    "createdAt": 2020-05-18T12:21:47.027Z,
+    "id": 1,
+    "name": "IRD",
+    "updatedAt": 2020-05-18T12:21:47.027Z,
+  },
+  "metadata": Object {
+    "link": Object {},
+  },
+}
+`;

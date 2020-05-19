@@ -6,7 +6,7 @@ module.exports = config => (req, res) => {
 		filter.id = req.params.modelId;
 	}
 
-	config.model
+	return config.model
 		// simply remove the given id
 		.destroy({
 			where: filter,
