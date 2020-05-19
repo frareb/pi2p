@@ -84,19 +84,19 @@ function getChartChoice(){
   let makeGraph = null;
   switch (selectChart){
     case 'line':
-      makeGraph = makeSimpleLineSensor;
+      makeGraph = makeSimpleLineSensorWithMA;
       break;
     case 'boxplot':
       makeGraph = makeSimpleBoxplotSensor;
       break;
     default:
-      makeGraph = makeSimpleLineSensor;
+      makeGraph = makeSimpleLineSensorWithMA;
       break;
   }
   return makeGraph;
 }
 
-function makeSimpleLineSensor(sensorId=1, nameVar, nameInst, nameGateway) {
+function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) {
   const timestampNow = Date.now();
   const timestamp30d = timestampNow - (30*24*60*60*1000) // -30 days
   const myURL = `${urlBase}/Sensors/${sensorId}/datas?start=${timestamp30d}&end=${timestampNow}`;
