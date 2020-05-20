@@ -16,6 +16,12 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
+				name: "deploy",
+				description: "Deploy bot access",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
 				name: "guest",
 				description: "Only GET access to the datas",
 				createdAt: new Date(),

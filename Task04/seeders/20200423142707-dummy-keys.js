@@ -16,6 +16,16 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
+				// without this key, no one can access the others
+				// please choose it secured in the first place
+				key: "githubSecretKey",
+				groupId: 3,
+				gatewayId: null,
+				description: "Github deploy hook on release",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
 				key: cryptoRandomString({length: 64, type: "base64"}),
 				groupId: 2,
 				gatewayId: 1,
