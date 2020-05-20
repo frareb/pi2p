@@ -9,6 +9,16 @@ router.get("/", function(req, res) {
 	});
 });
 
+// ----------------------------------------------------------------------------
+// charts
+// ----------------------------------------------------------------------------
+
+// vizabout
+// simple chart rendering
+// router.get("/vizs1", function(req, res) {
+// 	res.render("simplechart", { title: "PI2P" });
+// });
+
 // simple chart rendering
 router.get("/vizs1", function(req, res) {
 	res.render("simplechart", { title: "PI2P" });
