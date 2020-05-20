@@ -40,7 +40,7 @@ app.use("/sensors", require("./routes/sensors"));
 //app.use("/deploy", require("./routes/deploy"));
 app.use("/groups", require("./routes/groups"));
 app.use("/keys", require("./routes/api-keys"));
-app.use("/", require("./routes/index"));
+app.use("/", require("./routes/templates"));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
