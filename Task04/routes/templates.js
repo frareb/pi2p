@@ -19,6 +19,11 @@ router.get("/vizm1", function(req, res) {
 	res.render("multiplechart", { title: "PI2P" });
 });
 
+// comparison between sites rendering
+router.get("/viza1", function(req, res) {
+	res.render("comparechart", { title: "PI2P" });
+});
+
 // legal notice rendering
 router.get("/ln", function(req, res) {
 	res.render("legalNotice", { title: "PI2P" });
