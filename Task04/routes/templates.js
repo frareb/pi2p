@@ -3,7 +3,10 @@ const router = express.Router();
 
 // render a basic home page
 router.get("/", function(req, res) {
-	res.render("index", { title: "PI2P", longTitle: "Predicting Insect Pest Phenology" });
+	res.render("index", {
+		title: "PI2P",
+		longTitle: "Predicting Insect Pest Phenology",
+	});
 });
 
 // simple chart rendering

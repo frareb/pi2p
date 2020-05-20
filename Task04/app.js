@@ -6,17 +6,18 @@ const logger = require("morgan");
 const authorization = require("./authorization/plugin");
 const cors = require("cors");
 
+const env = process.env.NODE_ENV || "development";
 const app = express();
 
-// CORS: allow requests FROM ALL ORIGINS
-app.use(cors());
+// CORS: allow requests from all origins for development purposes
+if(env === "development") app.use(cors());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
 // decoding utilities
-app.use(logger("dev"));
+app.use(logger(env === "development" ? "dev" : "common"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -32,13 +33,14 @@ app.use(authorization({
 app.use(express.static(path.join(__dirname, "public")));
 
 // serve local routes
-app.use("/", require("./routes/index"));
 app.use("/documentation", require("./routes/documentation"));
 app.use("/institutes", require("./routes/institutes"));
 app.use("/gateways", require("./routes/gateways"));
 app.use("/sensors", require("./routes/sensors"));
+app.use("/deploy", require("./routes/deploy"));
 app.use("/groups", require("./routes/groups"));
 app.use("/keys", require("./routes/api-keys"));
+app.use("/", require("./routes/templates"));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -49,7 +51,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res) {
 	// set locals, only providing error in development
 	res.locals.message = err.message;
-	res.locals.error = req.app.get("env") === "development" ? err : {};
+	res.locals.error = env === "development" ? err : {};
 
 	// render the error page
 	res.status(err.status || 500);

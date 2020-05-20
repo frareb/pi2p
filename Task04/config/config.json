@@ -7,10 +7,11 @@
 		"dialect": "postgresql"
 	},
 	"tests": {
-		"use_dsn": "sqlite::memory:",
+		"useDsn": "sqlite::memory:",
 		"logging": false
 	},
 	"production": {
-		"useEnvVariable": "DSN"
+		"useEnvVariable": "DSN",
+		"logging": false
 	}
 }

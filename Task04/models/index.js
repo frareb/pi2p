@@ -4,6 +4,8 @@
 const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
+const Umzug = require("umzug");
+
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
@@ -12,12 +14,34 @@ const db = {};
 let sequelize;
 
 // gather environment variables and connect
-if (config.use_env_variable) {
-	sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else if(config.use_dsn) {
-	sequelize = new Sequelize(config.use_dsn, config);
+if (config.useEnvVariable) {
+	sequelize = new Sequelize(process.env[config.useEnvVariable], config);
+} else if(config.useDsn) {
+	sequelize = new Sequelize(config.useDsn, config);
 } else {
 	sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+// run pending migrations (production-only)
+if(env === "production") {
+	const umzug = new Umzug({
+		migrations: {
+			path: path.join(__dirname, "../migrations"),
+			params: [
+				sequelize.queryInterface,
+				Sequelize,
+			],
+		},
+		// store migration data inside the database
+		storage: "sequelize",
+		storageOptions: { sequelize },
+	});
+
+	(async () => {
+		// checks migrations and run them if they are not already applied
+		await umzug.up();
+		console.log("[umzug] ran all migrations");
+	})();
 }
 
 // give access to all the models
