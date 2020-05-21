@@ -13,25 +13,24 @@ router.get("/", function(req, res) {
 // charts
 // ----------------------------------------------------------------------------
 
-// vizabout
-// simple chart rendering
-// router.get("/vizs1", function(req, res) {
-// 	res.render("simplechart", { title: "PI2P" });
-// });
+// About climate and charts
+router.get("/vizabout", function(req, res) {
+	res.render("vizabout", { title: "PI2P" });
+});
 
 // simple chart rendering
 router.get("/vizs1", function(req, res) {
-	res.render("simplechart", { title: "PI2P" });
+	res.render("vizs1", { title: "PI2P" });
 });
 
 // multi-charts rendering
 router.get("/vizm1", function(req, res) {
-	res.render("multiplechart", { title: "PI2P" });
+	res.render("vizm1", { title: "PI2P" });
 });
 
 // comparison between sites rendering
 router.get("/viza1", function(req, res) {
-	res.render("comparechart", { title: "PI2P" });
+	res.render("viza1", { title: "PI2P" });
 });
 
 // legal notice rendering
