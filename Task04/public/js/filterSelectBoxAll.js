@@ -54,10 +54,12 @@ $("#selectVar").on('change',function(){
 		let myLab = "";
 
 		$.getJSON(`${urlBase}/Sensors/${mySensorIds[i]}`, function(x) {
-			const urlTargetGate = x.metadata.link.gateway.replace("gateway", "gateways") // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// const urlTargetGate = x.metadata.link.gateway.replace("gateway", "gateways")
+			const urlTargetGate = x.metadata.link.gateway
 			$.getJSON(urlTargetGate, function(y) {
 				myLab = `${myLab}${y.data.name}`;
-				const urlTargetInst = y.metadata.link.institute.replace("institute", "institutes") // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				// const urlTargetInst = y.metadata.link.institute.replace("institute", "institutes")
+				const urlTargetInst = y.metadata.link.institute
 				$.getJSON(urlTargetInst, function(z) {
 					myLab = `${myLab} (${z.data.name})`;
 
