@@ -44,15 +44,18 @@ module.exports = config => (req, res) => {
 			include.map(i => [i.as, !i.limit])
 				.forEach(props => {
 					const [model, isUnique] = props;
+					const pluralModel =
+						model.slice(-1) === "s" ? model : model + "s";
 
 					if(isUnique && data[model]) {
-						link[model] =
-							`${baseUrl}/${model}/${data[model].dataValues.id}`;
+						// eslint-disable-next-line max-len
+						link[model] = `${baseUrl}/${pluralModel}/${data[model].dataValues.id}`;
 					} else if(!config.unifyMultipleLinks && data[model]) {
 						link[model] = data[model].map(a =>
-							`${baseUrl}/${model}/${a.dataValues.id}`);
+							`${baseUrl}/${pluralModel}/${a.dataValues.id}`);
 					} else if(data[model]) {
-						link[model] = `${baseUrl}${req.originalUrl}/${model}`;
+						link[model] =
+							`${baseUrl}${req.originalUrl}/${pluralModel}`;
 					} else {
 						link[model] = null;
 					}
