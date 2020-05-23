@@ -52,7 +52,7 @@ $.getJSON(urlListInst, function(x) {
 				console.log(timestamp1h);
 				const urlListData = `${urlBase}/Sensors/${z.data[i].id}/datas?start=${timestamp1h}&end=${timestampNow}`;
 				$.getJSON(urlListData, function(w) {
-					let lastValue = "";
+					let lastValue = "no data";
 					let colorChange = "#FF8C61";
 					let timestamp = "";
 					if (w.data.length > 2){
