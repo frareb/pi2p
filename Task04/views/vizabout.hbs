@@ -1,5 +1,7 @@
 <p>Sensors are connected directly to <a href="https://en.wikipedia.org/wiki/Single-board_computer">single board computers</a> used as gateways or to <a href="https://en.wikipedia.org/wiki/Microcontroller">microcontrollers</a> sending data to gateways. Gatways belong to institutions, sending data to the main server. The network topology is represented below, in real time with salmon dots for inactive sensors and with green dots for active sensors. Last reads from active sensors can be seen on hover.</p>
+
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
 <style type="text/css">
 	#mynetwork {
 		width: 90%; /* 600px; */
@@ -9,6 +11,7 @@
 </style>
 <div id="mynetwork"></div>
 <script type="module" src="./js/visNetworkClimate.js"></script>
+
 
 <DIV id='PopUp' style='display: none; position: absolute; left: 100px; top: 50px; border: solid black 1px; text-align: justify; font-size: 12px; height: 200px ; width: 300px;' onmouseover="document.getElementById('PopUp').style.display = 'none' ">
 <SPAN id='PopUpText'></SPAN>

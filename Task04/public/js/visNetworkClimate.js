@@ -97,12 +97,15 @@ network.on("click", function(params){
 	// 	"<h2>Click event:</h2>" + JSON.stringify(params, null, 4);
 	const myNode = this.getNodeAt(params.pointer.DOM);
 	const myNodeObject = nodes.get(myNode);
-	console.log(myNodeObject);
+	// console.log(myNodeObject);
 	if(myNode !== undefined && myNode.startsWith('s') && myNodeObject.color == "#6ae35d"){
 		// console.log(myNode);
 		const sensorId = myNode.replace("s", "");
 		// console.log(sensorId);
 		makeSimpleLineChart(sensorId);
+		
+		// TO DO: replace with lib to place the popup, eg POPPER
+		// https://popper.js.org
 		showPos(event)
 	};
 });
