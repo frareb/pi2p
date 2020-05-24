@@ -76,7 +76,7 @@ $.getJSON(urlListInst, function(x) {
 						value: 5,
 						label: z.data[i].name,
 						color: colorChange,
-						title: `Last read: ${lastValue}${z.data[i].unit}</br>${timestamp}</br><div id="tooltipChart" style="width:50%;height:50%;"></div>`
+						title: `Last read: ${lastValue}${z.data[i].unit}</br>${timestamp}</br>`
 					});
 					edgesArrayUpdate.push({
 						from: "g" + z.data[i].gatewayId,
@@ -90,9 +90,19 @@ $.getJSON(urlListInst, function(x) {
 	});
 });
 
+network.on("click", function(params){
+	// functionality for popup to show on mouseover
+	params.event = "[original event]";
+	document.getElementById("eventSpan").innerHTML =
+		"<h2>Click event:</h2>" + JSON.stringify(params, null, 4);
+	console.log(
+		"click event, getNodeAt returns: " + this.getNodeAt(params.pointer.DOM)
+	);
+});
+
 network.on("hoverNode", function(){
-  // functionality for popup to show on mouseover
+	// functionality for popup to show on mouseover
 });
 network.on("blurNode", function(){
-  // functionality for popup to hide on mouseout
+	// functionality for popup to hide on mouseout
 });
