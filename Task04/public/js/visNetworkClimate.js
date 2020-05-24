@@ -118,8 +118,9 @@ function showPos(event) {
 		x = event.clientX + window.scrollX;
 		y = event.clientY + window.scrollY;
 	}
-	x -= 2; y -= 2;
-	y = y+15
+	x -= 2;
+	y -= 2;
+	y = y + 15
 	el.style.left = x + "px";
 	el.style.top = y + "px";
 	el.style.display = "block";
