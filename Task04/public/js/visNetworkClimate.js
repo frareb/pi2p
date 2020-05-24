@@ -1,9 +1,35 @@
 "use strict";
 
+// colors:
+// #653356
+// #6B5CA5
+// #71A9F7
+// #C6D8FF
+// #FAA275
+// #FF8C61
+
+// makeNetwork
+const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
+const edgesArray = [];
+const nodes = new vis.DataSet(nodesArray);
+const edges = new vis.DataSet(edgesArray);
+const container = document.getElementById('mynetwork');
+const data = {
+	nodes: nodes,
+	edges: edges
+};
+const options = {
+	nodes: {
+		shape: "dot"
+	},
+	interaction: {
+		hover:true
+	}
+};
+const network = new vis.Network(container, data, options);
+
 const urlBase = '.';
 const urlListInst = `${urlBase}/institutes?page_size=1000`;
-const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
-const edgesArray = []
 $.getJSON(urlListInst, function(x) {
 	for (let i = 0; i < x.data.length; i++) {
 		nodesArray.push({
@@ -26,30 +52,15 @@ $.getJSON(urlListInst, function(x) {
 			});
 			edgesArray.push({from: "i" + y.data[i].instituteId, to: "g" + y.data[i].id});
 		};
-		// makeNetwork
-		const nodes = new vis.DataSet(nodesArray);
-		const edges = new vis.DataSet(edgesArray);
-		const container = document.getElementById('mynetwork');
-		const data = {
-			nodes: nodes,
-			edges: edges
-		};
-		const options = {
-			nodes: {
-				shape: "dot"
-			}
-		};
-		const network = new vis.Network(container, data, options);
-
+		data.nodes.update(nodesArray);
+		data.edges.update(edgesArray);
 		const urlListSens = `${urlBase}/sensors?page_size=1000`;
 		$.getJSON(urlListSens, function(z) {
 			for (let i = 0; i < z.data.length; i++) {
 				const nodesArrayUpdate = [];
 				const edgesArrayUpdate = [];
 				const timestampNow = new Date(); //Date.now();
-				const timestamp1h = new Date(new Date().setHours(new Date().getHours() - 12));//timestampNow - (1000*60*60);
-				console.log(timestampNow);
-				console.log(timestamp1h);
+				const timestamp1h = new Date(new Date().setHours(new Date().getHours() - 12));
 				const urlListData = `${urlBase}/Sensors/${z.data[i].id}/datas?start=${timestamp1h}&end=${timestampNow}`;
 				$.getJSON(urlListData, function(w) {
 					let lastValue = "no data";
@@ -65,7 +76,7 @@ $.getJSON(urlListInst, function(x) {
 						value: 5,
 						label: z.data[i].name,
 						color: colorChange,
-						title: `Last read: ${lastValue}${z.data[i].unit} ${timestamp}`
+						title: `Last read: ${lastValue}${z.data[i].unit}</br>${timestamp}</br><div id="tooltipChart" style="width:50%;height:50%;"></div>`
 					});
 					edgesArrayUpdate.push({
 						from: "g" + z.data[i].gatewayId,
@@ -78,9 +89,10 @@ $.getJSON(urlListInst, function(x) {
 		});
 	});
 });
-// 653356
-// 6B5CA5
-// 71A9F7
-// C6D8FF
-// FAA275
-// FF8C61
+
+network.on("hoverNode", function(){
+  // functionality for popup to show on mouseover
+});
+network.on("blurNode", function(){
+  // functionality for popup to hide on mouseout
+});
