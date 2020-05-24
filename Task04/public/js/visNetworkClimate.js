@@ -92,13 +92,40 @@ $.getJSON(urlListInst, function(x) {
 
 network.on("click", function(params){
 	// functionality for popup to show on mouseover
-	params.event = "[original event]";
-	document.getElementById("eventSpan").innerHTML =
-		"<h2>Click event:</h2>" + JSON.stringify(params, null, 4);
-	console.log(
-		"click event, getNodeAt returns: " + this.getNodeAt(params.pointer.DOM)
-	);
+	// params.event = "[original event]";
+	// document.getElementById("PopUp").innerHTML =
+	// 	"<h2>Click event:</h2>" + JSON.stringify(params, null, 4);
+	const myNode = this.getNodeAt(params.pointer.DOM);
+	const myNodeObject = nodes.get(myNode);
+	console.log(myNodeObject);
+	if(myNode !== undefined && myNode.startsWith('s') && myNodeObject.color == "#6ae35d"){
+		// console.log(myNode);
+		const sensorId = myNode.replace("s", "");
+		// console.log(sensorId);
+		makeSimpleLineChart(sensorId);
+		showPos(event)
+	};
 });
+
+function showPos(event) {
+	let el, x, y;
+	el = document.getElementById('PopUp');
+	if (window.event) {
+		x = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+		y = window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
+	}
+	else {
+		x = event.clientX + window.scrollX;
+		y = event.clientY + window.scrollY;
+	}
+	x -= 2; y -= 2;
+	y = y+15
+	el.style.left = x + "px";
+	el.style.top = y + "px";
+	el.style.display = "block";
+	// document.getElementById('PopUpText').innerHTML = text;
+}
+
 
 network.on("hoverNode", function(){
 	// functionality for popup to show on mouseover
@@ -106,3 +133,50 @@ network.on("hoverNode", function(){
 network.on("blurNode", function(){
 	// functionality for popup to hide on mouseout
 });
+
+
+function makeSimpleLineChart(sensorId) {
+	const timestampNow = new Date(); //Date.now();
+	const timestamp1h = new Date(new Date().setHours(new Date().getHours() - 12));
+	const myURL = `${urlBase}/Sensors/${sensorId}/datas?start=${timestamp1h}&end=${timestampNow}`;
+	const myX = [];
+	const myY = [];
+	Plotly.d3.json(myURL, function(error, x) {
+		if (x.data.length > 1){
+			for (let i = 0; i < x.data.length; i++){
+				myX.push(new Date(x.data[i].createdAt ))
+				myY.push(x.data[i].value) }
+			const myLayout = {
+				autosize: true,
+				margin: {
+					l: 0,
+					r: 0,
+					b: 0,
+					t: 0,
+					pad: 4
+				},
+				showlegend: false,
+				xaxis: {
+					automargin: true,
+					autorange: true,
+					type: 'date'
+				},
+				yaxis: {
+					automargin: true,
+					hoverformat: '.1f'
+				}
+			}
+			const config = {
+				responsive: true
+			}
+			const myTrace = { // trace with raw data
+				line: {color: '#17BECF'},
+				x: myX,
+				y: myY}
+			Plotly.newPlot(document.getElementById('PopUp'), [myTrace], myLayout, config);
+		} else {
+			document.getElementById("PopUp").innerHTML = "";
+			console.log("no data");
+		};
+	});
+};
