@@ -31,41 +31,42 @@ module.exports = options => {
 			generatorsOrder[name] = order;
 		});
 
-	// construct a simple MDAST tree
-	const mdastTree = {
-		type: "root",
-		children: [],
-	};
-
 	// sort generators by given order
 	const sortedGenerators = Object.entries(generatorsOrder)
-		.sort((a, b) => a[1] - b[1]);
+		.sort((a, b) => a[1] - b[1])
+		.map(a => a[0]);
 
-	function appendToMdast(i=0) {
-		const generatorName = sortedGenerators[i][0];
-		const generator = generators[generatorName];
+	// fetch all promises
+	const promises = [...new Array(sortedGenerators.length)]
+		.map((_, i) => generators[sortedGenerators[i]](month, institute));
 
-		mdastTree.children.push({
-			type: "heading",
-			depth: 3,
-			children: [{type: "text", value: generatorName}],
-		});
+	// execute the promises asynchronously
+	return Promise.all(promises)
+		.then(executedGenerators => {
+			// construct a simple MDAST tree
+			const mdastTree = {
+				type: "root",
+				children: [],
+			};
 
-		generator(month, institute).then(fragment => {
-			mdastTree.children.push(fragment);
-			if(i + 1 < sortedGenerators.length) appendToMdast(i + 1);
-			else generateLatex();
-		});
-	}
+			// append heading and content to MDAST
+			executedGenerators.forEach((mdastFragment, i) => {
+				const mdastHeadingName = sortedGenerators[i];
 
-	function generateLatex() {
-		const finalContent = template({
+				mdastTree.children.push({
+					type: "heading",
+					depth: 3,
+					children: [{type: "text", value: mdastHeadingName}],
+				});
+
+				mdastTree.children.push(mdastFragment);
+			});
+
+			return mdastTree;
+		})
+		// stringify MDAST to LaTeX
+		.then(mdastTree => template({
 			lang,
 			content: toLaTeX(mdastTree),
-		});
-
-		console.log(finalContent);
-	}
-
-	appendToMdast();
+		}));
 };

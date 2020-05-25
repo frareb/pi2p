@@ -21,46 +21,50 @@ const generator = (month, institute) => {
 		bind: [month, institute],
 		type: sequelize.QueryTypes.SELECT,
 	}).then(data => {
-		const rowCount = 2;
+		const rowCount = 3;
+		// one data per minute
+		const dataCountPerSensor = 24 * 60;
 
-		const dayRows = [...new Array(rowCount)].map(() => ({
+		// one row out of two is for days, the other for percentages
+		const rows = [...new Array(2 * rowCount)].map((_, i) => ({
 			type: "tableRow",
-			children: [],
-		}));
-
-		const percentRows = [...new Array(rowCount)].map(() => ({
-			type: "tableRow",
-			children: [],
+			children: [{
+				type: "tableCell",
+				children: [{
+					type: "text",
+					value: i % 2 === 0 ? i18n("DAY") : i18n("PERCENT"),
+				}],
+			}],
 		}));
 
 		// construct MDAST table structure
 		data
 			.forEach((d, i, a) => {
-				const roundedToCountLength = Math.ceil(a.length / 4) * 4;
-				const row = Math.floor((rowCount * i) / roundedToCountLength);
+				const roundedLength = Math.ceil(a.length / rowCount) * rowCount;
+				const currentRow =
+					2 * Math.floor((rowCount * i) / roundedLength);
 
-				const percentage = Math.round(parseInt(d.data_count) / (1440 * parseInt(d.sensor_count)) * 100);
+				const dataCount = parseInt(d.data_count);
+				const sensorCount = parseInt(d.sensor_count);
+				const ratio = dataCount / (dataCountPerSensor * sensorCount);
 
-				dayRows[row].children.push({
+				rows[currentRow].children.push({
 					type: "tableCell",
 					children: [{type: "text", value: String(d.day_of_month)}],
 				});
 
-				percentRows[row].children.push({
+				rows[currentRow + 1].children.push({
 					type: "tableCell",
-					children: [{type: "text", value: String(percentage) + "%"}],
+					children: [{
+						type: "text",
+						value: String(Math.round(ratio * 100)) + "%",
+					}],
 				});
 			});
 
-		const mixedArray = [...new Array(2 * rowCount)].map((_, i) => {
-			const row = Math.floor(i/2);
-			if(i % 2) return percentRows[row];
-			else return dayRows[row];
-		});
-
 		return {
 			type: "table",
-			children: mixedArray,
+			children: rows,
 		};
 	});
 };
