@@ -28,7 +28,7 @@ const options = {
 };
 const network = new vis.Network(container, data, options);
 
-const urlBase = '.';
+const urlBase = '';
 const urlListInst = `${urlBase}/institutes?page_size=1000`;
 $.getJSON(urlListInst, function(x) {
 	for (let i = 0; i < x.data.length; i++) {
@@ -76,7 +76,7 @@ $.getJSON(urlListInst, function(x) {
 						value: 5,
 						label: z.data[i].name,
 						color: colorChange,
-						title: `Last read: ${lastValue}${z.data[i].unit}</br>${timestamp}</br>`
+						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>`
 					});
 					edgesArrayUpdate.push({
 						from: "g" + z.data[i].gatewayId,
@@ -103,7 +103,7 @@ network.on("click", function(params){
 		const sensorId = myNode.replace("s", "");
 		// console.log(sensorId);
 		makeSimpleLineChart(sensorId);
-		
+
 		// TO DO: replace with lib to place the popup, eg POPPER
 		// https://popper.js.org
 		showPos(event)

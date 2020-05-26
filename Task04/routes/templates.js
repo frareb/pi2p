@@ -14,24 +14,28 @@ router.get("/", function(req, res) {
 // ----------------------------------------------------------------------------
 
 // About climate and charts
-router.get("/vizabout", function(req, res) {
+router.get("/viz/network", function(req, res) {
 	res.render("vizabout", { title: "PI2P" });
 });
 
 // simple chart rendering
-router.get("/vizs1", function(req, res) {
+router.get("/viz/sensor", function(req, res) {
 	res.render("vizs1", { title: "PI2P" });
 });
 
 // multi-charts rendering
-router.get("/vizm1", function(req, res) {
+router.get("/viz/sensormult", function(req, res) {
 	res.render("vizm1", { title: "PI2P" });
 });
 
 // comparison between sites rendering
-router.get("/viza1", function(req, res) {
+router.get("/viz/sensorcomp", function(req, res) {
 	res.render("viza1", { title: "PI2P" });
 });
+
+// ----------------------------------------------------------------------------
+// Legal notice
+// ----------------------------------------------------------------------------
 
 // legal notice rendering
 router.get("/ln", function(req, res) {

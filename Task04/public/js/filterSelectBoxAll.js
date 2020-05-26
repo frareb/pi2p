@@ -1,6 +1,6 @@
 "use strict";
 
-const urlBase = '.';
+const urlBase = '';
 
 // functions related to colors
 import { generateColor } from './colors.js';
