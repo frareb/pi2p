@@ -1682,11 +1682,16 @@
 				"style" : "form",
 				"explode" : true,
 				"schema" : {
-					"oneOf": {
-						"type" : "string",
-						"type" : "intger"
-					},
-					"format" : "date-time"
+					"oneOf": [
+						{
+							"type" : "string",
+							"format" : "date-time"
+						},
+						{
+							"type" : "integer",
+							"format" : "timestamp"
+						}
+					]
 				}
 			},
 			"endQuery" : {
@@ -1697,11 +1702,16 @@
 				"style" : "form",
 				"explode" : true,
 				"schema" : {
-					"oneOf": {
-						"type" : "string",
-						"type" : "intger"
-					},
-					"format" : "date-time"
+					"oneOf": [
+						{
+							"type" : "string",
+							"format" : "date-time"
+						},
+						{
+							"type" : "integer",
+							"format" : "timestamp"
+						}
+					]
 				}
 			},
 			"pageQuery" : {
