@@ -59,8 +59,8 @@ $.getJSON(urlListInst, function(x) {
 			for (let i = 0; i < z.data.length; i++) {
 				const nodesArrayUpdate = [];
 				const edgesArrayUpdate = [];
-				const timestampNow = new Date(); //Date.now();
-				const timestamp1h = new Date(new Date().setHours(new Date().getHours() - 12));
+				const timestampNow = Date.now();
+				const timestamp1h = timestampNow - (12*60*60*1000);
 				const urlListData = `${urlBase}/Sensors/${z.data[i].id}/datas?start=${timestamp1h}&end=${timestampNow}`;
 				$.getJSON(urlListData, function(w) {
 					let lastValue = "no data";
@@ -140,8 +140,9 @@ network.on("blurNode", function(){
 
 
 function makeSimpleLineChart(sensorId) {
-	const timestampNow = new Date(); //Date.now();
-	const timestamp1h = new Date(new Date().setHours(new Date().getHours() - 12));
+	const timestampNow = Date.now();
+	const timestamp1h = timestampNow - (12*60*60*1000);
+
 	const myURL = `${urlBase}/Sensors/${sensorId}/datas?start=${timestamp1h}&end=${timestampNow}`;
 	const myX = [];
 	const myY = [];

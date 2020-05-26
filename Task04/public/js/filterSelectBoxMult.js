@@ -85,8 +85,9 @@ $("#selectUnit").on('change',function(){
 
 
 function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
-	const timestampNow = new Date(); //Date.now();
-	const timestamp30d = new Date(new Date().setDate(new Date().getDate() - 30));// timestampNow - (30*24*60*60*1000) // -30 days
+	const timestampNow = Date.now();
+	const timestamp30d = timestampNow - (30*24*60*60*1000); // -30 days
+
 	const myURL = `${urlBase}/Sensors/${sensorId}/datas?start=${timestamp30d}&end=${timestampNow}`;
 	// console.log(myURL);
 	const myX = [];
