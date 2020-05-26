@@ -3,7 +3,7 @@ const sequelize = models.sequelize;
 
 const i18n = require("../utils/i18n");
 
-const generator = (month, sensor) => {
+const generateReportForSensor = (month, sensor) => {
 	function capitalizeFirstLetter(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
@@ -70,7 +70,33 @@ const generator = (month, sensor) => {
 			});
 		}
 
-		return mdast;
+		return [
+			{
+				type: "heading",
+				depth: 4,
+				children: [{type: "text", value: "Title"}],
+			},
+			mdast,
+			{
+				type: "thematicBreak",
+			},
+		];
+	});
+};
+
+const generator = (month, institute) => {
+	return models.Sensors.findAll({
+		where: {
+			"$gateway.instituteId$": institute,
+		},
+		include: [{
+			model: models.Gateways,
+			as: "gateway",
+		}],
+	}).then(sensors => {
+		return Promise.all(
+			sensors.map(s => generateReportForSensor(month, s.dataValues.id)),
+		);
 	});
 };
 

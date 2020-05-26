@@ -62,10 +62,12 @@ const generator = (month, institute) => {
 				});
 			});
 
-		return {
+		return [{
 			type: "table",
 			children: rows,
-		};
+		}, {
+			type: "thematicBreak",
+		}];
 	});
 };
 

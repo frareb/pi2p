@@ -59,7 +59,7 @@ module.exports = options => {
 					children: [{type: "text", value: mdastHeadingName}],
 				});
 
-				mdastTree.children.push(mdastFragment);
+				mdastTree.children.push(...mdastFragment.flat(Infinity));
 			});
 
 			return mdastTree;
@@ -67,6 +67,9 @@ module.exports = options => {
 		// stringify MDAST to LaTeX
 		.then(mdastTree => template({
 			lang,
-			content: toLaTeX(mdastTree),
+			content: toLaTeX(mdastTree, {
+				thematicBreak: () => "\\pagebreak",
+				firstLineRowFont: "\\rowfont[l]{}",
+			}),
 		}));
 };
