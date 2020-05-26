@@ -7,7 +7,7 @@ const Op = sequelize.Op;
 
 module.exports = config => (req, res) => {
 	// get query strings
-	const {
+	let {
 		start,
 		end,
 	} = req.query;
@@ -19,6 +19,16 @@ module.exports = config => (req, res) => {
 
 	// filter by creation date
 	try {
+		// allow both timestamp and date literal
+		if(	(typeof start === "number" || Number(start)) &&
+			(typeof end === "number" || Number(end))) {
+			start = Number(start);
+			end = Number(end);
+		}
+
+		start = new Date(start);
+		end = new Date(end);
+
 		DataType.DATE().validate(start);
 		DataType.DATE().validate(end);
 

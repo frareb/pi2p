@@ -11,85 +11,77 @@ const unique = (value, index, self) => {
 	return self.indexOf(value) === index
 }
 
-
-const urlListInst = `${urlBase}/institutes?page_size=100`;
-$.getJSON(urlListInst, function(x) {
-	const select = document.getElementById("selectInst");
-	select.options.length = 0; // vider les options
-	select.options[select.options.length] = new Option("", 0)
-	for (let i = 0; i < x.data.length; i++) {
-		select.options[select.options.length] = new Option(x.data[i].name, x.data[i].id);
-	};
-});
-$("#selectInst").on('change',function(){
-	const selectGate = document.getElementById("selectGate");
-	selectGate.options.length = 0;
-	selectGate.options[selectGate.options.length] = new Option("...", 0)
-	const value = $(this).val();
-	const urlListGate = `${urlBase}/gateways?instituteId=${value}&page_size=100`;
-	$.getJSON(urlListGate, function(x) {
-		for (let i = 0; i < x.data.length; i++) {
-			selectGate.options[selectGate.options.length] = new Option(x.data[i].name, x.data[i].id);
-		};
-	});
-});
+const urlListSensors = `${urlBase}/sensors?page_size=1000`;
 let listSensNameFilter = [];
 let urlListSens = '';
-$("#selectGate").on('change',function(){
-	const selectUnit = document.getElementById("selectUnit");
-	selectUnit.options.length = 0;
-	selectUnit.options[selectUnit.options.length] = new Option("...", null)
-	const value = $(this).val();
-	// console.log("gatewayId: ", value);
-	urlListSens = `${urlBase}/sensors?gatewayId=${value}&page_size=100`;
-	$.getJSON(urlListSens, function(x) {
-		const listSensName = [];
-		for (let i = 0; i < x.data.length; i++) {
-			listSensName.push(x.data[i].name);
-		};
-		// console.log("listSensName", listSensName.filter(unique));
-		listSensNameFilter = listSensName.filter(unique);
-		for(let index in listSensName.filter(unique)) {
-			selectUnit.options[selectUnit.options.length] = new Option(listSensNameFilter[index], index)
-		};
-	});
+
+const sensorIds = [];
+const sensorLab = [];
+
+$.getJSON(urlListSensors, function(x) {
+	for (let i = 1; i < x.data.length; i++) {
+		sensorIds.push(x.data[i].id);
+		sensorLab.push(`${x.data[i].name} ${x.data[i].description}`);
+	};
+	listSensNameFilter = sensorLab.filter(unique);
+	for(let index in listSensNameFilter) {
+		selectVar.options[selectVar.options.length] = new Option(listSensNameFilter[index], index)
+	};
+	// console.log(sensorLab);
 });
-$("#selectUnit").on('change',function(){
+
+$("#selectVar").on('change',function(){
 	const varId = $(this).val();
 	const varName = listSensNameFilter[varId];
-	// console.log(urlListSens);
-	const sensorIds = [];
-	const sensorLab = [];
-	$.getJSON(urlListSens, function(x) {
-		for (let i = 0; i < x.data.length; i++) {
-			if (x.data[i].name == varName){
-				sensorIds.push(x.data[i].id);
-				sensorLab.push(`${x.data[i].name} ${x.data[i].description}`);
-			};
-		};
-		// console.log("sensorIds", sensorIds);
-		for (let i = 0; i < sensorIds.length; i++) {
-			if (i == 0){
-				makeSimpleLineSensor(sensorIds[i], varName, false, sensorLab[i])
-			} else {
-				makeSimpleLineSensor(sensorIds[i], varName, true, sensorLab[i])
-			}
-		};
-	});
+	// console.log(varName)
+	function getAllIndexes(arr, val) {
+		let indexes = [], i;
+		for(i = 0; i < arr.length; i++)
+			if (arr[i] === val)
+				indexes.push(i);
+		return indexes;
+	}
+	const mySensorIndex = getAllIndexes(sensorLab, varName);
+	// console.log(sensorLab);
+	// console.log(sensorIds);
+	// console.log(mySensorIndex);
+	const mySensorIds = [];
+	for (let i = 0; i < mySensorIndex.length; i++) {
+		mySensorIds.push(sensorIds[mySensorIndex[i]]);
+	}
+	// console.log(mySensorIds);
+	for (let i = 0; i < mySensorIds.length; i++) {
+		let myLab = "";
+
+		$.getJSON(`${urlBase}/Sensors/${mySensorIds[i]}`, function(x) {
+			// const urlTargetGate = x.metadata.link.gateway.replace("gateway", "gateways")
+			const urlTargetGate = x.metadata.link.gateway
+			$.getJSON(urlTargetGate, function(y) {
+				myLab = `${myLab}${y.data.name}`;
+				// const urlTargetInst = y.metadata.link.institute.replace("institute", "institutes")
+				const urlTargetInst = y.metadata.link.institute
+				$.getJSON(urlTargetInst, function(z) {
+					myLab = `${myLab} (${z.data.name})`;
+
+					if (i == 0){
+						makeSimpleLineSensor(mySensorIds[i], varName, false, myLab)
+					} else {
+						makeSimpleLineSensor(mySensorIds[i], varName, true, myLab)
+					}
+
+				});
+			});
+		});
+
+	};
 });
-
-
-
-
-
-
 
 function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 	const timestampNow = Date.now();
 	const timestamp30d = timestampNow - (30*24*60*60*1000); // -30 days
 
 	const myURL = `${urlBase}/Sensors/${sensorId}/datas?start=${timestamp30d}&end=${timestampNow}`;
-	// console.log(myURL);
+	//console.log(myURL);
 	const myX = [];
 	const myY = [];
 
@@ -198,4 +190,6 @@ function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 			console.log("no data");
 		};
 	});
+
+
 };

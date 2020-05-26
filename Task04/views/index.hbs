@@ -2,22 +2,25 @@
 
 <script src="https://unpkg.com/tiny-swiper@^1.0.0"></script>
 <!-- https://github.com/joe223/tiny-swiper -->
+
+<!--TO DO: try AOS lib: https://michalsnik.github.io/aos/ -->
+
 <!-- Slider main container -->
 <div class="swiper-container" id="swiper1">
-  <!-- Additional required wrapper -->
-  <div class="swiper-wrapper">
-    <!-- Slides -->
-    <div class="a swiper-slide"><img src="/img/pi2p_intro00_48dpi.png" alt='{{longTitle}}'></div>
-    <div class="a swiper-slide"><img src="/img/pi2p_intro01_48dpi.png" alt='{{longTitle}}'></div>
-    <div class="b swiper-slide"><img src="/img/pi2p_intro02_48dpi.png" alt='{{longTitle}}'></div>
-    <div class="b swiper-slide"><img src="/img/pi2p_intro03_48dpi.png" alt='{{longTitle}}'></div>
-    <div class="b swiper-slide"><img src="/img/pi2p_intro04_48dpi.png" alt='{{longTitle}}'></div>
-    <div class="b swiper-slide"><img src="/img/pi2p_intro05_48dpi.png" alt='{{longTitle}}'></div>
-    <div class="b swiper-slide"><img src="/img/pi2p_intro06_48dpi.png" alt='{{longTitle}}'></div>
-  </div>
+	<!-- Additional required wrapper -->
+	<div class="swiper-wrapper">
+		<!-- Slides -->
+		<div class="a swiper-slide"><img src="/img/pi2p_intro00_48dpi.jpg" alt='{{longTitle}}'></div>
+		<div class="a swiper-slide"><img src="/img/pi2p_intro01_48dpi.jpg" alt='Insect pests cause significant damages to crops'></div>
+		<div class="b swiper-slide"><img src="/img/pi2p_intro02_48dpi.jpg" alt='Predicting phenology requires insect pest performances curves'></div>
+		<div class="b swiper-slide"><img src="/img/pi2p_intro03_48dpi.jpg" alt='The PI2P project gathers literature'></div>
+		<div class="b swiper-slide"><img src="/img/pi2p_intro04_48dpi.jpg" alt='The PI2P project proposes new tools for modeling insects phenology'></div>
+		<div class="b swiper-slide"><img src="/img/pi2p_intro05_48dpi.jpg" alt='The PI2P project monitors climate and pests in the intertropical zone'></div>
+		<div class="b swiper-slide"><img src="/img/pi2p_intro06_48dpi.jpg" alt='Join us and contribute'></div>
+	</div>
 </div>
 <script>
 var mySwiper = new Swiper('#swiper1', {
-  mousewheel: true
+	mousewheel: true
 });
 </script>
