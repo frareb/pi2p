@@ -1682,7 +1682,10 @@
 				"style" : "form",
 				"explode" : true,
 				"schema" : {
-					"type" : "string",
+					"oneOf": {
+						"type" : "string",
+						"type" : "intger"
+					},
 					"format" : "date-time"
 				}
 			},
@@ -1694,7 +1697,10 @@
 				"style" : "form",
 				"explode" : true,
 				"schema" : {
-					"type" : "string",
+					"oneOf": {
+						"type" : "string",
+						"type" : "intger"
+					},
 					"format" : "date-time"
 				}
 			},
