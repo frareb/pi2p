@@ -27,9 +27,20 @@ const generateReportForSensor = (month, sensor) => {
 		GROUP BY quart, day_of_month
 		ORDER BY day_of_month, quart;
 	`, {
-		bind: [month, sensor],
+		bind: [month, sensor.id],
 		type: sequelize.QueryTypes.SELECT,
 	}).then(res => {
+		const strongCellConstructor = value => ({
+			type: "tableCell",
+			children: [{
+				type: "strong",
+				children: [{
+					type: "text",
+					value: String(value),
+				}],
+			}],
+		});
+
 		const cellConstructor = value => ({
 			type: "tableCell",
 			children: [{type: "text", value: String(value)}],
@@ -47,7 +58,7 @@ const generateReportForSensor = (month, sensor) => {
 					"Mean",
 					i18n("QU_3"),
 					"Max.",
-				].map(cellConstructor),
+				].map(strongCellConstructor),
 			}],
 		};
 
@@ -66,17 +77,25 @@ const generateReportForSensor = (month, sensor) => {
 			});
 		}
 
-		return [
-			{
-				type: "heading",
-				depth: 4,
-				children: [{type: "text", value: "Title"}],
-			},
-			mdast,
-			{
-				type: "thematicBreak",
-			},
-		];
+		if(res.length > 0) {
+			return [
+				{
+					type: "heading",
+					depth: 4,
+					children: [{
+						type: "text",
+						// eslint-disable-next-line max-len
+						value: `${sensor.name} - ${sensor.description} (${sensor.model})`,
+					}],
+				},
+				mdast,
+				{
+					type: "thematicBreak",
+				},
+			];
+		} else {
+			return [];
+		}
 	});
 };
 
@@ -90,8 +109,9 @@ const generator = (month, institute) => {
 			as: "gateway",
 		}],
 	}).then(sensors => {
+		console.log(sensors);
 		return Promise.all(
-			sensors.map(s => generateReportForSensor(month, s.dataValues.id)),
+			sensors.map(s => generateReportForSensor(month, s.dataValues)),
 		);
 	});
 };
