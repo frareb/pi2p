@@ -22,6 +22,7 @@ const generator = (month, institute) => {
 		type: sequelize.QueryTypes.SELECT,
 	}).then(data => {
 		const rowCount = 3;
+		const columnCount = Math.ceil(data.length / rowCount);
 		// one data per minute
 		const dataCountPerSensor = 24 * 60;
 
@@ -31,36 +32,50 @@ const generator = (month, institute) => {
 			children: [{
 				type: "tableCell",
 				children: [{
-					type: "text",
-					value: i % 2 === 0 ? i18n("DAY") : i18n("PERCENT"),
+					type: "strong",
+					children: [{
+						type: "text",
+						value: i % 2 === 0 ? i18n("DAY") : i18n("PERCENT"),
+					}],
 				}],
 			}],
 		}));
 
-		// construct MDAST table structure
-		data
-			.forEach((d, i, a) => {
-				const roundedLength = Math.ceil(a.length / rowCount) * rowCount;
-				const currentRow =
-					2 * Math.floor((rowCount * i) / roundedLength);
+		for(let c = 0; c < columnCount; c++) {
+			for(let r = 0; r < rowCount; r++) {
+				const d = data[c + r * columnCount];
 
-				const dataCount = parseInt(d.data_count);
-				const sensorCount = parseInt(d.sensor_count);
-				const ratio = dataCount / (dataCountPerSensor * sensorCount);
+				const dayChildren = [];
+				const percentChildren = [];
 
-				rows[currentRow].children.push({
-					type: "tableCell",
-					children: [{type: "text", value: String(d.day_of_month)}],
-				});
+				if(d) {
+					dayChildren.push({
+						type: "text",
+						value: String(d.day_of_month),
+					});
 
-				rows[currentRow + 1].children.push({
-					type: "tableCell",
-					children: [{
+					const dataCount = parseInt(d.data_count);
+					const sensorCount = parseInt(d.sensor_count);
+					const ratio =
+						dataCount / (dataCountPerSensor * sensorCount);
+
+					percentChildren.push({
 						type: "text",
 						value: String(Math.round(ratio * 100)) + "%",
-					}],
+					});
+				}
+
+				rows[2 * r].children.push({
+					type: "tableCell",
+					children: dayChildren,
 				});
-			});
+
+				rows[2 * r + 1].children.push({
+					type: "tableCell",
+					children: percentChildren,
+				});
+			}
+		}
 
 		return [{
 			type: "table",

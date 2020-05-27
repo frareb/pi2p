@@ -4,10 +4,6 @@ const sequelize = models.sequelize;
 const i18n = require("../utils/i18n");
 
 const generateReportForSensor = (month, sensor) => {
-	function capitalizeFirstLetter(string) {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
-
 	return sequelize.query(`
 		WITH quartiles AS (
 			SELECT
@@ -44,7 +40,7 @@ const generateReportForSensor = (month, sensor) => {
 			children: [{
 				type: "tableRow",
 				children: [
-					capitalizeFirstLetter(i18n("DAY")),
+					i18n("DAY"),
 					"Min.",
 					i18n("QU_1"),
 					"Med.",
