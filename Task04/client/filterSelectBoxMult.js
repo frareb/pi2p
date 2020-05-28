@@ -2,10 +2,9 @@
 
 const urlBase = "";
 
-// functions related to colors
 import { getRandomColor } from "./colors.js";
 import $ from "jquery";
-import Plotly from "plotly.js-dist";
+import Plotly from "plotly.js/lib/index-basic";
 
 // functions tools
 const unique = (value, index, self) => {
