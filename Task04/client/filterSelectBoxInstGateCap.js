@@ -2,7 +2,13 @@
 
 import { generateColor } from "./colors.js";
 import $ from "jquery";
+import box from "plotly.js/lib/box";
 import Plotly from "plotly.js/lib/index-basic";
+
+// Register boxplot
+Plotly.register([
+	box,
+]);
 
 // Formulaire pour afficher les données d"un capteur
 // avec des select boxes : institut puis filtrage
