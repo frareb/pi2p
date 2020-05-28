@@ -1,11 +1,12 @@
 {
-  "name": "task04",
+  "name": "pi2p-task4",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "doc": "node docs/generate.js",
-    "test": "cross-env NODE_ENV=tests jest"
+    "server:start": "node ./bin/www",
+    "server:test": "cross-env NODE_ENV=tests jest",
+    "client:build": "npx webpack",
+    "doc": "node docs/generate.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.5",
@@ -25,10 +26,14 @@
   },
   "devDependencies": {
     "axios": "^0.19.2",
+    "babel-loader": "^8.1.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
+    "ify-loader": "^1.1.0",
     "jest": "^26.0.1",
+    "jquery": "^3.5.1",
+    "plotly.js-dist": "^1.54.1",
     "rehype-document": "^5.0.0",
     "rehype-format": "^3.0.1",
     "rehype-highlight": "^4.0.0",
@@ -39,6 +44,8 @@
     "sequelize-cli": "^5.5.1",
     "sqlite3": "^4.2.0",
     "unified": "^9.0.0",
-    "unist-util-visit": "^2.0.2"
+    "unist-util-visit": "^2.0.2",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
