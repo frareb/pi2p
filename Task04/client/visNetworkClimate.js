@@ -10,8 +10,7 @@
 
 import $ from "jquery";
 import Plotly from "plotly.js/lib/index-basic";
-import { DataSet } from "vis-data/esnext";
-import { Network } from "vis-network/esnext";
+import { Network, DataSet } from "vis-network/dist/vis-network.esm";
 
 // makeNetwork
 const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
