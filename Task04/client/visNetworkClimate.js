@@ -8,11 +8,15 @@
 // #FAA275
 // #FF8C61
 
+import $ from "jquery";
+import Plotly from "plotly.js/lib/index-basic";
+import { Network, DataSet } from "vis-network/dist/vis-network.esm";
+
 // makeNetwork
 const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
 const edgesArray = [];
-const nodes = new vis.DataSet(nodesArray);
-const edges = new vis.DataSet(edgesArray);
+const nodes = new DataSet(nodesArray);
+const edges = new DataSet(edgesArray);
 const container = document.getElementById('mynetwork');
 const data = {
 	nodes: nodes,
@@ -26,7 +30,7 @@ const options = {
 		hover:true
 	}
 };
-const network = new vis.Network(container, data, options);
+const network = new Network(container, data, options);
 
 const urlBase = '';
 const urlListInst = `${urlBase}/institutes?page_size=1000`;

@@ -1,9 +1,16 @@
 "use strict";
 
-// functions related to colors
-import { generateColor } from './colors.js';
+import { generateColor } from "./colors.js";
+import $ from "jquery";
+import box from "plotly.js/lib/box";
+import Plotly from "plotly.js/lib/index-basic";
 
-// Formulaire pour afficher les données d'un capteur
+// Register boxplot
+Plotly.register([
+	box,
+]);
+
+// Formulaire pour afficher les données d"un capteur
 // avec des select boxes : institut puis filtrage
 // sur les gateways puis sur les capteurs.
 // Problème : la fonction de moyenne mobile fait une moyenne
@@ -11,7 +18,7 @@ import { generateColor } from './colors.js';
 // ce qui posera problème si deux capteurs ont des données à des
 // pas de temps différents.
 
-const urlBase = ''; //'http://localhost:3000'
+const urlBase = ""; //"http://localhost:3000"
 
 const urlListInst = `${urlBase}/institutes?page_size=100`;
 $.getJSON(urlListInst, function(x) {
@@ -22,7 +29,7 @@ $.getJSON(urlListInst, function(x) {
 		select.options[select.options.length] = new Option(x.data[i].name, x.data[i].id);
 	};
 });
-$("#selectInst").on('change',function(){
+$("#selectInst").on("change",function(){
 	const selectGate = document.getElementById("selectGate");
 	selectGate.options.length = 0;
 	selectGate.options[selectGate.options.length] = new Option("...", 0)
@@ -34,7 +41,7 @@ $("#selectInst").on('change',function(){
 		};
 	});
 });
-$("#selectGate").on('change',function(){
+$("#selectGate").on("change",function(){
 	const selectSens = document.getElementById("selectSens");
 	selectSens.options.length = 0;
 	selectSens.options[selectSens.options.length] = new Option("...", null)
@@ -47,12 +54,12 @@ $("#selectGate").on('change',function(){
 		};
 	});
 });
-$("#selectSens").on('change',function(){
+$("#selectSens").on("change",function(){
 	const sensorId = $(this).val();
 	const makeGraph = getChartChoice();
 	askAPIandMakegraph(sensorId, makeGraph)
 });
-$("#selectChart").on('change',function(){
+$("#selectChart").on("change",function(){
 	const makeGraph = getChartChoice();
 	// console.log(makeGraph);
 	const sensorId = document.getElementById("selectSens").value;
@@ -83,10 +90,10 @@ function getChartChoice(){
 	const selectChart = document.getElementById("selectChart").value;
 	let makeGraph = null;
 	switch (selectChart){
-		case 'line':
+		case "line":
 			makeGraph = makeSimpleLineSensorWithMA;
 			break;
-		case 'boxplot':
+		case "boxplot":
 			makeGraph = makeSimpleBoxplotSensor;
 			break;
 		default:
@@ -132,15 +139,15 @@ function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) 
 				myX.push(new Date(x.data[i].createdAt )) //- 120*60*1000
 				myY.push(x.data[i].value) }
 			const myTrace = { // trace with raw data
-				line: {color: '#17BECF'},
+				line: {color: "#17BECF"},
 				x: myX,
 				y: myY,
-				name: 'raw' }
+				name: "raw" }
 			const myMATrace = { // trace with moving average
-				line: {color: '#cc291b'},
+				line: {color: "#cc291b"},
 				x: myX,
 				y: oneDayMovingAverage.reverse(),
-				name: '1d mov. av.' }
+				name: "1d mov. av." }
 			const myLayout = {
 				autosize: true,
 				margin: {
@@ -153,7 +160,7 @@ function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) 
 				showlegend: true,
 				legend: {
 					x: 0,
-					xanchor: 'left',
+					xanchor: "left",
 					y: 1
 				},
 				title: `${nameVar} -${nameInst} ; ${nameGateway}-`,
@@ -163,66 +170,66 @@ function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) 
 					rangeselector: { buttons: [
 						{
 							count: 1,
-							label: '24h',
-							step: 'day',
-							stepmode: 'backward'
+							label: "24h",
+							step: "day",
+							stepmode: "backward"
 						},
 						{
 							count: 2,
-							label: '2d',
-							step: 'day',
-							stepmode: 'backward'
+							label: "2d",
+							step: "day",
+							stepmode: "backward"
 						},
 						{
 							count: 7,
-							label: '1w',
-							step: 'day',
-							stepmode: 'backward'
+							label: "1w",
+							step: "day",
+							stepmode: "backward"
 						},
 						{
-							step: 'all',
-							label: '30d'
+							step: "all",
+							label: "30d"
 						}
 					]},
 					rangeslider: {range: [myX[0], myX[myX.length - 1]]},
-					type: 'date'
+					type: "date"
 				},
 				yaxis: {
 					automargin: true,
-					hoverformat: '.1f'
+					hoverformat: ".1f"
 				}
 			}
 			const config = {
 				responsive: true,
 				editable: true,
 				modeBarButtonsToAdd: [{
-					name: 'Download data',
+					name: "Download data",
 					icon: Plotly.Icons.disk,
 					click: function(gd) {
 						const json = x.data;
 						const fields = Object.keys(json[0])
-						const replacer = function(key, value) { return value === null ? '' : value }
+						const replacer = function(key, value) { return value === null ? "" : value }
 						let csv = json.map(function(row){
 							return fields.map(function(fieldName){
 								return JSON.stringify(row[fieldName], replacer)
-							}).join(',')
+							}).join(",")
 						})
-						csv.unshift(fields.join(',')) // add header column
-						csv = csv.join('\r\n');
+						csv.unshift(fields.join(",")) // add header column
+						csv = csv.join("\r\n");
 						const text = csv;
 
-						const blob = new Blob([text], {type: 'text/plain'});
-						let a = document.createElement('a');
+						const blob = new Blob([text], {type: "text/plain"});
+						let a = document.createElement("a");
 						const object_URL = URL.createObjectURL(blob);
 						a.href = object_URL;
-						a.download = 'data.csv';
+						a.download = "data.csv";
 						document.body.appendChild(a);
 						a.click();
 						URL.revokeObjectURL(object_URL);
 					}
 				}]
 			}
-			Plotly.newPlot(document.getElementById('myChart'), [myTrace, myMATrace], myLayout, config);
+			Plotly.newPlot(document.getElementById("myChart"), [myTrace, myMATrace], myLayout, config);
 		} else {
 			console.log("no data");
 		};
@@ -233,7 +240,7 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 	const timestampNow = Date.now();
 	const timestamp30d = timestampNow - (30*24*60*60*1000); // -30 days
 
-	const myURL = urlBase + '/Sensors/'+ sensorId +'/datas?start=' + timestamp30d + '&end=' + timestampNow;
+	const myURL = urlBase + "/Sensors/"+ sensorId +"/datas?start=" + timestamp30d + "&end=" + timestampNow;
 	let myX = [];
 	let myY = [];
 	let myTrace = [];
@@ -242,17 +249,17 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 			let byday={};
 			function groupday(x, index, array)
 			{
-					let d = new Date(x['createdAt']);
+					let d = new Date(x["createdAt"]);
 					d = Math.floor(d.getTime()/(1000*60*60*24)); // *24
 					byday[d]=byday[d]||[];
-					byday[d].push({value:x['value'], createdAt:d*(1000*60*60*24)}); // x['createdAt']
+					byday[d].push({value:x["value"], createdAt:d*(1000*60*60*24)}); // x["createdAt"]
 			}
 			data.data.map(groupday); // old PR : data.map(groupday)
 			// console.log(byday);
-			// let txx = new Date(byday['18348'][1]['createdAt']);
+			// let txx = new Date(byday["18348"][1]["createdAt"]);
 			// console.log( new Date(Math.floor(txx.getTime()/(1000*60*60*24)) * (1000*60*60*24)) );
 
-			const boxColors = generateColor('#ff1100', '#060e7a', 100);
+			const boxColors = generateColor("#ff1100", "#060e7a", 100);
 			// console.log(boxColors);
 
 			const objKeyByDay = Object.keys(byday);
@@ -272,9 +279,9 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 					// let month = x.getMonth() + 1;
 					// let year = x.getFullYear();
 							// let hour = x.getHours() + 1;
-							// if (hour < 10) {hour = '0' + hour};
-							// let xx = new Date(year + '-' + month + '-' + date + ' ' + hour + ':00:00');
-					// let xx = new Date(year + '-' + month + '-' + date + ' 00:00:00');
+							// if (hour < 10) {hour = "0" + hour};
+							// let xx = new Date(year + "-" + month + "-" + date + " " + hour + ":00:00");
+					// let xx = new Date(year + "-" + month + "-" + date + " 00:00:00");
 					// myX2.push(xx);
 					myX2.push(x);
 					myY2.push(byday[keyDay][j].value);
@@ -286,20 +293,20 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 				const traceXY = {
 					y: myY2,
 					x: myX2,
-					type: 'box',
+					type: "box",
 					marker: {color: boxColors[colNum]},
-					boxpoints: 'suspectedoutliers'
+					boxpoints: "suspectedoutliers"
 				};
 				myTrace.push(traceXY);
 			}
 			// console.log("myTrace", myTrace);
 
 			const layout = {
-				title: nameVar + ' -' + nameInst + ' ; ' + nameGateway + '-',
+				title: nameVar + " -" + nameInst + " ; " + nameGateway + "-",
 				yaxis: {
-					// title: 'temperature by day',
+					// title: "temperature by day",
 					zeroline: false,
-					hoverformat: '.1f'
+					hoverformat: ".1f"
 				},
 				showlegend:false,
 				margin: {
@@ -315,25 +322,25 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 			responsive: true,
 			editable: true,
 			modeBarButtonsToAdd: [{
-				name: 'Download data',
+				name: "Download data",
 				icon: Plotly.Icons.disk,
 				click: function(gd) {
 					const json = data.data;
 					const fields = Object.keys(json[0])
-					const replacer = function(key, value) { return value === null ? '' : value }
+					const replacer = function(key, value) { return value === null ? "" : value }
 					let csv = json.map(function(row){
 						return fields.map(function(fieldName){
 							return JSON.stringify(row[fieldName], replacer)
-						}).join(',')
+						}).join(",")
 					})
-					csv.unshift(fields.join(',')) // add header
-					csv = csv.join('\r\n');
+					csv.unshift(fields.join(",")) // add header
+					csv = csv.join("\r\n");
 					const text = csv;
-					const blob = new Blob([text], {type: 'text/plain'});
-					let a = document.createElement('a');
+					const blob = new Blob([text], {type: "text/plain"});
+					let a = document.createElement("a");
 					const object_URL = URL.createObjectURL(blob);
 					a.href = object_URL;
-					a.download = 'data.csv';
+					a.download = "data.csv";
 					document.body.appendChild(a);
 					a.click();
 					URL.revokeObjectURL(object_URL);
@@ -341,7 +348,7 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 			}]
 		}
 
-			Plotly.newPlot(document.getElementById('myChart'), myTrace, layout, config);
+			Plotly.newPlot(document.getElementById("myChart"), myTrace, layout, config);
 		} else {
 			console.log("no data");
 		};
@@ -365,8 +372,8 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 // function convertToHex (rgb) {
 //	 return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
 // }
-// // Remove '#' in color hex string
-// function trim (s) { return (s.charAt(0) == '#') ? s.substring(1, 7) : s }
+// // Remove "#" in color hex string
+// function trim (s) { return (s.charAt(0) == "#") ? s.substring(1, 7) : s }
 // // Convert a hex string to an RGB triplet
 // function convertToRGB (hex) {
 //	 const color = [];

@@ -1,10 +1,10 @@
 "use strict";
 
-const urlBase = '';
+const urlBase = "";
 
-// functions related to colors
-import { generateColor } from './colors.js';
-import { getRandomColor } from './colors.js';
+import { getRandomColor } from "./colors.js";
+import $ from "jquery";
+import Plotly from "plotly.js/lib/index-basic";
 
 // functions tools
 const unique = (value, index, self) => {
@@ -13,7 +13,7 @@ const unique = (value, index, self) => {
 
 const urlListSensors = `${urlBase}/sensors?page_size=1000`;
 let listSensNameFilter = [];
-let urlListSens = '';
+let urlListSens = "";
 
 const sensorIds = [];
 const sensorLab = [];
@@ -30,7 +30,7 @@ $.getJSON(urlListSensors, function(x) {
 	// console.log(sensorLab);
 });
 
-$("#selectVar").on('change',function(){
+$("#selectVar").on("change",function(){
 	const varId = $(this).val();
 	const varName = listSensNameFilter[varId];
 	// console.log(varName)
@@ -102,7 +102,7 @@ function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 				showlegend: true,
 				legend: {
 					x: 0,
-					xanchor: 'left',
+					xanchor: "left",
 					y: 1
 				},
 				title: `${nameVar}`,
@@ -112,59 +112,59 @@ function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 					rangeselector: { buttons: [
 						{
 							count: 1,
-							label: '24h',
-							step: 'day',
-							stepmode: 'backward'
+							label: "24h",
+							step: "day",
+							stepmode: "backward"
 						},
 						{
 							count: 2,
-							label: '2d',
-							step: 'day',
-							stepmode: 'backward'
+							label: "2d",
+							step: "day",
+							stepmode: "backward"
 						},
 						{
 							count: 7,
-							label: '1w',
-							step: 'day',
-							stepmode: 'backward'
+							label: "1w",
+							step: "day",
+							stepmode: "backward"
 						},
 						{
-							step: 'all',
-							label: '30d'
+							step: "all",
+							label: "30d"
 						}
 					]},
 					rangeslider: {range: [myX[0], myX[myX.length - 1]]},
-					type: 'date'
+					type: "date"
 				},
 				yaxis: {
 					automargin: true,
-					hoverformat: '.1f'
+					hoverformat: ".1f"
 				}
 			}
 			const config = {
 				responsive: true,
 				editable: true,
 				modeBarButtonsToAdd: [{
-					name: 'Download data',
+					name: "Download data",
 					icon: Plotly.Icons.disk,
 					click: function(gd) {
 						const json = x.data;
 						const fields = Object.keys(json[0])
-						const replacer = function(key, value) { return value === null ? '' : value }
+						const replacer = function(key, value) { return value === null ? "" : value }
 						let csv = json.map(function(row){
 							return fields.map(function(fieldName){
 								return JSON.stringify(row[fieldName], replacer)
-							}).join(',')
+							}).join(",")
 						})
-						csv.unshift(fields.join(',')) // add header column
-						csv = csv.join('\r\n');
+						csv.unshift(fields.join(",")) // add header column
+						csv = csv.join("\r\n");
 						const text = csv;
 
-						const blob = new Blob([text], {type: 'text/plain'});
-						let a = document.createElement('a');
+						const blob = new Blob([text], {type: "text/plain"});
+						let a = document.createElement("a");
 						const object_URL = URL.createObjectURL(blob);
 						a.href = object_URL;
-						a.download = 'data.csv';
+						a.download = "data.csv";
 						document.body.appendChild(a);
 						a.click();
 						URL.revokeObjectURL(object_URL);
@@ -173,18 +173,18 @@ function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 			}
 			if (add == false){
 				const myTrace = { // trace with raw data
-					line: {color: '#17BECF'},
+					line: {color: "#17BECF"},
 					x: myX,
 					y: myY,
 					name: lab }
-				Plotly.newPlot(document.getElementById('myChart'), [myTrace], myLayout, config);
+				Plotly.newPlot(document.getElementById("myChart"), [myTrace], myLayout, config);
 			} else {
 				const myTrace = { // trace with raw data
 					line: {color: getRandomColor()},
 					x: myX,
 					y: myY,
 					name: lab }
-				Plotly.addTraces(document.getElementById('myChart'), [myTrace]);
+				Plotly.addTraces(document.getElementById("myChart"), [myTrace]);
 			}
 		} else {
 			console.log("no data");
