@@ -3,7 +3,7 @@ const sequelize = models.sequelize;
 
 const i18n = require("../utils/i18n");
 
-const generateReportForSensor = (month, sensor) => {
+const generateReportForSensor = (year, month, sensor) => {
 	return sequelize.query(`
 		WITH quartiles AS (
 			SELECT
@@ -15,8 +15,9 @@ const generateReportForSensor = (month, sensor) => {
 				value
 			FROM "Datas"
 			WHERE
-				EXTRACT(MONTH FROM "Datas"."createdAt") = $1
-				AND "Datas"."sensorId" = $2
+				EXTRACT(YEAR FROM "Datas"."createdAt") = $1
+				AND EXTRACT(MONTH FROM "Datas"."createdAt") = $2
+				AND "Datas"."sensorId" = $3
 		) SELECT
 			MAX(value),
 			AVG(value),
@@ -27,7 +28,7 @@ const generateReportForSensor = (month, sensor) => {
 		GROUP BY quart, day_of_month
 		ORDER BY day_of_month, quart;
 	`, {
-		bind: [month, sensor.id],
+		bind: [year, month, sensor.id],
 		type: sequelize.QueryTypes.SELECT,
 	}).then(res => {
 		const strongCellConstructor = value => ({
@@ -99,7 +100,7 @@ const generateReportForSensor = (month, sensor) => {
 	});
 };
 
-const generator = (month, institute) => {
+const generator = (year, month, institute) => {
 	return models.Sensors.findAll({
 		where: {
 			"$gateway.instituteId$": institute,
@@ -109,9 +110,9 @@ const generator = (month, institute) => {
 			as: "gateway",
 		}],
 	}).then(sensors => {
-		console.log(sensors);
 		return Promise.all(
-			sensors.map(s => generateReportForSensor(month, s.dataValues)),
+			sensors.map(s =>
+				generateReportForSensor(year, month, s.dataValues)),
 		);
 	});
 };

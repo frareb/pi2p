@@ -1,11 +1,28 @@
+const i18n = require("./utils/i18n");
+
 const QUOTE_TYPES = {
 	"french": "guillemets",
 	"spanish": "mexican",
 };
 
+const LANG_TO_CC = {
+	"french": "fr-FR",
+	"spanish": "es-MX",
+};
+
 module.exports = config => {
 	const lang = config.lang || "french";
 	const content = config.content || "";
+	const institute = config.institute || "";
+	const localeDate = config.localeDate || new Date();
+
+	// set lang in case not defined
+	i18n.lang(lang);
+
+	const dateString = localeDate.toLocaleDateString(LANG_TO_CC[lang], {
+		month: "long",
+		year: "numeric",
+	});
 
 	const langPkgs = [
 		`\\usepackage[${lang}]{babel}`,
@@ -29,6 +46,14 @@ ${langPkgs.join("\n")}
 \\usepackage{graphicx}
 
 \\begin{document}
+	\\begin{center}
+		\\huge ${i18n("REPORT_MAIN_TITLE")} ${institute} \\\\
+		\\vspace*{10pt}
+		\\LARGE ${i18n("MONTH_OF")} ${dateString}
+	\\end{center}
+
+	\\vspace*{20pt}
+
 	{ \\hypersetup{hidelinks} \\tableofcontents }
 	\\pagebreak
 

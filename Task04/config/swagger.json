@@ -354,6 +354,17 @@
 						"format" : "uint32"
 					}
 				}, {
+					"name" : "year",
+					"in" : "query",
+					"description" : "année pour laquelle générer le rapport. Par défaut, l'année en cours est utilisé.\n",
+					"required" : false,
+					"style" : "form",
+					"explode" : true,
+					"schema" : {
+						"type" : "integer",
+						"format" : "uint32"
+					}
+				}, {
 					"name" : "lang",
 					"in" : "query",
 					"description" : "Langue dans laquelle générer le rapport.\n",

@@ -9,11 +9,13 @@ require("./factory")({
 });
 
 router.get("/:instituteId/report", (req, res) => {
+	const year = req.query.year || new Date().getYear();
 	const month = req.query.month || new Date().getMonth();
 	const lang = req.query.lang || "french";
 
 	report({
 		lang,
+		year,
 		month,
 		institute: req.params.instituteId,
 	}).then(tex => {

@@ -3,7 +3,7 @@ const sequelize = models.sequelize;
 
 const i18n = require("../utils/i18n");
 
-const generator = (month, institute) => {
+const generator = (year, month, institute) => {
 	return sequelize.query(`
 		SELECT
 			EXTRACT(DAY FROM "Datas"."createdAt") AS "day_of_month",
@@ -14,14 +14,15 @@ const generator = (month, institute) => {
 		LEFT JOIN "Gateways" ON "Sensors"."gatewayId" = "Gateways"."id"
 		LEFT JOIN "Institutes" ON "Gateways"."instituteId" = "Institutes"."id"
 		WHERE
-			EXTRACT(MONTH FROM "Datas"."createdAt") = $1
-			AND "Institutes"."id" = $2
+			EXTRACT(YEAR FROM "Datas"."createdAt") = $1
+			AND EXTRACT(MONTH FROM "Datas"."createdAt") = $2
+			AND "Institutes"."id" = $3
 		GROUP BY "day_of_month";
 	`, {
-		bind: [month, institute],
+		bind: [year, month, institute],
 		type: sequelize.QueryTypes.SELECT,
 	}).then(data => {
-		const rowCount = 3;
+		const rowCount = 4;
 		const columnCount = Math.ceil(data.length / rowCount);
 		// one data per minute
 		const dataCountPerSensor = 24 * 60;

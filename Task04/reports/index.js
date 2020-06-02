@@ -2,14 +2,16 @@ const fs = require("fs");
 const path = require("path");
 const { toLaTeX } = require("rebber");
 
+const models = require("../models");
 const template = require("./template");
 
 module.exports = options => {
 	const {
 		lang,
-		month,
 		institute,
 	} = options;
+
+	const [year, month] = [options.year, options.month].map(n => parseInt(n));
 
 	// set langage for i18n
 	require("./utils/i18n").lang(lang);
@@ -38,7 +40,7 @@ module.exports = options => {
 
 	// fetch all promises
 	const promises = [...new Array(sortedGenerators.length)]
-		.map((_, i) => generators[sortedGenerators[i]](month, institute));
+		.map((_, i) => generators[sortedGenerators[i]](year, month, institute));
 
 	// execute the promises asynchronously
 	return Promise.all(promises)
@@ -65,11 +67,20 @@ module.exports = options => {
 			return mdastTree;
 		})
 		// stringify MDAST to LaTeX
-		.then(mdastTree => template({
-			lang,
-			content: toLaTeX(mdastTree, {
-				thematicBreak: () => "\\pagebreak",
-				firstLineRowFont: "\\rowfont[l]{}",
-			}),
-		}));
+		.then(async mdastTree => {
+			const instituteName = await models.Institutes.findOne({
+				where: { id: institute },
+				attributes: ["name"],
+			});
+
+			return template({
+				lang,
+				institute: instituteName.dataValues.name,
+				localeDate: new Date(year, month),
+				content: toLaTeX(mdastTree, {
+					thematicBreak: () => "\\pagebreak",
+					firstLineRowFont: "\\rowfont[l]{}",
+				}),
+			});
+		});
 };
