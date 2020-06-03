@@ -31,6 +31,9 @@ const generateReportForSensor = (year, month, sensor) => {
 		bind: [year, month, sensor.id],
 		type: sequelize.QueryTypes.SELECT,
 	}).then(res => {
+		// no result = no table
+		if(res.length === 0) return [];
+
 		const strongCellConstructor = value => ({
 			type: "tableCell",
 			children: [{
@@ -78,32 +81,25 @@ const generateReportForSensor = (year, month, sensor) => {
 			});
 		}
 
-		if(res.length > 0) {
-			return [
-				{
-					type: "heading",
-					depth: 4,
-					children: [{
-						type: "text",
-						// eslint-disable-next-line max-len
-						value: `${sensor.name} - ${sensor.description} (${sensor.model})`,
-					}],
-				},
-				mdast,
-				{
-					type: "thematicBreak",
-				},
-			];
-		} else {
-			return [];
-		}
+		return [
+			{
+				type: "heading",
+				depth: 5,
+				children: [{
+					type: "text",
+					// eslint-disable-next-line max-len
+					value: `${sensor.name} - ${sensor.description} (${sensor.model})`,
+				}],
+			},
+			mdast,
+		];
 	});
 };
 
-const generator = (year, month, institute) => {
+const generator = (year, month, gateway) => {
 	return models.Sensors.findAll({
 		where: {
-			"$gateway.instituteId$": institute,
+			"gatewayId": gateway,
 		},
 		include: [{
 			model: models.Gateways,

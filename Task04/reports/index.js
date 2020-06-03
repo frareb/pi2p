@@ -13,7 +13,7 @@ module.exports = options => {
 
 	const [year, month] = [options.year, options.month].map(n => parseInt(n));
 
-	// set langage for i18n
+	// set language for i18n
 	require("./utils/i18n").lang(lang);
 
 	const generators = {};
@@ -38,12 +38,47 @@ module.exports = options => {
 		.sort((a, b) => a[1] - b[1])
 		.map(a => a[0]);
 
-	// fetch all promises
-	const promises = [...new Array(sortedGenerators.length)]
-		.map((_, i) => generators[sortedGenerators[i]](year, month, institute));
+	// globally stored variables for passing through promises
+	let instituteName = "";
+	let generatorCount, gatewayCount;
+	const gatewayNames = [];
 
-	// execute the promises asynchronously
-	return Promise.all(promises)
+	// find gateways associated to institute
+	return models.Gateways
+		.findAll({
+			where: {
+				instituteId: institute,
+			},
+			include: [{
+				model: models.Institutes,
+				as: "institute",
+				attributes: ["name"],
+			}],
+			attributes: ["id", "name"],
+		})
+		.then(gateways => {
+			generatorCount = sortedGenerators.length;
+			gatewayCount = gateways.length;
+
+			gateways.forEach(g => gatewayNames.push(g.dataValues.name));
+
+			if(gateways.length >= 1)
+				instituteName = gateways[0].dataValues.institute.name;
+
+			return [...new Array(generatorCount * gatewayCount)]
+				.map((_, i) => {
+					const currentGenerator = Math.floor(i / gatewayCount);
+					const currentGateway = i % gatewayCount;
+		
+					// insert promises in order
+					return generators[sortedGenerators[currentGenerator]](
+						year,
+						month,
+						gateways[currentGateway].dataValues.id,
+					);
+				});
+		})
+		.then(ps => Promise.all(ps))
 		.then(executedGenerators => {
 			// construct a simple MDAST tree
 			const mdastTree = {
@@ -53,34 +88,54 @@ module.exports = options => {
 
 			// append heading and content to MDAST
 			executedGenerators.forEach((mdastFragment, i) => {
-				const mdastHeadingName = sortedGenerators[i];
+				const currentGenerator = Math.floor(i / gatewayCount);
+				const previousGenerator = Math.floor((i - 1) / gatewayCount);
+				const nextGenerator = Math.floor((i + 1) / gatewayCount);
+				const currentGateway = i % gatewayCount;
 
-				mdastTree.children.push({
-					type: "heading",
-					depth: 3,
-					children: [{type: "text", value: mdastHeadingName}],
-				});
+				// add global heading on first child
+				if(currentGenerator !== previousGenerator) {
+					const mdastHeadingName = sortedGenerators[currentGenerator];
+
+					mdastTree.children.push({
+						type: "heading",
+						depth: 3,
+						children: [{type: "text", value: mdastHeadingName}],
+					});
+				}
+
+				// add local heading on all non-empty children
+				if(mdastFragment.length > 0) {
+					mdastTree.children.push({
+						type: "heading",
+						depth: 4,
+						children: [{
+							type: "text",
+							value: `Gateway ${gatewayNames[currentGateway]}`,
+						}],
+					});
+				}
 
 				mdastTree.children.push(...mdastFragment.flat(Infinity));
+
+				if(currentGenerator !== nextGenerator) {
+					// add page break at the end of all children
+					mdastTree.children.push({
+						type: "thematicBreak",
+					});
+				}
 			});
 
 			return mdastTree;
 		})
 		// stringify MDAST to LaTeX
-		.then(async mdastTree => {
-			const instituteName = await models.Institutes.findOne({
-				where: { id: institute },
-				attributes: ["name"],
-			});
-
-			return template({
-				lang,
-				institute: instituteName.dataValues.name,
-				localeDate: new Date(year, month),
-				content: toLaTeX(mdastTree, {
-					thematicBreak: () => "\\pagebreak",
-					firstLineRowFont: "\\rowfont[l]{}",
-				}),
-			});
-		});
+		.then(mdastTree => template({
+			lang,
+			institute: instituteName,
+			localeDate: new Date(year, month),
+			content: toLaTeX(mdastTree, {
+				thematicBreak: () => "\\pagebreak",
+				firstLineRowFont: "\\rowfont[l]{}",
+			}),
+		}));
 };
