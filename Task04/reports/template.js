@@ -50,6 +50,7 @@ ${langPkgs.join("\n")}
 \\usepackage{hyperref}
 \\usepackage{longtable,tabu}
 \\usepackage{graphicx}
+\\usepackage[table]{xcolor}
 
 \\begin{document}
 	\\begin{center}
@@ -62,7 +63,11 @@ ${langPkgs.join("\n")}
 
 	\\vspace*{20pt}
 
-	{ \\hypersetup{hidelinks} \\tableofcontents }
+	{ \\hypersetup{
+		pdftitle={Project PI2P},
+		pdfauthor={Rebaudo et al.},
+		hidelinks
+	} \\tableofcontents }
 	\\pagebreak
 
 	${content}
