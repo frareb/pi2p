@@ -5,6 +5,7 @@
   "scripts": {
     "server:start": "node ./bin/www",
     "server:test": "cross-env NODE_ENV=tests jest",
+    "sql:reload": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
     "client:build": "npx webpack",
     "client:release": "cross-env NODE_ENV=production npx webpack",
     "lint": "npx eslint .",
@@ -21,6 +22,7 @@
     "path-to-regexp": "^6.1.0",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",
+    "rebber": "^5.1.0",
     "sequelize": "^5.21.10",
     "swagger-ui-express": "^4.1.4",
     "umzug": "^2.3.0"

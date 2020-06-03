@@ -43,7 +43,6 @@ module.exports = config => async (req, res, next) => {
 				// to get path-authorization for guest group
 				.forEach(a => {
 					const [k, v] = a;
-					//console.log(authenticatorResult.props[k], parseInt(v));
 
 					// TODO: allow non-integer parameters
 					if(	!authenticatorResult.props ||
