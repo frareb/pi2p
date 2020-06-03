@@ -132,7 +132,7 @@ module.exports = options => {
 		.then(mdastTree => template({
 			lang,
 			institute: instituteName,
-			localeDate: new Date(year, month),
+			localeDate: new Date(year, month - 1),
 			content: toLaTeX(mdastTree, {
 				thematicBreak: () => "\\pagebreak",
 				firstLineRowFont: "\\rowfont[l]{}",

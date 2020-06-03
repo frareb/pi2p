@@ -24,6 +24,12 @@ module.exports = config => {
 		year: "numeric",
 	});
 
+	const nowDateString = new Date().toLocaleDateString(LANG_TO_CC[lang], {
+		day: "numeric",
+		month: "numeric",
+		year: "numeric",
+	});
+
 	const langPkgs = [
 		`\\usepackage[${lang}]{babel}`,
 		`\\usepackage[${lang}=${QUOTE_TYPES[lang]}]{csquotes}`,
@@ -48,8 +54,10 @@ ${langPkgs.join("\n")}
 \\begin{document}
 	\\begin{center}
 		\\huge ${i18n("REPORT_MAIN_TITLE")} ${institute} \\\\
+		\\vspace*{15pt}
+		\\LARGE ${i18n("MONTH_OF")} ${dateString} \\\\
 		\\vspace*{10pt}
-		\\LARGE ${i18n("MONTH_OF")} ${dateString}
+		\\Large ${i18n("GENERATED_ON")} ${nowDateString}
 	\\end{center}
 
 	\\vspace*{20pt}
