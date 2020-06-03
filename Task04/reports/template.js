@@ -52,6 +52,8 @@ ${langPkgs.join("\n")}
 \\usepackage{graphicx}
 \\usepackage[table]{xcolor}
 
+\\rowcolors{2}{gray!10}{white}
+
 \\begin{document}
 	\\begin{center}
 		\\huge ${i18n("REPORT_MAIN_TITLE")} ${institute} \\\\
