@@ -44,7 +44,7 @@ module.exports = config => {
 
 \\usepackage{setspace}
 
-\\setlength{\\parskip}{8pt}
+\\setlength{\\parskip}{2pt}
 \\setlength{\\parindent}{12pt}
 
 ${langPkgs.join("\n")}
