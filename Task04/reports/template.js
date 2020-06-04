@@ -3,11 +3,13 @@ const i18n = require("./utils/i18n");
 const QUOTE_TYPES = {
 	"french": "guillemets",
 	"spanish": "mexican",
+	"english": "american",
 };
 
 const LANG_TO_CC = {
 	"french": "fr-FR",
 	"spanish": "es-MX",
+	"english": "en-US",
 };
 
 module.exports = config => {
