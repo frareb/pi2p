@@ -42,6 +42,8 @@ module.exports = config => {
 \\usepackage[T1]{fontenc}
 \\usepackage{microtype}
 
+\\usepackage{setspace}
+
 \\setlength{\\parskip}{8pt}
 \\setlength{\\parindent}{12pt}
 
@@ -57,19 +59,24 @@ ${langPkgs.join("\n")}
 \\begin{document}
 	\\begin{center}
 		\\huge ${i18n("REPORT_MAIN_TITLE")} ${institute} \\\\
-		\\vspace*{15pt}
+		\\vspace*{5pt}
 		\\LARGE ${i18n("MONTH_OF")} ${dateString} \\\\
-		\\vspace*{10pt}
+		\\vspace*{0pt}
 		\\Large ${i18n("GENERATED_ON")} ${nowDateString}
 	\\end{center}
 
 	\\vspace*{20pt}
 
-	{ \\hypersetup{
-		pdftitle={Project PI2P},
-		pdfauthor={Rebaudo et al.},
-		hidelinks
-	} \\tableofcontents }
+	{
+		\\hypersetup{
+			pdftitle={Project PI2P},
+			pdfauthor={Rebaudo et al.},
+			hidelinks
+		}
+		\\begin{spacing}{0.5}
+		\\tableofcontents
+		\\end{spacing}
+	}
 	\\pagebreak
 
 	${content}
