@@ -54,9 +54,6 @@ ${langPkgs.join("\n")}
 \\usepackage{hyperref}
 \\usepackage{longtable,tabu}
 \\usepackage{graphicx}
-\\usepackage[table]{xcolor}
-
-\\rowcolors{2}{gray!10}{white}
 
 \\begin{document}
 	\\begin{center}
