@@ -48,6 +48,12 @@ const generator = (year, month, gateway) => {
 						type: "text",
 						value: String(Math.round(ratio * 100)) + "%",
 					}],
+				}, {
+					type: "tableCell",
+					children: [{
+						type: "text",
+						value: `${"- ".repeat(String(Math.round(ratio * 10) * 2))}`,
+					}],
 				}],
 			};
 		});
@@ -68,6 +74,12 @@ const generator = (year, month, gateway) => {
 					children: [{
 						type: "strong",
 						children: [{type: "text", value: i18n("PERCENT")}],
+					}],
+				}, {
+					type: "tableCell",
+					children: [{
+						type: "strong",
+						children: [{type: "text", value: ""}],
 					}],
 				}],
 			}, ...rows],
