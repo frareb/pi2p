@@ -2,7 +2,7 @@
 	"openapi" : "3.0.3",
 	"info" : {
 		"title" : "API PI2P",
-		"description" : "Récupération des informations de capteurs pour\nl\\'étude du milieu de vie d\\'insectes.\n",
+		"description" : "Récupération des informations de capteurs pour\nl\\'étude du milieu de vie des insectes.\n<a href='/'>Retour au menu principal</a>",
 		"contact" : {
 			"email" : "francois.rebaudo@ird.fr"
 		},
