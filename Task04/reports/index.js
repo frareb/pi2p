@@ -136,6 +136,11 @@ module.exports = options => {
 			content: toLaTeX(mdastTree, {
 				thematicBreak: () => "\\pagebreak",
 				firstLineRowFont: "\\rowfont[l]{}",
+				headerParse: tableRows => {
+					// eslint-disable-next-line max-len
+					const columns = Math.max(...tableRows.map(l => l.split("&").length));
+					return `${"X[-1] ".repeat(columns)}`;
+				},
 			}),
 		}));
 };

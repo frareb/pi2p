@@ -22,65 +22,67 @@ const generator = (year, month, gateway) => {
 	}).then(data => {
 		if(data.length === 0) return [];
 
-		const rowCount = 4;
-		const columnCount = Math.ceil(data.length / rowCount);
-		// one data per minute
+		// one data per minute expected
 		const dataCountPerSensor = 24 * 60;
 
-		// one row out of two is for days, the other for percentages
-		const rows = [...new Array(2 * rowCount)].map((_, i) => ({
-			type: "tableRow",
-			children: [{
-				type: "tableCell",
+		// make the rows using data
+		const rows = data.map(v => {
+			const { day_of_month } = v;
+
+			const dataCount = parseInt(v.data_count);
+			const sensorCount = parseInt(v.sensor_count);
+			const ratio =
+				dataCount / (dataCountPerSensor * sensorCount);
+
+			return {
+				type: "tableRow",
 				children: [{
-					type: "strong",
+					type: "tableCell",
 					children: [{
 						type: "text",
-						value: i % 2 === 0 ? i18n("DAY") : i18n("PERCENT"),
+						value: day_of_month,
 					}],
-				}],
-			}],
-		}));
-
-		for(let c = 0; c < columnCount; c++) {
-			for(let r = 0; r < rowCount; r++) {
-				const d = data[c + r * columnCount];
-
-				const dayChildren = [];
-				const percentChildren = [];
-
-				if(d) {
-					dayChildren.push({
-						type: "text",
-						value: String(d.day_of_month),
-					});
-
-					const dataCount = parseInt(d.data_count);
-					const sensorCount = parseInt(d.sensor_count);
-					const ratio =
-						dataCount / (dataCountPerSensor * sensorCount);
-
-					percentChildren.push({
+				}, {
+					type: "tableCell",
+					children: [{
 						type: "text",
 						value: String(Math.round(ratio * 100)) + "%",
-					});
-				}
-
-				rows[2 * r].children.push({
+					}],
+				}, {
 					type: "tableCell",
-					children: dayChildren,
-				});
+					children: [{
+						type: "text",
+						value: `${"- ".repeat(String(Math.round(ratio * 10) * 2))}`,
+					}],
+				}],
+			};
+		});
 
-				rows[2 * r + 1].children.push({
-					type: "tableCell",
-					children: percentChildren,
-				});
-			}
-		}
-
+		// construct simple MDAST table
 		return [{
 			type: "table",
-			children: rows,
+			children: [{
+				type: "tableRow",
+				children: [{
+					type: "tableCell",
+					children: [{
+						type: "strong",
+						children: [{type: "text", value: i18n("DAY")}],
+					}],
+				}, {
+					type: "tableCell",
+					children: [{
+						type: "strong",
+						children: [{type: "text", value: i18n("PERCENT")}],
+					}],
+				}, {
+					type: "tableCell",
+					children: [{
+						type: "strong",
+						children: [{type: "text", value: ""}],
+					}],
+				}],
+			}, ...rows],
 		}];
 	});
 };

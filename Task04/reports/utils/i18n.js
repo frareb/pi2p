@@ -24,6 +24,17 @@ const STRINGS = {
 		"QU_1": "1e Cua.",
 		"QU_3": "3e Cua.",
 	},
+	"english": {
+		"REPORT_MAIN_TITLE": "Report for",
+		"SENSORS_AVAILABILITY_MAIN_TITLE": "Data collection for the current month",
+		"SENSORS_MEASUREMENTS_MAIN_TITLE": "Summary of sensor measurements",
+		"MONTH_OF": "",
+		"DAY": "Day",
+		"PERCENT": "Percent",
+		"GENERATED_ON": "Created",
+		"QU_1": "1e Qu.",
+		"QU_3": "3e Qu.",
+	},
 };
 
 module.exports = stringName => STRINGS[lang][stringName];

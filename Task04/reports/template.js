@@ -3,11 +3,13 @@ const i18n = require("./utils/i18n");
 const QUOTE_TYPES = {
 	"french": "guillemets",
 	"spanish": "mexican",
+	"english": "american",
 };
 
 const LANG_TO_CC = {
 	"french": "fr-FR",
 	"spanish": "es-MX",
+	"english": "en-US",
 };
 
 module.exports = config => {
@@ -37,12 +39,14 @@ module.exports = config => {
 
 	if(lang === "french") langPkgs.push("\\frenchspacing");
 
-	return `\\documentclass[12pt]{article}
+	return `\\documentclass[12pt,a4paper]{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{microtype}
 
-\\setlength{\\parskip}{8pt}
+\\usepackage{setspace}
+
+\\setlength{\\parskip}{2pt}
 \\setlength{\\parindent}{12pt}
 
 ${langPkgs.join("\n")}
@@ -54,15 +58,24 @@ ${langPkgs.join("\n")}
 \\begin{document}
 	\\begin{center}
 		\\huge ${i18n("REPORT_MAIN_TITLE")} ${institute} \\\\
-		\\vspace*{15pt}
+		\\vspace*{5pt}
 		\\LARGE ${i18n("MONTH_OF")} ${dateString} \\\\
-		\\vspace*{10pt}
+		\\vspace*{0pt}
 		\\Large ${i18n("GENERATED_ON")} ${nowDateString}
 	\\end{center}
 
 	\\vspace*{20pt}
 
-	{ \\hypersetup{hidelinks} \\tableofcontents }
+	{
+		\\hypersetup{
+			pdftitle={Project PI2P},
+			pdfauthor={Rebaudo et al.},
+			hidelinks
+		}
+		\\begin{spacing}{0.5}
+		\\tableofcontents
+		\\end{spacing}
+	}
 	\\pagebreak
 
 	${content}
