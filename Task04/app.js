@@ -41,6 +41,7 @@ app.use("/sensors", require("./routes/sensors"));
 app.use("/deploy", require("./routes/deploy"));
 app.use("/groups", require("./routes/groups"));
 app.use("/graphs", require("./routes/graphs"));
+app.use("/", require("./routes/reports"));
 app.use("/keys", require("./routes/api-keys"));
 app.use("/", require("./routes/index"));
 
