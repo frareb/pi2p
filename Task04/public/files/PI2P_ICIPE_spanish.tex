@@ -1,0 +1,157 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+
+\usepackage{setspace}
+
+\setlength{\parskip}{2pt}
+\setlength{\parindent}{12pt}
+
+\usepackage[spanish]{babel}
+\usepackage[spanish=mexican]{csquotes}
+
+\usepackage{hyperref}
+\usepackage{longtable,tabu}
+\usepackage{graphicx}
+
+\begin{document}
+	\begin{center}
+		\huge Informe para el instituto ICIPE \\
+		\vspace*{5pt}
+		\LARGE Mes de mayo de 2020 \\
+		\vspace*{0pt}
+		\Large Creado el 15/6/2020
+	\end{center}
+
+	\vspace*{20pt}
+
+	{
+		\hypersetup{
+			pdftitle={Project PI2P},
+			pdfauthor={Rebaudo et al.},
+			hidelinks
+		}
+		\begin{spacing}{0.5}
+		\tableofcontents
+		\end{spacing}
+	}
+	\pagebreak
+
+	\section{Collecte des données du mois par le serveur}
+
+
+\subsection{Gateway Nairobi}
+
+
+\begin{longtabu} spread 0pt {X[-1] X[-1] X[-1] } \hline
+\rowfont[l]{}
+\textbf{Día} & \textbf{Porcentaje} & \textbf{} \\ \hline
+\rowfont[l]{}
+15 & 77\% & - - - - - - - - - - - - - - - -  \\ \hline
+16 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+17 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+18 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+19 & 97\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+20 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+21 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+22 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+23 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+24 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+25 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+26 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+27 & 98\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+28 & 67\% & - - - - - - - - - - - - - -  \\ \hline
+29 & 97\% & - - - - - - - - - - - - - - - - - - - -  \\ \hline
+30 & 47\% & - - - - - - - - - -  \\ \hline
+\end{longtabu}
+
+
+\pagebreak
+
+\section{Récapitulatif des mesures des capteurs}
+
+
+\subsection{Gateway Nairobi}
+
+
+\subsubsection{Temperature - from Gateway (BME680)}
+
+
+\begin{longtabu} spread 0pt {X[-1] X[-1] X[-1] X[-1] X[-1] X[-1] X[-1] } \hline
+\rowfont[l]{}
+\textbf{Día} & \textbf{Min.} & \textbf{1e Cua.} & \textbf{Med.} & \textbf{Mean} & \textbf{3e Cua.} & \textbf{Max.} \\ \hline
+\rowfont[l]{}
+15 & 19.58 & 20.24 & 21.79 & 20 & 23.23 & 25.86 \\ \hline
+16 & 19.12 & 19.57 & 19.98 & 19.36 & 21.32 & 24.19 \\ \hline
+17 & 18.24 & 18.94 & 19.95 & 18.77 & 22.47 & 24.45 \\ \hline
+18 & 18.06 & 18.79 & 19.97 & 18.54 & 22.75 & 24.66 \\ \hline
+19 & 16.62 & 19.32 & 20.67 & 17.59 & 24 & 25.34 \\ \hline
+20 & 17.77 & 19.64 & 20.67 & 18.49 & 22.17 & 24.65 \\ \hline
+21 & 18.31 & 19.35 & 20.46 & 18.91 & 22.27 & 23.84 \\ \hline
+22 & 17.88 & 19.07 & 20.71 & 18.46 & 22.41 & 24.59 \\ \hline
+23 & 17.74 & 18.85 & 20.7 & 18.38 & 22.17 & 24.17 \\ \hline
+24 & 17.99 & 19.19 & 21.11 & 18.64 & 22.96 & 25.06 \\ \hline
+25 & 18.23 & 19.78 & 20.61 & 19.07 & 23.18 & 25.86 \\ \hline
+26 & 18.69 & 20.16 & 21.21 & 19.12 & 23.84 & 25.45 \\ \hline
+27 & 19.11 & 20.37 & 21.79 & 19.73 & 24.29 & 25.97 \\ \hline
+28 & 19.37 & 20 & 21.15 & 19.65 & 22.18 & 24.06 \\ \hline
+29 & 18.33 & 20.25 & 21.52 & 19.64 & 24.18 & 26.03 \\ \hline
+30 & 17.85 & 18.31 & 20.07 & 18.09 & 23.49 & 25.05 \\ \hline
+\end{longtabu}
+
+
+\subsubsection{RH - from Gateway (BME680)}
+
+
+\begin{longtabu} spread 0pt {X[-1] X[-1] X[-1] X[-1] X[-1] X[-1] X[-1] } \hline
+\rowfont[l]{}
+\textbf{Día} & \textbf{Min.} & \textbf{1e Cua.} & \textbf{Med.} & \textbf{Mean} & \textbf{3e Cua.} & \textbf{Max.} \\ \hline
+\rowfont[l]{}
+15 & 45.46 & 54.43 & 58.96 & 50.98 & 62.59 & 65.31 \\ \hline
+16 & 47.59 & 58.46 & 62.71 & 51.57 & 64.86 & 67.01 \\ \hline
+17 & 47.38 & 52.57 & 58.36 & 49.63 & 61.12 & 65.9 \\ \hline
+18 & 40.88 & 48.7 & 56.42 & 44.7 & 59.89 & 63.14 \\ \hline
+19 & 38.86 & 43.36 & 55.36 & 41.42 & 59.5 & 61.68 \\ \hline
+20 & 44.81 & 51.65 & 58.93 & 48.2 & 60.36 & 62.39 \\ \hline
+21 & 45.2 & 51.8 & 57.02 & 49.45 & 60.31 & 62.07 \\ \hline
+22 & 39.33 & 48.61 & 54.35 & 44.16 & 57.44 & 64.53 \\ \hline
+23 & 40.35 & 48.32 & 54.16 & 43.99 & 57.76 & 60.72 \\ \hline
+24 & 43.67 & 49.61 & 55.67 & 46.69 & 57.7 & 61.05 \\ \hline
+25 & 38.29 & 44.73 & 54.58 & 41.98 & 58.3 & 61.36 \\ \hline
+26 & 41.38 & 46.67 & 54.88 & 44.52 & 61.16 & 63.77 \\ \hline
+27 & 39.2 & 47.21 & 54.08 & 42.99 & 58.95 & 63.21 \\ \hline
+28 & 46.06 & 51.73 & 58.14 & 49.8 & 59.53 & 62.13 \\ \hline
+29 & 35.13 & 43.73 & 52 & 39.4 & 57.12 & 62.5 \\ \hline
+30 & 26.85 & 33.58 & 52.68 & 30.49 & 57.19 & 58.51 \\ \hline
+\end{longtabu}
+
+
+\subsubsection{Pressure - from Gateway (BME680)}
+
+
+\begin{longtabu} spread 0pt {X[-1] X[-1] X[-1] X[-1] X[-1] X[-1] X[-1] } \hline
+\rowfont[l]{}
+\textbf{Día} & \textbf{Min.} & \textbf{1e Cua.} & \textbf{Med.} & \textbf{Mean} & \textbf{3e Cua.} & \textbf{Max.} \\ \hline
+\rowfont[l]{}
+15 & 841.96 & 843.03 & 844.09 & 842.44 & 845.09 & 846.15 \\ \hline
+16 & 842.56 & 843.91 & 844.6 & 843.38 & 845.5 & 846.04 \\ \hline
+17 & 843.32 & 844.29 & 845.24 & 843.81 & 846.16 & 847.06 \\ \hline
+18 & 843.02 & 844.42 & 845 & 843.65 & 845.59 & 847.15 \\ \hline
+19 & 842.64 & 844.19 & 845.19 & 843.34 & 845.87 & 846.99 \\ \hline
+20 & 843.24 & 844.71 & 845.43 & 843.86 & 846.33 & 847.48 \\ \hline
+21 & 843.7 & 844.94 & 845.67 & 844.14 & 846.25 & 847.56 \\ \hline
+22 & 843.67 & 845.42 & 846.12 & 844.42 & 846.76 & 848.04 \\ \hline
+23 & 843.7 & 845 & 845.65 & 844.25 & 846.33 & 847.73 \\ \hline
+24 & 842.76 & 844.22 & 844.93 & 843.37 & 845.38 & 846.7 \\ \hline
+25 & 842.78 & 843.78 & 844.45 & 843.24 & 845.17 & 846.7 \\ \hline
+26 & 842.95 & 843.89 & 844.77 & 843.38 & 845.41 & 846.04 \\ \hline
+27 & 842.91 & 844.51 & 845.25 & 843.61 & 845.69 & 846.78 \\ \hline
+28 & 842.92 & 844.37 & 844.82 & 843.77 & 846.18 & 846.92 \\ \hline
+29 & 841.99 & 843.38 & 843.97 & 842.61 & 844.66 & 846.44 \\ \hline
+30 & 842.68 & 843.45 & 844.31 & 843.19 & 845.1 & 845.54 \\ \hline
+\end{longtabu}
+
+
+\pagebreak
+\end{document}

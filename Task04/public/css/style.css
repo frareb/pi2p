@@ -37,6 +37,9 @@ body {
 a {
 	color: #00B7FF;
 }
+a.file{
+	color: darkblue;
+}
 select{
 	color: grey;
 }
@@ -46,6 +49,14 @@ select:hover{
 
 form{
 	padding: 5px;
+}
+
+.listFiles{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: white;
 }
 
 /* HEADER -------------------------------------------------------------------*/
@@ -67,7 +78,7 @@ ul {
 	background-color: #333;
 }
 
-li {
+li{
 	float: left;
 }
 
