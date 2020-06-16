@@ -111,15 +111,15 @@ li a, .dropbtn {
 	text-decoration: none;
 }
 
-li a:hover, .dropdown:hover .dropbtn {
+li a:hover, .dropdownpi2p:hover .dropbtn {
 	background-color: #653356ff;
 }
 
-li.dropdown {
+li.dropdownpi2p {
 	display: inline-block;
 }
 
-.dropdown-content {
+.dropdownpi2p-content {
 	display: none;
 	position: absolute;
 	background-color: #f9f9f9;
@@ -128,7 +128,7 @@ li.dropdown {
 	z-index: 1;
 }
 
-.dropdown-content a {
+.dropdownpi2p-content a {
 	color: black;
 	padding: 12px 16px;
 	text-decoration: none;
@@ -136,9 +136,9 @@ li.dropdown {
 	text-align: left;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f1;}
+.dropdownpi2p-content a:hover {background-color: #f1f1f1;}
 
-.dropdown:hover .dropdown-content {
+.dropdownpi2p:hover .dropdownpi2p-content {
 	display: block;
 }
 

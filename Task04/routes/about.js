@@ -6,4 +6,11 @@ router.get("/devrate", function(req, res) {
 	res.render("about/da_devrate", { title: "PI2P" });
 });
 
+// publications
+router.get("/publi", function(req, res) {
+	res.render("about/com_publi", { title: "PI2P" });
+});
+
+
+
 module.exports = router;
