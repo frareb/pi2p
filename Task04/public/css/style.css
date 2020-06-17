@@ -20,6 +20,22 @@
 }
 
 /* IMAGES -------------------------------------------------------------------*/
+img{
+	/*RESPONSIVE*/
+	max-width: 80%;
+  height: auto;
+}
+.animsition-link {
+  /* width: 200px;
+  height: 200px;*/
+  margin: 0px auto;
+  padding-top: 0px;
+  background: white;
+  text-align: center;
+  color: white;
+  font-size: 3em;
+}
+
 .swiper-wrapper {
 	padding: 0;
 	margin: 0;
