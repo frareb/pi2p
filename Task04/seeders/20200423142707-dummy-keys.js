@@ -16,8 +16,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				// without this key, no one can access the others
-				// please choose it secured in the first place
 				key: "githubSecretKey",
 				groupId: 3,
 				gatewayId: null,
@@ -26,7 +24,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				key: cryptoRandomString({length: 64, type: "base64"}),
+				key: "firstGatewayKey",
 				groupId: 2,
 				gatewayId: 1,
 				description: "Accès pour la gateway 1",
