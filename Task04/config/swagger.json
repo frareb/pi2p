@@ -373,7 +373,7 @@
 					"explode" : true,
 					"schema" : {
 						"type" : "string",
-						"enum": ["french", "spanish"]
+						"enum": ["french", "spanish", "english"]
 					}
 				} ],
 				"responses" : {
