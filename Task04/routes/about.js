@@ -11,6 +11,9 @@ router.get("/publi", function(req, res) {
 	res.render("about/com_publi", { title: "PI2P" });
 });
 
-
+// bibliography
+router.get("/biblio", function(req, res) {
+	res.render("about/com_biblio", { title: "PI2P" });
+});
 
 module.exports = router;
