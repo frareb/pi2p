@@ -22,7 +22,7 @@ fs.readdirSync(fileFolder).forEach(file => {
 	let inst = file.split('_')[1];
 	let lang = file.split('_')[2].split(".")[0];
 	let ext = file.split('_')[2].split(".")[1];
-	if (lang == "english" && ext == "tex") {
+	if (lang == "english" && ext == "pdf") {
 		myFiles.push({name:inst, tex:[], pdf:[]});
 	}
 	if(ext == "tex"){
