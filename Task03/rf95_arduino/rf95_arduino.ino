@@ -1,9 +1,6 @@
 /*
  * Program that read a value in °C from DS18B20, sends it using RFM95
- * and then goes to sleep for a four seconds, and sends a new read
- * 
- * This demo was made to test electrical consumption
- * when sending something every regularly.
+ * and then goes to sleep for a four seconds, and sends a new read.
  * 
  * Pinout:
  * 
@@ -21,13 +18,6 @@
  *    3.3V ----> 3V3 --|
  *    Gnd -----> Gnd   | 10k resistor from Vcc to DATA
  *    DATA ----> D2 ---|
- * 
- * To measure consumption, transfer the program,
- * and power the Arduino standalone using power supply
- * connected to 1 Ohm resistor going to Arduino.
- * 
- * Visualize the potential between the resistor's pins
- * to see current shape (1 V / A).
  */
 
 #include <SPI.h>
@@ -62,11 +52,11 @@ typedef union __RadioPacket {
   } hi;
 } RadioPacket;
 
-unsigned char sleep_count = 0;
+unsigned char sleep_cycles = 0;
 
 void setup() {
   // Reset watchdog in case of brown-out during interrupt
-  wdt_rst();
+  sleep_disable_wdt();
   
   Serial.begin(9600);
   while (!Serial); // Wait for serial port to be available
@@ -101,7 +91,7 @@ void loop() {
   pkt.hi.value = temp_sensor.getTempCByIndex(0);
 
   // Send the packet  
-  if(!rf95.send(pkt.raw, sizeof(pkt.raw))) {
+  if(!rf95.send((uint8_t *) pkt.raw, sizeof(pkt.raw))) {
     Serial.println("unable to send message");
     while(1);
   }
@@ -111,54 +101,57 @@ void loop() {
   uint8_t rcv_buf[RH_RF95_MAX_MESSAGE_LEN];
   uint8_t rcv_len = sizeof(rcv_buf);
   
-  if(rf95.waitAvailableTimeout(3000)) {
+  if(rf95.waitAvailableTimeout(1000)) {
     if(rf95.recv(rcv_buf, &rcv_len)) {
       Serial.print("got reply!");
     }
   }
 
-  deepsleep();
+  // Sleep for a minute
+  sleep_enter(7);
 }
 
-void wdt_rst(void) {
+void sleep_disable_wdt(void) {
   cli();
   __asm__("wdr");
   
   // Clear WDRF & WDE bits
-  MCUSR &= ~0x08;
-  WDTCSR |= 0x18;
-  __asm__("nop");
+  MCUSR &= ~(1 << WDRF);
+  WDTCSR |= (1 << WDCE) | (1 << WDE);
   WDTCSR = 0x00;
 
   sei();
 }
 
-void deepsleep(void) {
+void sleep_enable_wdt(void) {
   cli();
-  
-  // Enable watchdog interrupt
-  WDTCSR |= 0x18;
-  __asm__("nop");
-  WDTCSR |= 0x4E;
+  __asm__("wdr");
 
-  // Set sleep for LoRa module
-  if(!rf95.sleep()) {
-    Serial.println("could not go to sleep");
-    while(1);
-  }
+  // Enable watchdog interrupt at 8s rate
+  WDTCSR |= (1 << WDCE) | (1 << WDE);
+  WDTCSR = (1 << WDP0) | (1 << WDP3);
+  WDTCSR |= _BV(WDIE);
+
+  sei();
+}
+
+void sleep_enter(unsigned char cycles) {
+  sleep_cycles = 0;
+  sleep_enable_wdt();
+
+  rf95.sleep();
 
   // Go to sleep
-  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
-  sleep_enable();
-  sei();
-  sleep_mode();
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  while(sleep_cycles++ < cycles) {
+    sleep_enable();
+    sleep_mode();
+  }
 
-  // On deepsleep end, restart from here: reenable power
+  // On sleep end, restart from here: reenable power
   sleep_disable();
   power_all_enable();
 }
 
 // Interrupt on watchdog restore (end of sleep)
-ISR(WDT_vect) {
-  wdt_rst();
-}
+ISR(WDT_vect) {}
