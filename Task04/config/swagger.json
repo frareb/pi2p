@@ -4,7 +4,7 @@
 		"title" : "API PI2P",
 		"description" : "Récupération des informations de capteurs pour\nl\\'étude du milieu de vie des insectes.\n<a href='/'>Retour au menu principal</a>",
 		"contact" : {
-			"email" : "francois.rebaudo@ird.fr"
+			"email" : "francois [point] rebaudo [arobase] ird [point] fr"
 		},
 		"license" : {
 			"name" : "Propriétaire"
