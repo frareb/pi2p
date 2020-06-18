@@ -1,9 +1,9 @@
 /*
- * Program that sends a simple message using RFM95,
- * and then goes to sleep for a second, and sends it again.
+ * Program that read a value in °C from DS18B20, sends it using RFM95
+ * and then goes to sleep for a four seconds, and sends a new read
  * 
  * This demo was made to test electrical consumption
- * when send something every second.
+ * when sending something every regularly.
  * 
  * Pinout:
  * 
@@ -16,7 +16,12 @@
  *   NSS ----> D4
  *   DIO0 ---> D3
  *   RESET --> D6
- *   
+ * 
+ * | DS18B20 | Arduino |
+ *    3.3V ----> 3V3 --|
+ *    Gnd -----> Gnd   | 10k resistor from Vcc to DATA
+ *    DATA ----> D2 ---|
+ * 
  * To measure consumption, transfer the program,
  * and power the Arduino standalone using power supply
  * connected to 1 Ohm resistor going to Arduino.
@@ -27,6 +32,8 @@
 
 #include <SPI.h>
 #include <RH_RF95.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
@@ -35,9 +42,27 @@
 #define RFM95_INT 3
 #define RFM95_CS  4
 #define RFM95_RST 6
+#define TEMP_PIN  2
+
+// Setup oneWire instance & DallasTemperature library
+OneWire oneWire(TEMP_PIN);  
+DallasTemperature temp_sensor(&oneWire);
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
+
+// Create an union for data conversion
+typedef union __RadioPacket {
+  char raw[6];
+  
+  struct __HIPacket {
+    char type;
+    float value;
+    char __padding;
+  } hi;
+} RadioPacket;
+
+unsigned char sleep_count = 0;
 
 void setup() {
   // Reset watchdog in case of brown-out during interrupt
@@ -46,8 +71,8 @@ void setup() {
   Serial.begin(9600);
   while (!Serial); // Wait for serial port to be available
 
-  Serial.println(SCK);
-  Serial.println(MISO);
+  // Init DS18B20
+  temp_sensor.begin();
 
   // Perform chip reset
   digitalWrite(RFM95_RST, LOW);
@@ -68,20 +93,26 @@ void setup() {
 }
 
 void loop() {
-  uint8_t data[] = "Hello World!";
-  uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-  uint8_t len = sizeof(buf);
+  // Get temperature and forge packet
+  temp_sensor.requestTemperatures();
 
-  Serial.println("sending message");
-  if(!rf95.send(data, sizeof(data))) {
+  RadioPacket pkt;
+  pkt.hi.type = 'T';
+  pkt.hi.value = temp_sensor.getTempCByIndex(0);
+
+  // Send the packet  
+  if(!rf95.send(pkt.raw, sizeof(pkt.raw))) {
     Serial.println("unable to send message");
     while(1);
   }
   rf95.waitPacketSent();
 
   // Wait for a reply
+  uint8_t rcv_buf[RH_RF95_MAX_MESSAGE_LEN];
+  uint8_t rcv_len = sizeof(rcv_buf);
+  
   if(rf95.waitAvailableTimeout(3000)) {
-    if(rf95.recv(buf, &len)) {
+    if(rf95.recv(rcv_buf, &rcv_len)) {
       Serial.print("got reply!");
     }
   }
