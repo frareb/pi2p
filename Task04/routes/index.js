@@ -14,4 +14,14 @@ router.get("/legal", function(req, res) {
 	res.render("legal", { title: "PI2P" });
 });
 
+// to download reports
+const downreports = require("../controllers/downreports");
+router.get("/reports/main", function(req, res) {
+	res.render("reports/reports", {
+		title: "PI2P",
+		myMonth: downreports.myDate, //myMonth,
+		myFiles: downreports.myFiles, //myFiles,
+	});
+});
+
 module.exports = router;

@@ -1,6 +1,3 @@
-const express = require("express");
-const router = express.Router();
-
 const d = new Date();
 d.setMonth(d.getMonth()-1);
 const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
@@ -9,13 +6,6 @@ const myMonth = `${mo}-${ye}`;
 
 const fileFolder = './public/files/';
 const fs = require('fs');
-// const myFiles = [];
-// fs.readdirSync(fileFolder).forEach(file => {
-// 	let inst = file.split('_')[1];
-// 	let lang = file.split('_')[2].split(".")[0];
-// 	let ext = file.split('_')[2].split(".")[1];
-// 	let push = (lang == "french" && ext == "tex") ? myFiles.push(inst) : false;
-// });
 
 const myFiles = [];
 fs.readdirSync(fileFolder).forEach(file => {
@@ -33,15 +23,7 @@ fs.readdirSync(fileFolder).forEach(file => {
 		}
 	}
 });
-// console.log(myFiles);
 
-// page to download reports
-router.get("/reports/main", function(req, res) {
-	res.render("reports/reports", {
-		title: "PI2P",
-		myMonth: myMonth,
-		myFiles: myFiles,
-	});
-});
+const downreports = {myDate: myMonth, myFiles: myFiles}
 
-module.exports = router;
+module.exports = downreports;
