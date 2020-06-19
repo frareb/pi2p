@@ -2,35 +2,35 @@
 	"openapi" : "3.0.3",
 	"info" : {
 		"title" : "API PI2P",
-		"description" : "Récupération des informations de capteurs pour\nl\\'étude du milieu de vie des insectes.\n<a href='/'>Retour au menu principal</a>",
+		"description" : "This is the PI2P RESTful API documentation page to create, read, update, and delete all entities of the PI2P database. This documentation is made using the [Swagger Open Source Editor](https://swagger.io/tools/swagger-editor/). To exit the API documentation and get back to the PI2P website main menu, click [here](/).",
 		"contact" : {
 			"email" : "francois [point] rebaudo [arobase] ird [point] fr"
 		},
 		"license" : {
-			"name" : "Propriétaire"
+			"name" : "Proprietary"
 		},
-		"version" : "1.0.0"
+		"version" : "1.0.1"
 	},
 	"servers" : [ {
 		"url" : "https://pi2p.ird.fr/",
-		"description" : "Point d'accès unique"
+		"description" : "Single access point"
 	} ],
 	"tags" : [ {
 		"name" : "admins",
-		"description" : "Points d'accès réservés aux administrateurs"
+		"description" : "Access points reserved for administrators"
 	}, {
 		"name" : "gateways",
-		"description" : "Points d'accès pour les gateways"
+		"description" : "Access points reserved for gateways"
 	}, {
 		"name" : "guests",
-		"description" : "Opérations accessibles à tous"
+		"description" : "Access points for all"
 	} ],
 	"paths" : {
 		"/institutes" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Liste les instituts hébergeant des capteurs",
-				"description" : "Permet de filtrer les instituts par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"summary" : "List the partner institutes of the project",
+				"description" : "Allows you to filter the institutes by creation date, or simply by listing them all with an appropriate pagination.",
 				"operationId" : "listInstitutes",
 				"parameters" : [
 					{ "$ref" : "#/components/parameters/startQuery" },
@@ -40,7 +40,7 @@
 					{
 						"name" : "name",
 						"in" : "query",
-						"description" : "filtrer les instituts par nom",
+						"description" : "filter institutes by name",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -49,7 +49,7 @@
 					{
 						"name" : "countryCode",
 						"in" : "query",
-						"description" : "filtrer les instituts par pays",
+						"description" : "filter institutes by country",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -58,7 +58,7 @@
 				],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -85,17 +85,17 @@
 						}
 					},
 					"416" : {
-						"description" : "la page est inaccessible"
+						"description" : "the page is inaccessible"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
 			"post" : {
 				"tags" : [ "admins" ],
-				"summary" : "Créé un nouvel institut",
-				"description" : "Créé un nouvel institut, avec toutes ses propriétés\n",
+				"summary" : "Create a new institute",
+				"description" : "Create a new institute, with all its properties",
 				"operationId" : "addInstitute",
 				"requestBody" : {
 					"content" : {
@@ -109,7 +109,7 @@
 				},
 				"responses" : {
 					"201" : {
-						"description" : "création de la ressource",
+						"description" : "resource creation",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -128,13 +128,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -143,18 +143,18 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime tous les instituts",
-				"description" : "Supprime de manière définitive tous les instituts ainsi que tous les éléments enfants de chaque institut.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"summary" : "Remove all institutes",
+				"description" : "Permanently delete all institutes as well as all child elements from each institute. Thank you for using this request with all the necessary precautions!",
 				"operationId" : "deleteInstitutes",
 				"responses" : {
 					"204" : {
-						"description" : "collection supprimée"
+						"description" : "collection deleted"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -165,13 +165,13 @@
 		"/institutes/{instituteId}" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Affiche les détails d'un institut",
-				"description" : "Affiche un institut avec toutes ses informations et relations\n",
+				"summary" : "Display the details of an institute",
+				"description" : "Display an institute with all its information and relationships",
 				"operationId" : "getInstitute",
 				"parameters" : [ {
 					"name" : "instituteId",
 					"in" : "path",
-					"description" : "identifiant de l'institut à afficher\n",
+					"description" : "id of the institute to display",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -182,7 +182,7 @@
 				} ],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -224,22 +224,22 @@
 						}
 					},
 					"404" : {
-						"description" : "la ressource n'a pas été trouvée"
+						"description" : "the resource was not found"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime un institut",
-				"description" : "Supprime de manière définitive un institut ainsi que ses éléments enfants\n",
+				"summary" : "Remove an institute",
+				"description" : "Permanently delete an institute and its child elements",
 				"operationId" : "deleteInstitute",
 				"parameters" : [ {
 					"name" : "instituteId",
 					"in" : "path",
-					"description" : "identifiant de l'institut à supprimer\n",
+					"description" : "id of the institute to be deleted",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -250,13 +250,13 @@
 				} ],
 				"responses" : {
 					"204" : {
-						"description" : "ressource supprimée"
+						"description" : "resource deleted"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -265,13 +265,13 @@
 			},
 			"patch" : {
 				"tags" : [ "admins" ],
-				"summary" : "Met à jour un institut",
-				"description" : "Modifie les propriétés d'un institut\n",
+				"summary" : "Update an institute",
+				"description" : "Modify the properties of an institute",
 				"operationId" : "updateInstitute",
 				"parameters" : [ {
 					"name" : "instituteId",
 					"in" : "path",
-					"description" : "identifiant de l'institut à modifier\n",
+					"description" : "id of the institute to be modified",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -292,7 +292,7 @@
 				},
 				"responses" : {
 					"200" : {
-						"description" : "mise à jour de la ressource",
+						"description" : "resource update",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -311,13 +311,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -328,13 +328,13 @@
 		"/institutes/{instituteId}/report" : {
 			"get" : {
 				"tags" : [ "admins" ],
-				"summary" : "Génère un rapport pour l'institut",
-				"description" : "Génère, au format TeX, un rapport de l'activité de l'institut sur le mois donné.\n",
+				"summary" : "Generate a report for the institute",
+				"description" : "Generate, in TeX format, a report of the institute's activity for the given month.",
 				"operationId" : "getInstituteReport",
 				"parameters" : [ {
 					"name" : "instituteId",
 					"in" : "path",
-					"description" : "identifiant de l'institut pour lequel générer le rapport\n",
+					"description" : "id of the institute for which to generate the report",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -345,7 +345,7 @@
 				}, {
 					"name" : "month",
 					"in" : "query",
-					"description" : "numéro du mois pour lequel générer le rapport. Par défaut, le mois en cours est utilisé.\n",
+					"description" : "number of the month for which to generate the report. By default, the current month is used.",
 					"required" : false,
 					"style" : "form",
 					"explode" : true,
@@ -356,7 +356,7 @@
 				}, {
 					"name" : "year",
 					"in" : "query",
-					"description" : "année pour laquelle générer le rapport. Par défaut, l'année en cours est utilisé.\n",
+					"description" : "year for which to generate the report. By default, the current year is used.",
 					"required" : false,
 					"style" : "form",
 					"explode" : true,
@@ -367,7 +367,7 @@
 				}, {
 					"name" : "lang",
 					"in" : "query",
-					"description" : "Langue dans laquelle générer le rapport.\n",
+					"description" : "Language in which to generate the report.",
 					"required" : false,
 					"style" : "form",
 					"explode" : true,
@@ -384,7 +384,7 @@
 						}
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -425,7 +425,7 @@
 				],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -452,10 +452,10 @@
 						}
 					},
 					"416" : {
-						"description" : "la page est inaccessible"
+						"description" : "the page is inaccessible"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
@@ -495,13 +495,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -518,10 +518,10 @@
 						"description" : "collection supprimée"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -549,7 +549,7 @@
 				} ],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -596,10 +596,10 @@
 						}
 					},
 					"404" : {
-						"description" : "la ressource n'a pas été trouvée"
+						"description" : "the resource was not found"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
@@ -622,13 +622,13 @@
 				} ],
 				"responses" : {
 					"204" : {
-						"description" : "ressource supprimée"
+						"description" : "resource deleted"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -664,7 +664,7 @@
 				},
 				"responses" : {
 					"200" : {
-						"description" : "mise à jour de la ressource",
+						"description" : "resource update",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -683,13 +683,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -748,7 +748,7 @@
 				],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -775,10 +775,10 @@
 						}
 					},
 					"416" : {
-						"description" : "la page est inaccessible"
+						"description" : "the page is inaccessible"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
@@ -818,13 +818,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -841,10 +841,10 @@
 						"description" : "collection supprimée"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -872,7 +872,7 @@
 				} ],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -916,10 +916,10 @@
 						}
 					},
 					"404" : {
-						"description" : "la ressource n'a pas été trouvée"
+						"description" : "the resource was not found"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
@@ -942,13 +942,13 @@
 				} ],
 				"responses" : {
 					"204" : {
-						"description" : "ressource supprimée"
+						"description" : "resource deleted"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -984,7 +984,7 @@
 				},
 				"responses" : {
 					"200" : {
-						"description" : "mise à jour de la ressource",
+						"description" : "resource update",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1003,13 +1003,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1043,7 +1043,7 @@
 				],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1070,10 +1070,10 @@
 						}
 					},
 					"416" : {
-						"description" : "la page est inaccessible"
+						"description" : "the page is inaccessible"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				}
 			},
@@ -1125,13 +1125,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1164,10 +1164,10 @@
 						"description" : "collection supprimée"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1198,7 +1198,7 @@
 				],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1225,13 +1225,13 @@
 						}
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"416" : {
-						"description" : "la page est inaccessible"
+						"description" : "the page is inaccessible"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1274,13 +1274,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1297,10 +1297,10 @@
 						"description" : "collection supprimée"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1328,7 +1328,7 @@
 				} ],
 				"responses" : {
 					"200" : {
-						"description" : "succès de la requête",
+						"description" : "request success",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1347,13 +1347,13 @@
 						}
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"404" : {
-						"description" : "la ressource n'a pas été trouvée"
+						"description" : "the resource was not found"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1379,13 +1379,13 @@
 				} ],
 				"responses" : {
 					"204" : {
-						"description" : "ressource supprimée"
+						"description" : "resource deleted"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1421,7 +1421,7 @@
 				},
 				"responses" : {
 					"200" : {
-						"description" : "mise à jour de la ressource",
+						"description" : "resource update",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1440,13 +1440,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1491,13 +1491,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1514,10 +1514,10 @@
 						"description" : "collection supprimée"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1545,13 +1545,13 @@
 				} ],
 				"responses" : {
 					"204" : {
-						"description" : "ressource supprimée"
+						"description" : "resource deleted"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
@@ -1587,7 +1587,7 @@
 				},
 				"responses" : {
 					"200" : {
-						"description" : "mise à jour de la ressource",
+						"description" : "resource update",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1606,13 +1606,13 @@
 						}
 					},
 					"400" : {
-						"description" : "les paramètres du corps de la requête sont invalides"
+						"description" : "the parameters of the request body are invalid"
 					},
 					"403" : {
-						"description" : "non autorisé : la requête doit émaner d'une clef administrateur"
+						"description" : "not authorized: the request must come from an administrator key"
 					},
 					"500" : {
-						"description" : "erreur interne du serveur"
+						"description" : "Internal Server Error"
 					}
 				},
 				"security" : [ {
