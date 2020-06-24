@@ -25,7 +25,7 @@ export function formatBiblio(divId, biblioURL) {
 				let myTitle = document.createElement('span');
 				myTitle.setAttribute("id", "bib_title");
 				// myTitle.setAttribute("onclick", 'showAbstract(' + i + ')');
-				//myTitle.setAttribute("title", listBib[i].data.abstractNote);
+				myTitle.setAttribute("title", listBib[i].data.abstractNote);
 				myTitle.textContent = `${listBib[i].data.title}. `;
 
 				let myDOI = document.createElement('a');
