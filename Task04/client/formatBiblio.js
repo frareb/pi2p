@@ -12,12 +12,20 @@ export function formatBiblio(divId, biblioURL) {
 
 			// console.log("listBib:", listBib);
 
+			// function showAbstract(elt){
+			// 	let myAbstract = document.createElement('p')
+			// 	myAbstract.setAttribute("id", "bib_abstract");
+			// 	myAbstract.textContent = `${listBib[elt].data.abstractNote}`;
+			// 	myRef.appendChild(myAbstract);
+			// }
+
 			for (let i = 0; i < listBib.length; i++){
 				let myRef = document.createElement('p');
 
 				let myTitle = document.createElement('span');
 				myTitle.setAttribute("id", "bib_title");
-				myTitle.setAttribute("title", listBib[i].data.abstractNote);
+				// myTitle.setAttribute("onclick", 'showAbstract(' + i + ')');
+				//myTitle.setAttribute("title", listBib[i].data.abstractNote);
 				myTitle.textContent = `${listBib[i].data.title}. `;
 
 				let myDOI = document.createElement('a');
