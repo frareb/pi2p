@@ -4,6 +4,12 @@
 	font-weight: bold;
 }
 
+#publiGroup{
+	line-height: 1.35;
+	margin-left: 2em;
+	text-indent:-2em;
+}
+
 
 /* IFRAME -------------------------------------------------------------------*/
 .iframe {
