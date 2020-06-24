@@ -12,20 +12,12 @@ export function formatBiblio(divId, biblioURL) {
 
 			// console.log("listBib:", listBib);
 
-			// function showAbstract(elt){
-			// 	let myAbstract = document.createElement('p')
-			// 	myAbstract.setAttribute("id", "bib_abstract");
-			// 	myAbstract.textContent = `${listBib[elt].data.abstractNote}`;
-			// 	myRef.appendChild(myAbstract);
-			// }
-
 			for (let i = 0; i < listBib.length; i++){
 				let myRef = document.createElement('p');
 
 				let myTitle = document.createElement('span');
 				myTitle.setAttribute("id", "bib_title");
-				// myTitle.setAttribute("onclick", 'showAbstract(' + i + ')');
-				myTitle.setAttribute("title", listBib[i].data.abstractNote);
+				//myTitle.setAttribute("title", listBib[i].data.abstractNote);
 				myTitle.textContent = `${listBib[i].data.title}. `;
 
 				let myDOI = document.createElement('a');
@@ -73,6 +65,26 @@ export function formatBiblio(divId, biblioURL) {
 					myPages.textContent = ". "
 				}
 
+				let mySep = document.createElement('span');
+				mySep.setAttribute("id", "bib_sep");
+				mySep.textContent = " ";
+
+				let myAbstractBtn = document.createElement('BUTTON');
+				myAbstractBtn.setAttribute("id", "bib_btn");
+				myAbstractBtn.innerHTML = ">";
+				myAbstractBtn.addEventListener("click", function() {
+					if (myAbstract.style.display == 'none') {
+						myAbstract.style.display = 'block';
+					} else {
+						myAbstract.style.display = 'none';
+					}
+				});
+
+				let myAbstract = document.createElement('div')
+				myAbstract.setAttribute("id", "bib_abstract");
+				myAbstract.textContent = `${listBib[i].data.abstractNote}`;
+				myAbstract.style.display = 'none';
+
 				myRef.appendChild(myCreators);
 				myRef.appendChild(myDate);
 				myRef.appendChild(myTitle);
@@ -81,6 +93,9 @@ export function formatBiblio(divId, biblioURL) {
 				myRef.appendChild(myIssue);
 				myRef.appendChild(myPages);
 				myRef.appendChild(myDOI);
+				myRef.appendChild(mySep);
+				myRef.appendChild(myAbstractBtn);
+				myRef.appendChild(myAbstract);
 				div.appendChild(myRef);
 
 				// console.log("myRef:", myRef);

@@ -10,6 +10,15 @@
 	text-indent:-2em;
 }
 
+#bib_btn{
+	border: none;
+	padding: 0;
+}
+
+#bib_abstract{
+	background-color: lightgray;
+	text-indent:0em;
+}
 
 /* IFRAME -------------------------------------------------------------------*/
 .iframe {
