@@ -40,6 +40,7 @@
 #define TEMP_PIN  2
 #define DHT_PIN   7
 
+#define PKT_LENGTH    8
 #define EE_COUNT_ADDR 0x00
 #define EE_STORE_ADDR 0x01
 
@@ -55,16 +56,18 @@ RH_RF95 rf95(RFM95_CS, RFM95_INT);
 
 // Create an union for data conversion
 typedef union __RadioPacket {
-  char raw[6];
+  char raw[PKT_LENGTH];
   
   struct __HIPacket {
     char type;
     float value;
+    unsigned short timeshift;
     char __padding;
   } hi;
 } RadioPacket;
 
 unsigned char sleep_cycles = 0;
+unsigned long old_time;
 
 void setup() {
   // Reset watchdog in case of brown-out during interrupt
@@ -96,9 +99,15 @@ void setup() {
     Serial.println("frequency set failed");
     while(1);
   }
+
+  // Store initial timestamp
+  old_time = millis();
 }
 
 void loop() {
+  // Update timestamps in queue
+  stored_pkts_refresh();
+  
   // Read sensors values
   sensors_event_t humidity_results;
   ds18b20.requestTemperatures();
@@ -108,6 +117,7 @@ void loop() {
   RadioPacket pkt;
   pkt.hi.type = 'T';
   pkt.hi.value = ds18b20.getTempCByIndex(0);
+  pkt.hi.timeshift = 0;
   pkt_send_with_queue(&pkt);
 
   // Short sleep before packet resend
@@ -116,10 +126,11 @@ void loop() {
 
   pkt.hi.type = 'H';
   pkt.hi.value = humidity_results.relative_humidity;
+  pkt.hi.timeshift = 0;
   pkt_send_with_queue(&pkt);
 
   // Sleep for a minute
-  sleep_enter(1);
+  sleep_enter(6);
 }
 
 void pkt_send_with_queue(RadioPacket *pkt) {
@@ -165,9 +176,9 @@ void stored_pkts_send(void) {
   while(remaining_pkts > 0) {
     remaining_pkts--;
 
-    // Reassemble the six data packet bytes
-    for(char frag = 0; frag < 6; frag++) {
-      current_pkt.raw[frag] = EEPROM.read(EE_STORE_ADDR + 6 * remaining_pkts + frag);
+    // Reassemble the data packet bytes
+    for(char frag = 0; frag < PKT_LENGTH; frag++) {
+      current_pkt.raw[frag] = EEPROM.read(EE_STORE_ADDR + PKT_LENGTH * remaining_pkts + frag);
     }
 
     // Try to send packet
@@ -181,12 +192,41 @@ void stored_pkts_append(RadioPacket *pkt) {
   unsigned char queue_pkts = EEPROM.read(EE_COUNT_ADDR);
 
   // Dissassemble the data packet bytes
-  for(char frag = 0; frag < 6; frag++) {
-    EEPROM.write(EE_STORE_ADDR + 6 * queue_pkts + frag, pkt->raw[frag]);
+  for(char frag = 0; frag < PKT_LENGTH; frag++) {
+    EEPROM.write(EE_STORE_ADDR + PKT_LENGTH * queue_pkts + frag, pkt->raw[frag]);
   }
 
   // Increment the packet queue count
   EEPROM.write(EE_COUNT_ADDR, queue_pkts + 1);
+}
+
+void stored_pkts_refresh(void) {
+  // Get current packet count
+  unsigned char remaining_pkts = EEPROM.read(EE_COUNT_ADDR);
+  unsigned long current_time = millis();
+  
+  RadioPacket current_pkt;
+
+  while(remaining_pkts > 0) {
+    remaining_pkts--;
+
+    // Reassemble the data packet bytes
+    for(char frag = 0; frag < PKT_LENGTH; frag++) {
+      current_pkt.raw[frag] = EEPROM.read(EE_STORE_ADDR + PKT_LENGTH * remaining_pkts + frag);
+    }
+
+    // Update time shift (stored in seconds)
+    // Current method is quite meh... Millis doesn't work when sleeping, so I manually add 60 second
+    current_pkt.hi.timeshift += 60 + ((current_time - old_time) / 1000);
+
+    // Restore the packet in EEPROM
+    for(char frag = 0; frag < PKT_LENGTH; frag++) {
+      EEPROM.write(EE_STORE_ADDR + PKT_LENGTH * remaining_pkts + frag, current_pkt.raw[frag]);
+    }
+  }
+
+  // Update local timestamp
+  old_time = current_time;
 }
 
 void sleep_disable_wdt(void) {
