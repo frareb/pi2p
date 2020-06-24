@@ -378,7 +378,7 @@
 				} ],
 				"responses" : {
 					"200" : {
-						"description" : "génération du rapport",
+						"description" : "report generation",
 						"content" : {
 							"application/x-tex" : {}
 						}
@@ -395,8 +395,8 @@
 		"/gateways" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Liste les gateways",
-				"description" : "Permet de filtrer les gateways par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"summary" : "List the gateways",
+				"description" : "Allows you to filter the gateways by creation date, or simply by listing them all with an appropriate pagination.",
 				"operationId" : "listGateways",
 				"parameters" : [
 					{ "$ref" : "#/components/parameters/startQuery" },
@@ -406,7 +406,7 @@
 					{
 						"name" : "instituteId",
 						"in" : "query",
-						"description" : "filtrer les instituts par identifiant de l'institut parent",
+						"description" : "filter the institutes by id of the parent institute",
 						"style" : "simple",
 						"schema" : {
 							"type" : "integer",
@@ -416,7 +416,7 @@
 					{
 						"name" : "name",
 						"in" : "query",
-						"description" : "filtrer les gateways par nom",
+						"description" : "filter gateways by name",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -461,8 +461,8 @@
 			},
 			"post" : {
 				"tags" : [ "admins" ],
-				"summary" : "Créé un nouveau gateway",
-				"description" : "Créé un nouveau gateway, avec toutes ses propriétés\n",
+				"summary" : "Create a new gateway",
+				"description" : "Create a new gateway, with all its properties",
 				"operationId" : "addGateway",
 				"requestBody" : {
 					"content" : {
@@ -476,7 +476,7 @@
 				},
 				"responses" : {
 					"201" : {
-						"description" : "création de la ressource",
+						"description" : "resource creation",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -510,12 +510,12 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime tous les gateways",
-				"description" : "Supprime de manière définitive tous les gateways ainsi que tous les éléments enfants de chaque gateway (les capteurs et données).\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"summary" : "Delete all gateways",
+				"description" : "Permanently delete all gateways as well as all child elements of each gateway (sensors and data). Thank you for using this request with all the necessary precautions!",
 				"operationId" : "deleteGateways",
 				"responses" : {
 					"204" : {
-						"description" : "collection supprimée"
+						"description" : "deleted collection"
 					},
 					"403" : {
 						"description" : "not authorized: the request must come from an administrator key"
@@ -532,13 +532,13 @@
 		"/gateways/{gatewayId}" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Affiche les détails d'un gateway",
-				"description" : "Affiche un gateway avec toutes ses informations et relations\n",
+				"summary" : "Display the details of a gateway",
+				"description" : "Displays a gateway with all its information and relationships",
 				"operationId" : "getGateway",
 				"parameters" : [ {
 					"name" : "gatewayId",
 					"in" : "path",
-					"description" : "identifiant du gateway à afficher\n",
+					"description" : "gateway id to display",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -605,13 +605,13 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime un gateway",
-				"description" : "Supprime de manière définitive un gateway\nainsi que ses éléments enfants (capteurs, données).\n",
+				"summary" : "Delete a gateway",
+				"description" : "Permanently delete a gateway and its child elements (sensors, data).",
 				"operationId" : "deleteGateway",
 				"parameters" : [ {
 					"name" : "gatewayId",
 					"in" : "path",
-					"description" : "identifiant du gateway à afficher\n",
+					"description" : "gateway id to display",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -637,13 +637,13 @@
 			},
 			"patch" : {
 				"tags" : [ "admins" ],
-				"summary" : "Met à jour un gateway",
-				"description" : "Modifie les propriétés d'un gateway\n",
+				"summary" : "Update a gateway",
+				"description" : "Modify the properties of a gateway",
 				"operationId" : "updateGateway",
 				"parameters" : [ {
 					"name" : "gatewayId",
 					"in" : "path",
-					"description" : "identifiant du gateway à afficher\n",
+					"description" : "gateway id to display",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -700,8 +700,8 @@
 		"/sensors" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Liste les capteurs contenant des données",
-				"description" : "Permet de filtrer les capteurs par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"summary" : "List of sensors containing data",
+				"description" : "Allows you to filter the sensors by creation date, or simply by listing them all with an appropriate pagination.",
 				"operationId" : "listSensors",
 				"parameters" : [
 					{ "$ref" : "#/components/parameters/startQuery" },
@@ -711,7 +711,7 @@
 					{
 						"name" : "gatewayId",
 						"in" : "query",
-						"description" : "filtrer les capteurs par identifiant du gateway parent",
+						"description" : "filter the sensors by id of the parent gateway",
 						"style" : "simple",
 						"schema" : {
 							"type" : "integer",
@@ -721,7 +721,7 @@
 					{
 						"name" : "name",
 						"in" : "query",
-						"description" : "filtrer les capteurs par nom",
+						"description" : "filter sensors by name",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -730,7 +730,7 @@
 					{
 						"name" : "unit",
 						"in" : "query",
-						"description" : "filtrer les capteurs par unité de la mesure qu'ils fournissent",
+						"description" : "filter sensors by unit of measurement they provide",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -739,7 +739,7 @@
 					{
 						"name" : "model",
 						"in" : "query",
-						"description" : "filtrer les capteurs par modèle du capteur utilisé",
+						"description" : "filter the sensors by model of the sensor used",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -784,8 +784,8 @@
 			},
 			"post" : {
 				"tags" : [ "admins" ],
-				"summary" : "Créé un nouveau capteur",
-				"description" : "Créé un nouveau capteur, avec toutes ses propriétés\n",
+				"summary" : "Create a new sensor",
+				"description" : "Create a new sensor, with all its properties",
 				"operationId" : "addSensor",
 				"requestBody" : {
 					"content" : {
@@ -799,7 +799,7 @@
 				},
 				"responses" : {
 					"201" : {
-						"description" : "création de la ressource",
+						"description" : "resource creation",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -833,12 +833,12 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime tous les capteurs",
-				"description" : "Supprime de manière définitive tous les capteurs ainsi que tous les éléments enfants de chaque capteur.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"summary" : "Delete all sensors",
+				"description" : "Permanently delete all sensors and all child elements from each sensor. Thank you for using this request with all the necessary precautions!",
 				"operationId" : "deleteSensors",
 				"responses" : {
 					"204" : {
-						"description" : "collection supprimée"
+						"description" : "deleted collection"
 					},
 					"403" : {
 						"description" : "not authorized: the request must come from an administrator key"
@@ -855,13 +855,13 @@
 		"/sensors/{sensorId}" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Affiche les détails d'un capteur",
-				"description" : "Affiche un capteur avec toutes ses informations et relations\n",
+				"summary" : "Display the details of a sensor",
+				"description" : "Displays a sensor with all its information and relationships",
 				"operationId" : "getSensor",
 				"parameters" : [ {
 					"name" : "sensorId",
 					"in" : "path",
-					"description" : "identifiant du capteur à afficher\n",
+					"description" : "sensor id to display",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -925,13 +925,13 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime un capteur",
-				"description" : "Supprime de manière définitive un capteur ainsi que ses éléments enfants\n",
+				"summary" : "Delete a sensor",
+				"description" : "Permanently delete a sensor and its child elements",
 				"operationId" : "deleteSensor",
 				"parameters" : [ {
 					"name" : "sensorId",
 					"in" : "path",
-					"description" : "identifiant du capteur à supprimer\n",
+					"description" : "id of the sensor to be deleted",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -957,13 +957,13 @@
 			},
 			"patch" : {
 				"tags" : [ "admins" ],
-				"summary" : "Met à jour un capteur",
-				"description" : "Modifie les propriétés d'un capteur\n",
+				"summary" : "Update a sensor",
+				"description" : "Modify the properties of a sensor",
 				"operationId" : "updateSensor",
 				"parameters" : [ {
 					"name" : "sensorId",
 					"in" : "path",
-					"description" : "identifiant du capteur à modifier\n",
+					"description" : "sensor id to modify",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1020,8 +1020,8 @@
 		"/sensors/{sensorId}/datas" : {
 			"get" : {
 				"tags" : [ "guests" ],
-				"summary" : "Affiche les données liées à un capteur",
-				"description" : "Permet de filtrer les données d'un capteur par date de création,\nou simplement en les listant tous avec une pagination appropriée.\n",
+				"summary" : "Display data related to a sensor",
+				"description" : "Allows you to filter the data of a sensor by creation date, or simply by listing them all with an appropriate pagination.",
 				"operationId" : "listSensorDatas",
 				"parameters" : [
 					{ "$ref" : "#/components/parameters/startQuery" },
@@ -1031,7 +1031,7 @@
 					{
 						"name" : "sensorId",
 						"in" : "path",
-						"description" : "identifiant du capteur dont les données seront affichées\n",
+						"description" : "id of the sensor whose data will be displayed",
 						"required" : true,
 						"style" : "simple",
 						"explode" : true,
@@ -1079,13 +1079,13 @@
 			},
 			"post" : {
 				"tags" : [ "admins", "gateways" ],
-				"summary" : "Ajoute une valeur aux données du capteur",
-				"description" : "Pour un capteur donné, ajoute une valeur. L'unité est celle précisée\ndans la description du capteur.\n",
+				"summary" : "Add value to sensor data",
+				"description" : "For a given sensor, add a value. The unit is that specified in the description of the sensor.",
 				"operationId" : "addSensorData",
 				"parameters" : [ {
 					"name" : "sensorId",
 					"in" : "path",
-					"description" : "identifiant du capteur auquel ajouter une valeur\n",
+					"description" : "sensor id to which to add a value",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1106,7 +1106,7 @@
 				},
 				"responses" : {
 					"201" : {
-						"description" : "création de la ressource",
+						"description" : "resource creation",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1140,14 +1140,14 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime les données d'un capteur",
-				"description" : "Supprime de manière définitive les données sélectionnées d'un capteur.\nSans filtre, toutes les données seront supprimées !\n",
+				"summary" : "Delete data from a sensor",
+				"description" : "Permanently delete selected data from a sensor. Without filter, all data will be deleted!",
 				"operationId" : "deleteDatas",
 				"parameters" : [
 					{
 						"name" : "sensorId",
 						"in" : "path",
-						"description" : "identifiant du capteur auquel ajouter une valeur\n",
+						"description" : "sensor id to which to add a value",
 						"required" : true,
 						"style" : "simple",
 						"explode" : true,
@@ -1161,7 +1161,7 @@
 				],
 				"responses" : {
 					"204" : {
-						"description" : "collection supprimée"
+						"description" : "deleted collection"
 					},
 					"403" : {
 						"description" : "not authorized: the request must come from an administrator key"
@@ -1178,8 +1178,8 @@
 		"/groups" : {
 			"get" : {
 				"tags" : [ "admins" ],
-				"summary" : "Liste les groupes hébergeant des capteurs",
-				"description" : "Permet de filtrer les groupes par date de création, ou simplement\nen les listant tous avec une pagination appropriée.\n",
+				"summary" : "List the groups hosting sensors",
+				"description" : "Allows you to filter the groups by creation date, or simply by listing them all with an appropriate pagination.",
 				"operationId" : "listGroups",
 				"parameters" : [
 					{ "$ref" : "#/components/parameters/startQuery" },
@@ -1189,7 +1189,7 @@
 					{
 						"name" : "name",
 						"in" : "query",
-						"description" : "filtrer les groupes par nom",
+						"description" : "filter groups by name",
 						"style" : "simple",
 						"schema" : {
 							"type" : "string"
@@ -1240,8 +1240,8 @@
 			},
 			"post" : {
 				"tags" : [ "admins" ],
-				"summary" : "Créé un nouveau groupe",
-				"description" : "Créé un nouvel groupe, avec toutes ses propriétés\n",
+				"summary" : "Create a new group",
+				"description" : "Create a new group, with all its properties",
 				"operationId" : "addGroup",
 				"requestBody" : {
 					"content" : {
@@ -1255,7 +1255,7 @@
 				},
 				"responses" : {
 					"201" : {
-						"description" : "création de la ressource",
+						"description" : "resource creation",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1289,12 +1289,12 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime tous les groupes",
-				"description" : "Supprime de manière définitive tous les groupes ainsi que tous les éléments enfants de chaque groupe.\nMerci d'utiliser cette requête avec toutes les précautions qui s'imposent !\n",
+				"summary" : "Delete all groups",
+				"description" : "Permanently delete all groups and all child elements from each group. Thank you for using this request with all the necessary precautions!",
 				"operationId" : "deleteGroups",
 				"responses" : {
 					"204" : {
-						"description" : "collection supprimée"
+						"description" : "deleted collection"
 					},
 					"403" : {
 						"description" : "not authorized: the request must come from an administrator key"
@@ -1311,13 +1311,13 @@
 		"/groups/{groupId}" : {
 			"get" : {
 				"tags" : [ "admins" ],
-				"summary" : "Affiche les détails d'un groupe",
-				"description" : "Affiche un groupe avec toutes ses informations et relations\n",
+				"summary" : "Display group details",
+				"description" : "Displays a group with all its information and relationships",
 				"operationId" : "getGroup",
 				"parameters" : [ {
 					"name" : "groupId",
 					"in" : "path",
-					"description" : "identifiant du groupe à afficher\n",
+					"description" : "group id to display",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1362,13 +1362,13 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime un groupe",
-				"description" : "Supprime de manière définitive un groupe ainsi que ses éléments enfants\n",
+				"summary" : "Delete a group",
+				"description" : "Permanently delete a group and its child elements",
 				"operationId" : "deleteGroup",
 				"parameters" : [ {
 					"name" : "groupId",
 					"in" : "path",
-					"description" : "identifiant du groupe à supprimer\n",
+					"description" : "group id to delete",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1394,13 +1394,13 @@
 			},
 			"patch" : {
 				"tags" : [ "admins" ],
-				"summary" : "Met à jour un groupe",
-				"description" : "Modifie les propriétés d'un groupe\n",
+				"summary" : "Update a group",
+				"description" : "Modify group properties",
 				"operationId" : "updateGroup",
 				"parameters" : [ {
 					"name" : "groupId",
 					"in" : "path",
-					"description" : "identifiant du groupe à modifier\n",
+					"description" : "group id to modify",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1457,8 +1457,8 @@
 		"/keys" : {
 			"post" : {
 				"tags" : [ "admins" ],
-				"summary" : "Créé une nouvelle clef d'accès",
-				"description" : "Insère une nouvelle clef d'accès, associée à un groupe\net éventuellement à un gateway.\nLa clef en elle-même ne peut pas être forcée par l'utilisateur :\nelle est générée automatiquement.\n",
+				"summary" : "Create a new access key",
+				"description" : "Inserts a new access key, associated with a group and possibly with a gateway. The key itself cannot be forced by the user: it is generated automatically.",
 				"operationId" : "addKey",
 				"requestBody" : {
 					"content" : {
@@ -1472,7 +1472,7 @@
 				},
 				"responses" : {
 					"201" : {
-						"description" : "création de la ressource",
+						"description" : "resource creation",
 						"content" : {
 							"application/json" : {
 								"schema" : {
@@ -1506,12 +1506,12 @@
 			},
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Supprime toutes les clefs",
-				"description" : "Supprime de manière définitive toutes les clefs d'accès.\nCette requête peut être utile lorsqu'un accès administrateur est\ncompromis : on ne peut plus compter sur la confidentalité d'aucune\nclef, et il faut les révoquer toutes.\n",
+				"summary" : "Delete all keys",
+				"description" : "Permanently delete all access keys. This request can be useful when administrator access is compromised: you can no longer rely on the confidentiality of any key, and you must revoke all of them.",
 				"operationId" : "deleteKeys",
 				"responses" : {
 					"204" : {
-						"description" : "collection supprimée"
+						"description" : "deleted collection"
 					},
 					"403" : {
 						"description" : "not authorized: the request must come from an administrator key"
@@ -1528,13 +1528,13 @@
 		"/keys/{keyId}" : {
 			"delete" : {
 				"tags" : [ "admins" ],
-				"summary" : "Révoque une clef d'accès",
-				"description" : "Supprime de manière définitive une clef d'accès API\n",
+				"summary" : "Revoke an access key",
+				"description" : "Permanently delete an API access key",
 				"operationId" : "deleteKey",
 				"parameters" : [ {
 					"name" : "keyId",
 					"in" : "path",
-					"description" : "identifiant de la clef à supprimer\n",
+					"description" : "id of the key to be deleted",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1560,13 +1560,13 @@
 			},
 			"patch" : {
 				"tags" : [ "admins" ],
-				"summary" : "Remplace une clef d'accès par une nouvelle",
-				"description" : "Modifie les propriétés d'une clef d'accès, et REMPLACE LA CLEF\nPAR UNE NOUVELLE.\n",
+				"summary" : "Replace an access key with a new one",
+				"description" : "Modifies the properties of an access key, and REPLACES THE KEY WITH A NEW ONE.",
 				"operationId" : "updateKey",
 				"parameters" : [ {
 					"name" : "keyId",
 					"in" : "path",
-					"description" : "identifiant de la clef à modifier\n",
+					"description" : "id of the key to modify",
 					"required" : true,
 					"style" : "simple",
 					"explode" : true,
@@ -1626,7 +1626,7 @@
 			"startQuery" : {
 				"name" : "start",
 				"in" : "query",
-				"description" : "filtre optionnel limitant les données à partir\nd'une certaine date de création\n",
+				"description" : "optional filter limiting data from a certain creation date",
 				"required" : false,
 				"style" : "form",
 				"explode" : true,
@@ -1646,7 +1646,7 @@
 			"endQuery" : {
 				"name" : "end",
 				"in" : "query",
-				"description" : "filtre optionnel limitant les données jusqu'à\nune certaine date de création\n",
+				"description" : "optional filter limiting data up to a certain creation date",
 				"required" : false,
 				"style" : "form",
 				"explode" : true,
@@ -1666,7 +1666,7 @@
 			"pageQuery" : {
 				"name" : "page",
 				"in" : "query",
-				"description" : "page de données actuellement consultée ; les données\nles plus récentes sont sur les numéros de page les plus bas\n",
+				"description" : "data page currently being viewed; the most recent data is on the lowest page numbers",
 				"required" : false,
 				"style" : "form",
 				"explode" : true,
@@ -1679,7 +1679,7 @@
 			"pageSizeQuery" : {
 				"name" : "page_size",
 				"in" : "query",
-				"description" : "nombre d'éléments par page",
+				"description" : "number of items per page",
 				"required" : false,
 				"style" : "form",
 				"explode" : true,
