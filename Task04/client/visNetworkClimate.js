@@ -40,7 +40,7 @@ $.getJSON(urlListInst, function(x) {
 			id: "i" + x.data[i].id,
 			value: 10,
 			label: x.data[i].name,
-			title: x.data[i].countryCode,
+			title: `id: ${x.data[i].id}</br>name: ${x.data[i].name}</br>countryCode: ${x.data[i].countryCode}</br>url: <a href="${x.data[i].url}">${x.data[i].url}</a>`,
 			color: "#6B5CA5"
 		});
 		edgesArray.push({from: 0, to: "i" + x.data[i].id});
@@ -52,6 +52,7 @@ $.getJSON(urlListInst, function(x) {
 				id: "g" + y.data[i].id,
 				value: 7,
 				label: y.data[i].name,
+				title: `id: ${y.data[i].id}</br>instituteId: ${y.data[i].instituteId}</br>name: ${y.data[i].name}</br>url: <a href="${y.data[i].url}">${y.data[i].url}</a>`,
 				color: "#71A9F7"
 			});
 			edgesArray.push({from: "i" + y.data[i].instituteId, to: "g" + y.data[i].id});
@@ -80,7 +81,7 @@ $.getJSON(urlListInst, function(x) {
 						value: 5,
 						label: z.data[i].name,
 						color: colorChange,
-						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>`
+						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>id: ${z.data[i].id}</br>gatewayId: ${z.data[i].gatewayId}</br>name: ${z.data[i].name}</br>unit: ${z.data[i].unit}</br>model: ${z.data[i].model}</br>description: ${z.data[i].description}</br>url: <a href="${z.data[i].url}">${z.data[i].url}</a>`
 					});
 					edgesArrayUpdate.push({
 						from: "g" + z.data[i].gatewayId,
