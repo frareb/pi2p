@@ -12,6 +12,10 @@ import $ from "jquery";
 import Plotly from "plotly.js/lib/index-basic";
 import { Network, DataSet } from "vis-network/dist/vis-network.esm";
 
+// workaround for filling the page as height X% does not work
+var height = Math.round(window.innerHeight * 0.70) + 'px';
+document.getElementById('mynetwork').style.height = height;
+
 // makeNetwork
 const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
 const edgesArray = [];
@@ -143,7 +147,6 @@ network.on("hoverNode", function(){
 network.on("blurNode", function(){
 	// functionality for popup to hide on mouseout
 });
-
 
 function makeSimpleLineChart(sensorId) {
 	const timestampNow = Date.now();
