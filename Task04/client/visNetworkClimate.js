@@ -81,7 +81,8 @@ $.getJSON(urlListInst, function(x) {
 						value: 5,
 						label: z.data[i].name,
 						color: colorChange,
-						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>id: ${z.data[i].id}</br>gatewayId: ${z.data[i].gatewayId}</br>name: ${z.data[i].name}</br>unit: ${z.data[i].unit}</br>model: ${z.data[i].model}</br>description: ${z.data[i].description}</br>url: <a href="${z.data[i].url}">${z.data[i].url}</a>`
+						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>id: ${z.data[i].id}</br>gatewayId: ${z.data[i].gatewayId}</br>name: ${z.data[i].name}</br>unit: ${z.data[i].unit}</br>model: ${z.data[i].model}</br>description: ${z.data[i].description}</br>url: <a href="${z.data[i].url}">${z.data[i].url}</a>`,
+						shape: (z.data[i].name == "TRAP") ? "triangle" : "dot"
 					});
 					edgesArrayUpdate.push({
 						from: "g" + z.data[i].gatewayId,
