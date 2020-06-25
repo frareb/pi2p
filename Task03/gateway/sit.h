@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdint.h>
+
+const char P_TABLE[16] = {
+	0x03, 0x0F, 0x0E, 0x00,
+	0x05, 0x04, 0x0B, 0x0C,
+	0x0D, 0x0A, 0x09, 0x06,
+	0x07, 0x08, 0x02, 0x01
+};
+
+const char Q_TABLE[16] = {
+	0x09, 0x0E, 0x05, 0x06,
+	0x0A, 0x02, 0x03, 0x0C,
+	0x0F, 0x00, 0x04, 0x0D,
+	0x07, 0x0B, 0x01, 0x08
+};
+
+// Not used for encryption
+const char K1_PERM[16] = {
+	0x03, 0x02, 0x01, 0x00,
+	0x04, 0x05, 0x06, 0x07,
+	0x0B, 0x0A, 0x09, 0x08,
+	0x0C, 0x0D, 0x0E, 0x0F
+};
+
+const char K2_PERM[16] = {
+	0x00, 0x04, 0x08, 0x0C,
+	0x0D, 0x09, 0x05, 0x01,
+	0x02, 0x06, 0x0A, 0x0E,
+	0x0F, 0x0B, 0x07, 0x03
+};
+
+const char K3_PERM[16] = {
+	0x00, 0x01, 0x02, 0x03,
+	0x07, 0x06, 0x05, 0x04,
+	0x08, 0x09, 0x0A, 0x0B,
+	0x0F, 0x0E, 0x0D, 0x0C
+};
+
+const char K4_PERM[16] = {
+	0x0C, 0x08, 0x04, 0x00,
+	0x01, 0x05, 0x09, 0x0D,
+	0x0E, 0x0A, 0x06, 0x02,
+	0x03, 0x07, 0x0B, 0x0F
+};
+
+#define U8_TO_U16BE(p)	(*(p) << 8) | (*(p+1))
+#define U16BE_TO_U8(v, p)	do {	\
+	*(p+1) = v & 0x00FF;				\
+	*(p) = (v & 0xFF00) >> 8;		\
+} while(0)
+
+#define PQPQ_SUBST(db)	P_TABLE[(db & 0xF000) >> 12] << 12	| Q_TABLE[(db & 0x0F00) >> 8] << 8	|\
+						P_TABLE[(db & 0x00F0) >> 4] << 4	| Q_TABLE[db & 0x000F]
+
+#define QPQP_SUBST(db)	Q_TABLE[(db & 0xF000) >> 12] << 12	| P_TABLE[(db & 0x0F00) >> 8] << 8	|\
+						Q_TABLE[(db & 0x00F0) >> 4] << 4	| P_TABLE[db & 0x000F]
+
+#define F_SWAP(db)	(db & 0xC000)		| (db & 0x3000) >> 2 | (db & 0x0C00) << 2 | (db & 0x0300) >> 2 |\
+					(db & 0x00C0) << 2	| (db & 0x0030) >> 2 | (db & 0x000C) << 2 | (db & 0x0003)
+
+#define F_FUNCTION(db)	do {	\
+	db = PQPQ_SUBST(db);		\
+	db = F_SWAP(db);			\
+	db = QPQP_SUBST(db);		\
+	db = F_SWAP(db);			\
+	db = PQPQ_SUBST(db);		\
+} while(0)
+
+#define LR_SHIFT(a, b)	b < 0 ? a >> -b : a << b
+
+#define XNOR(a, b)	~(a ^ b)
+
+#define GEN_SUBST(t, f)	do {									\
+	uint16_t tmp = 0;											\
+																\
+	for(char i = 0; i < 16; i++) {								\
+		tmp |= LR_SHIFT((f & (1 << t[i])), ((15 - i) - t[i]));	\
+	}															\
+																\
+	f = tmp;													\
+} while(0)
+
+void sit_key_expansion(uint8_t *usr_key, uint16_t *dst_key);
+void sit_encrypt(uint16_t *expanded_key, uint8_t *raw_content, uint8_t *dst_content);
+void sit_decrypt(uint16_t *expanded_key, uint8_t *raw_content, uint8_t *dst_content);
