@@ -4,13 +4,12 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const authorization = require("./authorization/plugin");
-const cors = require("cors");
 
 const env = process.env.NODE_ENV || "development";
 const app = express();
 
 // CORS: allow requests from all origins for development purposes
-if(env === "development") app.use(cors());
+if(env === "development") app.use(require("cors")());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
