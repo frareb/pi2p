@@ -20,7 +20,17 @@ router.post("/", (req, res) => {
 
 	// run the deploy script
 	res.status(204).send();
-	exec(`"${scriptPath}" ${commitId}`);
+
+	console.log("running deploy script");
+	exec(`"${scriptPath}" ${commitId}`, (error, stdout, stderr) => {
+		if(error) {
+			console.error(`exec error: ${error}`);
+			return;
+		}
+
+		console.log(`stdout: ${stdout}`);
+		console.error(`stderr: ${stderr}`);
+	});
 });
 
 module.exports = router;
