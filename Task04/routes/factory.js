@@ -38,7 +38,7 @@ module.exports = config => {
 	// indicate which fields are optional for POST and PATCH
 	optionalFields.push(...["id", "createdAt", "updatedAt"]);
 
-	if(disallowMethods.includes("GET")) {
+	if(!disallowMethods.includes("GET")) {
 		// list every element of the model
 		router.get("/", controllers.get({
 			model,
