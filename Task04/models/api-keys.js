@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const ApiKeys = sequelize.define("ApiKeys", {
-		key: DataTypes.STRING,
+		key: DataTypes.STRING(64),
 		groupId: DataTypes.INTEGER,
 		gatewayId: {
 			allowNull: true,

@@ -25,7 +25,9 @@ app.use(cookieParser());
 app.use(authorization({
 	groups: require("./config/auth.json"),
 	default: "guest",
+	deploy: "deploy",
 	authenticator: require("./authorization/authenticator"),
+	releaser: require("./authorization/github"),
 }));
 
 // serve static content
