@@ -12,6 +12,6 @@ module.exports = config => (req, res) => {
 
 	return config.model
 		.create(bodyOpts)
-		.then(d => res.status(201).send(d))
+		.then(d => res.status(201).send(config.postprocessor(d)))
 		.catch(error => res.status(500).json({error}));
 };

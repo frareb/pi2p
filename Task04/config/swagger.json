@@ -1455,76 +1455,6 @@
 			}
 		},
 		"/keys" : {
-			"get" : {
-				"tags" : [ "admins" ],
-				"summary" : "Liste les clef API disponibles",
-				"description" : "Permet de récupérer les clefs API déjà attribuées\npar date de création, ou simplement en les listant\ntoutes avec une pagination appropriée.\n",
-				"operationId" : "listKeys",
-				"parameters" : [
-					{ "$ref" : "#/components/parameters/startQuery" },
-					{ "$ref" : "#/components/parameters/endQuery" },
-					{ "$ref" : "#/components/parameters/pageQuery" },
-					{ "$ref" : "#/components/parameters/pageSizeQuery" },
-					{
-						"name" : "groupId",
-						"in" : "query",
-						"description" : "filtrer les clefs API par identifiant du groupe auquel elles appartiennent",
-						"style" : "simple",
-						"schema" : {
-							"type" : "integer",
-							"format" : "uint32"
-						}
-					},
-					{
-						"name" : "gatewayId",
-						"in" : "query",
-						"description" : "filtrer les clefs API par identifiant de la gateway à laquelle elles se rapportent",
-						"style" : "simple",
-						"schema" : {
-							"type" : "integer",
-							"format" : "uint32"
-						}
-					}
-				],
-				"responses" : {
-					"200" : {
-						"description" : "succès de la requête",
-						"content" : {
-							"application/json" : {
-								"schema" : {
-									"type" : "object",
-									"properties" : {
-										"metadata" : {
-											"$ref" : "#/components/schemas/PaginationMeta"
-										},
-										"data" : {
-											"type" : "array",
-											"items" : {
-												"allOf" : [ {
-													"$ref" : "#/components/schemas/Identifier"
-												}, {
-													"$ref" : "#/components/schemas/ApiKey"
-												}, {
-													"$ref" : "#/components/schemas/Url"
-												} ]
-											}
-										}
-									}
-								}
-							}
-						}
-					},
-					"416" : {
-						"description" : "la page est inaccessible"
-					},
-					"500" : {
-						"description" : "erreur interne du serveur"
-					}
-				},
-				"security" : [ {
-					"bearerAuth" : [ ]
-				} ]
-			},
 			"post" : {
 				"tags" : [ "admins" ],
 				"summary" : "Créé une nouvelle clef d'accès",
@@ -1596,54 +1526,6 @@
 			}
 		},
 		"/keys/{keyId}" : {
-			"get" : {
-				"tags" : [ "admins" ],
-				"summary" : "Affiche les détails d'un clef d'accès",
-				"description" : "Affiche une clefs d'accès API ainsi que toutes\nses informations et relations\n",
-				"operationId" : "getKey",
-				"parameters" : [ {
-					"name" : "keyId",
-					"in" : "path",
-					"description" : "identifiant de la clef à afficher\n",
-					"required" : true,
-					"style" : "simple",
-					"explode" : true,
-					"schema" : {
-						"type" : "integer",
-						"format" : "uint32"
-					}
-				} ],
-				"responses" : {
-					"200" : {
-						"description" : "succès de la requête",
-						"content" : {
-							"application/json" : {
-								"schema" : {
-									"type" : "array",
-									"items" : {
-										"allOf" : [ {
-											"$ref" : "#/components/schemas/Identifier"
-										}, {
-											"$ref" : "#/components/schemas/ApiKey"
-										}, {
-											"$ref" : "#/components/schemas/Datation"
-										} ]
-									}
-								}
-							}
-						}
-					},
-					"404" : {
-						"description" : "la ressource n'a pas été trouvée"
-					},
-					"500" : {
-						"description" : "erreur interne du serveur"
-					}
-				},
-				"security" : [ {
-					"bearerAuth" : [ ]
-				} ]
-			},
 			"delete" : {
 				"tags" : [ "admins" ],
 				"summary" : "Révoque une clef d'accès",

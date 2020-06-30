@@ -18,6 +18,6 @@ module.exports = config => async (req, res) => {
 
 	return config.model
 		.findByPk(id)
-		.then(d => res.status(200).send(d))
+		.then(d => res.status(200).send(config.postprocessor(d)))
 		.catch(error => res.status(500).json({error}));
 };
