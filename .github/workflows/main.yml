@@ -1,0 +1,35 @@
+name: Main workflow
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checks-out repository under $GITHUB_WORKSPACE
+    - uses: actions/checkout@v2
+
+    - name: Dependencies install
+      run: cd $GITHUB_WORKSPACE/Task04 && npm ci
+
+    - name: Builds the project
+      run: cd $GITHUB_WORKSPACE/Task04 && npm run client:release
+
+    - name: Creates a commit
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Automated commit"
+      
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: deploy
+        force: true
