@@ -2,7 +2,7 @@
 
 import $ from "jquery";
 
-export function formatBiblio(divId, biblioURL) {
+function formatBiblio(divId, biblioURL) {
 	$.getJSON(biblioURL, function(listBib) {
 			const div = document.getElementById(divId);
 
@@ -101,6 +101,7 @@ export function formatBiblio(divId, biblioURL) {
 				// console.log("myRef:", myRef);
 			};
 	});
+	return 0
 };
 
 const biblioURL = 'https://api.zotero.org/groups/2520377/items?key=axXEhVlBUnltrZujRGzSf9Gf';
