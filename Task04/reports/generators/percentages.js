@@ -52,6 +52,7 @@ const generator = (year, month, gateway) => {
 					type: "tableCell",
 					children: [{
 						type: "text",
+						// eslint-disable-next-line max-len
 						value: `${"- ".repeat(String(Math.round(ratio * 10) * 2))}`,
 					}],
 				}],
