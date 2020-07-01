@@ -13,6 +13,12 @@ const defaultConf = {
 			exclude: [/node_modules/],
 			use: ["babel-loader"],
 		}],
+		rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
 	},
 };
 
@@ -30,4 +36,5 @@ module.exports = [
 	"filterSelectBoxMult",
 	"visNetworkClimate",
 	"comPublicationsTeam",
+	"homePageAnimation",
 ].map(makeExportObject);
