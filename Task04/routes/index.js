@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const reportsController = require("../controllers/reports");
+
 // render a basic home page
 router.get("/", function(req, res) {
 	res.render("index", {
@@ -16,11 +18,12 @@ router.get("/legal", function(req, res) {
 
 // to download reports
 router.get("/reports/download", function(req, res) {
-	const downreports = require("../controllers/getDownloadLinksForReports");
+	const downreports = reportsController();
+
 	res.render("reports/reports", {
 		title: "PI2P",
-		localeDate: downreports.localeDate, //localeDate,
-		reportFilepaths: downreports.reportFilepaths, //reportFilepaths,
+		localeDate: downreports.localeDate,
+		reportFilepaths: downreports.reportFilepaths,
 	});
 });
 
