@@ -1,8 +1,7 @@
 "use strict";
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from "aos";
 
 AOS.init({
-  duration: 1200,
+	duration: 1200,
 })

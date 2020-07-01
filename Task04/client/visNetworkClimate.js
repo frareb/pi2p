@@ -13,15 +13,15 @@ import Plotly from "plotly.js/lib/index-basic";
 import { Network, DataSet } from "vis-network/dist/vis-network.esm";
 
 // workaround for filling the page as height X% does not work
-var height = Math.round(window.innerHeight * 0.70) + 'px';
-document.getElementById('mynetwork').style.height = height;
+var height = Math.round(window.innerHeight * 0.70) + "px";
+document.getElementById("mynetwork").style.height = height;
 
 // makeNetwork
-const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
+const nodesArray = [{id: 0, value: 15, label: "Main server", color: "#653356ff"}];
 const edgesArray = [];
 const nodes = new DataSet(nodesArray);
 const edges = new DataSet(edgesArray);
-const container = document.getElementById('mynetwork');
+const container = document.getElementById("mynetwork");
 const data = {
 	nodes: nodes,
 	edges: edges
@@ -36,7 +36,7 @@ const options = {
 };
 const network = new Network(container, data, options);
 
-const urlBase = '';
+const urlBase = "";
 const urlListInst = `${urlBase}/institutes?page_size=1000`;
 $.getJSON(urlListInst, function(x) {
 	for (let i = 0; i < x.data.length; i++) {
@@ -108,7 +108,7 @@ network.on("click", function(params){
 	const myNode = this.getNodeAt(params.pointer.DOM);
 	const myNodeObject = nodes.get(myNode);
 	// console.log(myNodeObject);
-	if(myNode !== undefined && myNode.startsWith('s') && myNodeObject.color == "#6ae35d"){
+	if(myNode !== undefined && myNode.startsWith("s") && myNodeObject.color == "#6ae35d"){
 		// console.log(myNode);
 		const sensorId = myNode.replace("s", "");
 		// console.log(sensorId);
@@ -122,7 +122,7 @@ network.on("click", function(params){
 
 function showPos(event) {
 	let el, x, y;
-	el = document.getElementById('PopUp');
+	el = document.getElementById("PopUp");
 	if (window.event) {
 		x = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
 		y = window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
@@ -137,7 +137,7 @@ function showPos(event) {
 	el.style.left = x + "px";
 	el.style.top = y + "px";
 	el.style.display = "block";
-	// document.getElementById('PopUpText').innerHTML = text;
+	// document.getElementById("PopUpText").innerHTML = text;
 }
 
 
@@ -173,21 +173,21 @@ function makeSimpleLineChart(sensorId) {
 				xaxis: {
 					automargin: true,
 					autorange: true,
-					type: 'date'
+					type: "date"
 				},
 				yaxis: {
 					automargin: true,
-					hoverformat: '.1f'
+					hoverformat: ".1f"
 				}
 			}
 			const config = {
 				responsive: true
 			}
 			const myTrace = { // trace with raw data
-				line: {color: '#17BECF'},
+				line: {color: "#17BECF"},
 				x: myX,
 				y: myY}
-			Plotly.newPlot(document.getElementById('PopUp'), [myTrace], myLayout, config);
+			Plotly.newPlot(document.getElementById("PopUp"), [myTrace], myLayout, config);
 		} else {
 			document.getElementById("PopUp").innerHTML = "";
 			console.log("no data");
