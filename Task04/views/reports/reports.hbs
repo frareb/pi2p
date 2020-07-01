@@ -1,7 +1,7 @@
-<h2>{{title}} reports for {{myMonth}}</h2>
+<h2>{{title}} reports for {{localeDate}}</h2>
 
 <dl class="listFiles">
-	{{#each myFiles}}
+	{{#each reportFilepaths}}
 			<dt><strong>{{this.name}}</strong></dt>
 			<dd>Latex:
 			{{#each this.tex}}

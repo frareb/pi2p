@@ -19,8 +19,8 @@ router.get("/reports/main", function(req, res) {
 	const downreports = require("../controllers/downreports");
 	res.render("reports/reports", {
 		title: "PI2P",
-		myMonth: downreports.myDate, //myMonth,
-		myFiles: downreports.myFiles, //myFiles,
+		localeDate: downreports.localeDate, //localeDate,
+		reportFilepaths: downreports.reportFilepaths, //reportFilepaths,
 	});
 });
 
