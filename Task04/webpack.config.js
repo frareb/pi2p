@@ -29,5 +29,5 @@ module.exports = [
 	"filterSelectBoxInstGateCap",
 	"filterSelectBoxMult",
 	"visNetworkClimate",
-	"com_publi_proj",
+	"comPublicationsTeam",
 ].map(makeExportObject);

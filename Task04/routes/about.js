@@ -7,8 +7,8 @@ router.get("/devrate", function(req, res) {
 });
 
 // publications
-router.get("/publi", function(req, res) {
-	res.render("about/com_publi", { title: "PI2P" });
+router.get("/publications", function(req, res) {
+	res.render("about/comPublicationsTeam", { title: "PI2P" });
 });
 
 // bibliography
