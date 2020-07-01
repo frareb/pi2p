@@ -8,8 +8,8 @@ API_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
 # Checkout the requested commit
 cd ${API_DIR}
 git checkout .
-git fetch -p origin
-git pull origin deploy
+git fetch --all
+git reset --hard origin/deploy
 git checkout ${GIT_COMMIT}
 
 npm ci --only=prod
