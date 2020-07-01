@@ -3,7 +3,7 @@ const router = express.Router();
 
 // devRate R package
 router.get("/devrate", function(req, res) {
-	res.render("about/da_devrate", { title: "PI2P" });
+	res.render("about/dataAnalysisDevrate", { title: "PI2P" });
 });
 
 // publications
