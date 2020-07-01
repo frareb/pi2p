@@ -199,7 +199,7 @@
 															"items" : {
 																"type" : "string",
 																"format" : "uri",
-																"example" : "http://localhost:3000/gateways/1"
+																"example" : "https://pi2p.ird.fr/gateways/1"
 															}
 														}
 													}
@@ -564,14 +564,14 @@
 														"institute" : {
 															"type" : "string",
 															"format" : "uri",
-															"example" : "http://localhost:3000/institutes/1"
+															"example" : "https://pi2p.ird.fr/institutes/1"
 														},
 														"sensors" : {
 															"type" : "array",
 															"items" : {
 																"type" : "string",
 																"format" : "uri",
-																"example" : "http://localhost:3000/sensors/1"
+																"example" : "https://pi2p.ird.fr/sensors/1"
 															}
 														}
 													}
@@ -887,12 +887,12 @@
 														"gateway" : {
 															"type" : "string",
 															"format" : "uri",
-															"example" : "http://localhost:3000/gateways/1"
+															"example" : "https://pi2p.ird.fr/gateways/1"
 														},
 														"datas" : {
 															"type" : "string",
 															"format" : "uri",
-															"example" : "http://localhost:3000/sensors/1/datas"
+															"example" : "https://pi2p.ird.fr/sensors/1/datas"
 														}
 													}
 												}
@@ -1722,7 +1722,7 @@
 					"url" : {
 						"type" : "string",
 						"format" : "uri",
-						"example" : "http://localhost:3000/ressource/1"
+						"example" : "https://pi2p.ird.fr/ressource/1"
 					}
 				}
 			},
@@ -1735,22 +1735,22 @@
 							"first" : {
 								"type" : "string",
 								"format" : "uri",
-								"example" : "http://localhost:3000/ressource?page=0&page_size=10"
+								"example" : "https://pi2p.ird.fr/ressource?page=0&page_size=10"
 							},
 							"prev" : {
 								"type" : "string",
 								"format" : "uri",
-								"example" : "http://localhost:3000/ressource?page=1&page_size=10"
+								"example" : "https://pi2p.ird.fr/ressource?page=1&page_size=10"
 							},
 							"next" : {
 								"type" : "string",
 								"format" : "uri",
-								"example" : "http://localhost:3000/ressource?page=3&page_size=10"
+								"example" : "https://pi2p.ird.fr/ressource?page=3&page_size=10"
 							},
 							"last" : {
 								"type" : "string",
 								"format" : "uri",
-								"example" : "http://localhost:3000/ressource?page=5&page_size=10"
+								"example" : "https://pi2p.ird.fr/ressource?page=5&page_size=10"
 							}
 						}
 					}
