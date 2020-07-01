@@ -1,6 +1,10 @@
 const bodyParser = require("./body");
 
 module.exports = config => async (req, res) => {
+	const postprocessor = typeof config.postprocessor === "function" ?
+		config.postprocessor :
+		(d => d);
+
 	const id = req.params.modelId;
 	let bodyOpts = {};
 
@@ -18,6 +22,6 @@ module.exports = config => async (req, res) => {
 
 	return config.model
 		.findByPk(id)
-		.then(d => res.status(200).send(config.postprocessor(d)))
+		.then(d => res.status(200).send(postprocessor(d)))
 		.catch(error => res.status(500).json({error}));
 };
