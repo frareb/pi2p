@@ -12,12 +12,16 @@ import $ from "jquery";
 import Plotly from "plotly.js/lib/index-basic";
 import { Network, DataSet } from "vis-network/dist/vis-network.esm";
 
+// workaround for filling the page as height X% does not work
+var height = Math.round(window.innerHeight * 0.70) + "px";
+document.getElementById("mynetwork").style.height = height;
+
 // makeNetwork
-const nodesArray = [{id: 0, value: 15, label: 'Main server', color: "#653356ff"}];
+const nodesArray = [{id: 0, value: 15, label: "Main server", color: "#653356ff"}];
 const edgesArray = [];
 const nodes = new DataSet(nodesArray);
 const edges = new DataSet(edgesArray);
-const container = document.getElementById('mynetwork');
+const container = document.getElementById("mynetwork");
 const data = {
 	nodes: nodes,
 	edges: edges
@@ -32,7 +36,7 @@ const options = {
 };
 const network = new Network(container, data, options);
 
-const urlBase = '';
+const urlBase = "";
 const urlListInst = `${urlBase}/institutes?page_size=1000`;
 $.getJSON(urlListInst, function(x) {
 	for (let i = 0; i < x.data.length; i++) {
@@ -40,7 +44,7 @@ $.getJSON(urlListInst, function(x) {
 			id: "i" + x.data[i].id,
 			value: 10,
 			label: x.data[i].name,
-			title: x.data[i].countryCode,
+			title: `id: ${x.data[i].id}</br>name: ${x.data[i].name}</br>countryCode: ${x.data[i].countryCode}</br>url: <a href="${x.data[i].url}">${x.data[i].url}</a>`,
 			color: "#6B5CA5"
 		});
 		edgesArray.push({from: 0, to: "i" + x.data[i].id});
@@ -52,6 +56,7 @@ $.getJSON(urlListInst, function(x) {
 				id: "g" + y.data[i].id,
 				value: 7,
 				label: y.data[i].name,
+				title: `id: ${y.data[i].id}</br>instituteId: ${y.data[i].instituteId}</br>name: ${y.data[i].name}</br>url: <a href="${y.data[i].url}">${y.data[i].url}</a>`,
 				color: "#71A9F7"
 			});
 			edgesArray.push({from: "i" + y.data[i].instituteId, to: "g" + y.data[i].id});
@@ -80,7 +85,8 @@ $.getJSON(urlListInst, function(x) {
 						value: 5,
 						label: z.data[i].name,
 						color: colorChange,
-						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>`
+						title: `Last read in UTC: <b>${lastValue}${z.data[i].unit}</b></br>${timestamp}</br>id: ${z.data[i].id}</br>gatewayId: ${z.data[i].gatewayId}</br>name: ${z.data[i].name}</br>unit: ${z.data[i].unit}</br>model: ${z.data[i].model}</br>description: ${z.data[i].description}</br>url: <a href="${z.data[i].url}">${z.data[i].url}</a>`,
+						shape: (z.data[i].name == "TRAP") ? "triangle" : "dot"
 					});
 					edgesArrayUpdate.push({
 						from: "g" + z.data[i].gatewayId,
@@ -102,7 +108,7 @@ network.on("click", function(params){
 	const myNode = this.getNodeAt(params.pointer.DOM);
 	const myNodeObject = nodes.get(myNode);
 	// console.log(myNodeObject);
-	if(myNode !== undefined && myNode.startsWith('s') && myNodeObject.color == "#6ae35d"){
+	if(myNode !== undefined && myNode.startsWith("s") && myNodeObject.color == "#6ae35d"){
 		// console.log(myNode);
 		const sensorId = myNode.replace("s", "");
 		// console.log(sensorId);
@@ -116,7 +122,7 @@ network.on("click", function(params){
 
 function showPos(event) {
 	let el, x, y;
-	el = document.getElementById('PopUp');
+	el = document.getElementById("PopUp");
 	if (window.event) {
 		x = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
 		y = window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
@@ -131,7 +137,7 @@ function showPos(event) {
 	el.style.left = x + "px";
 	el.style.top = y + "px";
 	el.style.display = "block";
-	// document.getElementById('PopUpText').innerHTML = text;
+	// document.getElementById("PopUpText").innerHTML = text;
 }
 
 
@@ -141,7 +147,6 @@ network.on("hoverNode", function(){
 network.on("blurNode", function(){
 	// functionality for popup to hide on mouseout
 });
-
 
 function makeSimpleLineChart(sensorId) {
 	const timestampNow = Date.now();
@@ -168,21 +173,21 @@ function makeSimpleLineChart(sensorId) {
 				xaxis: {
 					automargin: true,
 					autorange: true,
-					type: 'date'
+					type: "date"
 				},
 				yaxis: {
 					automargin: true,
-					hoverformat: '.1f'
+					hoverformat: ".1f"
 				}
 			}
 			const config = {
 				responsive: true
 			}
 			const myTrace = { // trace with raw data
-				line: {color: '#17BECF'},
+				line: {color: "#17BECF"},
 				x: myX,
 				y: myY}
-			Plotly.newPlot(document.getElementById('PopUp'), [myTrace], myLayout, config);
+			Plotly.newPlot(document.getElementById("PopUp"), [myTrace], myLayout, config);
 		} else {
 			document.getElementById("PopUp").innerHTML = "";
 			console.log("no data");

@@ -1,0 +1,18 @@
+<h2>{{title}} reports for {{localeDate}}</h2>
+
+<dl class="listFiles">
+	{{#each reportFilepaths}}
+			<dt><strong>{{this.name}}</strong></dt>
+			<dd>Latex:
+			{{#each this.tex}}
+				<a class="file", href="../files/{{this}}">[{{this}}]</a>
+			{{/each}}
+			</dd>
+			<dd>PDF:
+			{{#each this.pdf}}
+				<a class="file" href="../files/{{this}}">[{{this}}]</a>
+			{{/each}}
+			</dd>
+		{{/each}}
+</dl>
+</br>

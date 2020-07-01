@@ -6,6 +6,7 @@
 		<title>{{title}}</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://unpkg.com/vis-network@7.6.9/styles/vis-network.min.css">
+		<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
 		<link rel="stylesheet" href="/css/style.css" />
 	</head>
 
@@ -27,24 +28,38 @@
 					<div class="topnav" id="myTopnav">
 					<ul>
 						<li><a href="/">Home</a></li>
-						<li class="dropdown">
+						<li class="dropdownpi2p">
 							<a href="javascript:void(0)" class="dropbtn">Climate</a>
-							<div class="dropdown-content">
+							<div class="dropdownpi2p-content">
 								<a href="/graphs/network">Chart: network topology</a>
 								<a href="/graphs/single">Chart: single sensor</a>
 								<a href="/graphs/multiple">Chart: multiple sensors in one site</a>
 								<a href="/graphs/sites">Chart: comparison between sites</a>
+								<a href="/reports/download">PDF: past month data reports</a>
 							</div>
 						</li>
-						<li class="dropdown">
+						<li class="dropdownpi2p">
 							<a href="javascript:void(0)" class="dropbtn">Insects</a>
-							<div class="dropdown-content">
-								<a href="/">...</a>
-								<a href="/">...</a>
-								<a href="/">...</a>
+							<div class="dropdownpi2p-content">
+								<!--<a href="/">Species</a>-->
+								<!--<a href="/">Chart: single site</a>-->
+								<!--<a href="/">Chart: multiple sites</a>-->
+								<!--<a href="/">PDF: past month data reports</a>-->
 							</div>
 						</li>
-						<li><a href="/">About</a></li>
+						<li class="dropdownpi2p">
+							<a href="javascript:void(0)" class="dropbtn">About</a>
+							<div class="dropdownpi2p-content">
+								<a href="/about/publications">Publications: selection</a>
+								<a href="/about/bibliography">Publications: bibliography</a>
+								<a href="/documentation/api">Documentation: server API</a>
+								<a href="/about/devrate">Data analysis: development rate</a>
+								<!--<a href="/">Data analysis: Phenology</a>-->
+								<a href="https://frareb.github.io/pi2p_docu/">Contribute: joining the network</a>
+								<!--<a href="/">Contribute: data visualization</a>-->
+								<a href="mailto:francois [point] rebaudo [arobase] ird [point] fr">Contact</a>
+							</div>
+						</li>
 					</ul>
 					</div>
 					<script>
@@ -70,7 +85,7 @@
 
 		<div class="footer">
 			<p>
-				This projet is funded by ANR grant number ANR-19-CE32-0001.<br> <a href="/legal">Legal notice</a>
+				This projet is funded by ANR grant number ANR-19-CE32-0001.<br> <a href="/legal">Legal notice</a> - <a href="mailto:francois [point] rebaudo [arobase] ird [point] fr">Contact</a>
 			</p>
 		</div>
 	</body>

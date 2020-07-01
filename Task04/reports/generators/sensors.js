@@ -49,7 +49,10 @@ const generateReportForSensor = (year, month, sensor) => {
 			type: "tableCell",
 			children: (value > 0) ?
 				[{type: "text", value: String(value)}] :
-				[{type: "strong", children: [{type: "text", value: String(value)}]}],
+				[{
+					type: "strong",
+					children: [{type: "text", value: String(value)}]
+				}],
 		});
 
 		const mdast = {

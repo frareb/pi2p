@@ -2,8 +2,8 @@
 
 // RANDOM COLOR
 export function getRandomColor() {
-	const letters = '0123456789ABCDEF';
-	let color = '#';
+	const letters = "0123456789ABCDEF";
+	let color = "#";
 	for (let i = 0; i < 6; i++) {
 		color += letters[Math.floor(Math.random() * 16)];
 	}
@@ -23,8 +23,8 @@ export function hex (c) {
 export function convertToHex (rgb) {
 	return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
 }
-// Remove '#' in color hex string
-export function trim (s) { return (s.charAt(0) == '#') ? s.substring(1, 7) : s }
+// Remove "#" in color hex string
+export function trim (s) { return (s.charAt(0) == "#") ? s.substring(1, 7) : s }
 // Convert a hex string to an RGB triplet
 export function convertToRGB (hex) {
 	const color = [];

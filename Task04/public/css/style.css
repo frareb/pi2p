@@ -1,4 +1,61 @@
+/* LISTE DES PUBLIS ---------------------------------------------------------*/
+#bib_publititle {
+	font-style: italic;
+	font-weight: bold;
+}
+
+#publiGroup{
+	line-height: 1.35;
+	margin-left: 2em;
+	text-indent:-2em;
+}
+
+#bib_btn{
+	border: none;
+	padding: 0;
+}
+
+#bib_abstract{
+	background-color: lightgray;
+	text-indent:0em;
+}
+
+/* IFRAME -------------------------------------------------------------------*/
+.iframe {
+	position: relative;
+	overflow: hidden;
+	width: 90%;
+	padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+}
+
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+}
+
 /* IMAGES -------------------------------------------------------------------*/
+img{
+	/*RESPONSIVE*/
+	max-width: 80%;
+	height: auto;
+}
+.animsition-link {
+	/* width: 200px;
+	height: 200px;*/
+	margin: 0px auto;
+	padding-top: 0px;
+	background: white;
+	text-align: center;
+	color: white;
+	font-size: 3em;
+}
+
 .swiper-wrapper {
 	padding: 0;
 	margin: 0;
@@ -37,6 +94,9 @@ body {
 a {
 	color: #00B7FF;
 }
+a.file{
+	color: darkblue;
+}
 select{
 	color: grey;
 }
@@ -46,6 +106,14 @@ select:hover{
 
 form{
 	padding: 5px;
+}
+
+.listFiles{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: white;
 }
 
 /* HEADER -------------------------------------------------------------------*/
@@ -67,7 +135,7 @@ ul {
 	background-color: #333;
 }
 
-li {
+li{
 	float: left;
 }
 
@@ -79,15 +147,15 @@ li a, .dropbtn {
 	text-decoration: none;
 }
 
-li a:hover, .dropdown:hover .dropbtn {
+li a:hover, .dropdownpi2p:hover .dropbtn {
 	background-color: #653356ff;
 }
 
-li.dropdown {
+li.dropdownpi2p {
 	display: inline-block;
 }
 
-.dropdown-content {
+.dropdownpi2p-content {
 	display: none;
 	position: absolute;
 	background-color: #f9f9f9;
@@ -96,7 +164,7 @@ li.dropdown {
 	z-index: 1;
 }
 
-.dropdown-content a {
+.dropdownpi2p-content a {
 	color: black;
 	padding: 12px 16px;
 	text-decoration: none;
@@ -104,9 +172,9 @@ li.dropdown {
 	text-align: left;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f1;}
+.dropdownpi2p-content a:hover {background-color: #f1f1f1;}
 
-.dropdown:hover .dropdown-content {
+.dropdownpi2p:hover .dropdownpi2p-content {
 	display: block;
 }
 
