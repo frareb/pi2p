@@ -10,7 +10,6 @@ cd ${API_DIR}
 git checkout .
 git fetch --all
 git reset --hard origin/deploy
-git checkout ${GIT_COMMIT}
 
 npm ci --only=prod
 
