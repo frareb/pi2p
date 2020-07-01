@@ -15,8 +15,8 @@ router.get("/legal", function(req, res) {
 });
 
 // to download reports
-router.get("/reports/main", function(req, res) {
-	const downreports = require("../controllers/downreports");
+router.get("/reports/download", function(req, res) {
+	const downreports = require("../controllers/getDownloadLinksForReports");
 	res.render("reports/reports", {
 		title: "PI2P",
 		localeDate: downreports.localeDate, //localeDate,
