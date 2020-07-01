@@ -12,8 +12,8 @@ router.get("/publications", function(req, res) {
 });
 
 // bibliography
-router.get("/biblio", function(req, res) {
-	res.render("about/com_biblio", { title: "PI2P" });
+router.get("/bibliography", function(req, res) {
+	res.render("about/comPublicationsBibliography", { title: "PI2P" });
 });
 
 module.exports = router;
