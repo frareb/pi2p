@@ -64,7 +64,7 @@ typedef union __RadioPacket {
     char type;
     float value;
     unsigned short timeshift;
-    char __padding;
+    char id;
   } hi;
 } RadioPacket;
 
@@ -123,6 +123,7 @@ void loop() {
   pkt.hi.type = 'T';
   pkt.hi.value = ds18b20.getTempCByIndex(0);
   pkt.hi.timeshift = 0;
+  pkt.hi.id = 0;
   pkt_send_with_queue(&pkt);
 
   // Short sleep before packet resend
@@ -132,6 +133,7 @@ void loop() {
   pkt.hi.type = 'H';
   pkt.hi.value = humidity_results.relative_humidity;
   pkt.hi.timeshift = 0;
+  pkt.hi.id = 0;
   pkt_send_with_queue(&pkt);
 
   // Sleep for a minute
