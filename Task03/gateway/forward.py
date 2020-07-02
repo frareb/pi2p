@@ -5,6 +5,7 @@ import adafruit_rfm9x
 import struct
 import time
 import requests
+import sit
 
 RADIO_FREQ_MHZ = 868.0
 CS = digitalio.DigitalInOut(board.D5)
@@ -25,13 +26,16 @@ rfm9x.enable_crc = True
 
 # Forge ACK packet
 ack_pkt = bytes(struct.pack(PKT_FORMAT, b"A", 0, 0x0000))
+key = b'\x55\xBA\xBD\xCC\x41\x0C\x4C\x2F\xE5\x55'
 
 while True:
     packet = rfm9x.receive(with_header=True)
 
     if packet is not None:
         # Extract data from packet
-        (s_type, s_val, s_time) = struct.unpack(PKT_FORMAT, packet[4:])
+        raw_packet = bytes(packet[4:])
+        decrypted_packet = sit.pydecrypt(key, raw_packet)
+        (s_type, s_val, s_time) = struct.unpack(PKT_FORMAT, decrypted_packet)
         print(s_type, s_val)
         # Send ACK to sensor to prevent local data storage
         rfm9x.send(ack_pkt, keep_listening=True)

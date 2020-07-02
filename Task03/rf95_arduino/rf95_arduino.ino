@@ -34,10 +34,12 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 
+#include "sit.h"
+
 #define RFM95_INT 3
 #define RFM95_CS  4
 #define RFM95_RST 6
-#define TEMP_PIN  2
+#define TEMP_PIN  9
 #define DHT_PIN   7
 
 #define PKT_LENGTH    8
@@ -68,6 +70,9 @@ typedef union __RadioPacket {
 
 unsigned char sleep_cycles = 0;
 unsigned long old_time;
+
+// Key for packet encryption
+uint16_t key[5] = { 0x55BA, 0xBDCC, 0x410C, 0x4C2F, 0xE555 };
 
 void setup() {
   // Reset watchdog in case of brown-out during interrupt
@@ -145,8 +150,12 @@ void pkt_send_with_queue(RadioPacket *pkt) {
 }
 
 bool pkt_send(RadioPacket *pkt) {
+  uint8_t encrypted_pkt[8];
+  
+  sit_encrypt(key, (uint8_t *) pkt->raw, encrypted_pkt);
+  
   // Send the packet  
-  if(!rf95.send((uint8_t *) pkt->raw, sizeof(pkt->raw))) {
+  if(!rf95.send(encrypted_pkt, sizeof(encrypted_pkt))) {
     Serial.println("unable to send message");
     while(1);
   }
