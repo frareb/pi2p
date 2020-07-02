@@ -6,23 +6,48 @@
 
 #include "sit.h"
 
-void main(void) {
-	uint8_t key[8] = { 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0 };
-	uint16_t expanded_key[5];
+const uint8_t P_TABLE[16] = {
+	0x03, 0x0F, 0x0E, 0x00,
+	0x05, 0x04, 0x0B, 0x0C,
+	0x0D, 0x0A, 0x09, 0x06,
+	0x07, 0x08, 0x02, 0x01
+};
 
-	sit_key_expansion(key, expanded_key);
-	printf("Expanded key: %x %x %x %x %x\n", expanded_key[0], expanded_key[1], expanded_key[2], expanded_key[3], expanded_key[4]);
+const uint8_t Q_TABLE[16] = {
+	0x09, 0x0E, 0x05, 0x06,
+	0x0A, 0x02, 0x03, 0x0C,
+	0x0F, 0x00, 0x04, 0x0D,
+	0x07, 0x0B, 0x01, 0x08
+};
 
-	uint8_t text[8] = { 0xA6, 0xBE, 0x03, 0xFE, 0x67, 0x52, 0x74, 0x20 };
-	uint8_t ciphered_text[8];
+const uint8_t K1_PERM[16] = {
+	0x03, 0x02, 0x01, 0x00,
+	0x04, 0x05, 0x06, 0x07,
+	0x0B, 0x0A, 0x09, 0x08,
+	0x0C, 0x0D, 0x0E, 0x0F
+};
 
-	printf("Initial text: %x %x %x %x %x %x %x %x\n", text[0], text[1], text[2], text[3], text[4], text[5], text[6], text[7]);
-	sit_encrypt(expanded_key, text, ciphered_text);
-	printf("Ciphered text: %x %x %x %x %x %x %x %x\n", ciphered_text[0], ciphered_text[1], ciphered_text[2], ciphered_text[3], ciphered_text[4], ciphered_text[5], ciphered_text[6], ciphered_text[7]);
+const uint8_t K2_PERM[16] = {
+	0x00, 0x04, 0x08, 0x0C,
+	0x0D, 0x09, 0x05, 0x01,
+	0x02, 0x06, 0x0A, 0x0E,
+	0x0F, 0x0B, 0x07, 0x03
+};
 
-	sit_decrypt(expanded_key, ciphered_text, text);
-	printf("Deciphered text: %x %x %x %x %x %x %x %x\n", text[0], text[1], text[2], text[3], text[4], text[5], text[6], text[7]);
-}
+const uint8_t K3_PERM[16] = {
+	0x00, 0x01, 0x02, 0x03,
+	0x07, 0x06, 0x05, 0x04,
+	0x08, 0x09, 0x0A, 0x0B,
+	0x0F, 0x0E, 0x0D, 0x0C
+};
+
+const uint8_t K4_PERM[16] = {
+	0x0C, 0x08, 0x04, 0x00,
+	0x01, 0x05, 0x09, 0x0D,
+	0x0E, 0x0A, 0x06, 0x02,
+	0x03, 0x07, 0x0B, 0x0F
+};
+
 
 void sit_key_expansion(uint8_t *usr_key, uint16_t *dst_key) {
 	uint16_t int_key[4];
@@ -63,7 +88,7 @@ void sit_encrypt(uint16_t *expanded_key, uint8_t *raw_content, uint8_t *dst_cont
 	content_u16be[2] = U8_TO_U16BE(raw_content + 4);
 	content_u16be[3] = U8_TO_U16BE(raw_content + 6);
 
-	for(char current_key = 0; current_key < 5; current_key++) {
+	for(int8_t current_key = 0; current_key < 5; current_key++) {
 		// Temporary array for data manipulation
 		uint16_t tmp_content[4];
 		tmp_content[1] = content_u16be[1];
@@ -109,7 +134,7 @@ void sit_decrypt(uint16_t *expanded_key, uint8_t *raw_content, uint8_t *dst_cont
 	content_u16be[2] = U8_TO_U16BE(raw_content + 4);
 	content_u16be[3] = U8_TO_U16BE(raw_content + 6);
 
-	for(char current_key = 4; current_key >= 0; current_key--) {
+	for(int8_t current_key = 4; current_key >= 0; current_key--) {
 		// Temporary array for data manipulation
 		uint16_t tmp_content[4];
 		tmp_content[0] = content_u16be[0];
