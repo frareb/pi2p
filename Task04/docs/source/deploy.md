@@ -1,7 +1,7 @@
 # Déploiement de l'API sur un serveur
 
 Ce guide explique comment effectuer une mise en production de l'API, afin de pouvoir y connecter des *gateways*.
-L'entièreté de la procédure a été effectuée sur un serveur CentOS 7 ; toutefois, un administrateur système expériementé saura modifier les commandes lorsque c'est nécessaire afin d'adapter cette procédure à n'importe quel autre système.
+L'entièreté de la procédure a été effectuée sur un serveur CentOS 7 ; toutefois, un administrateur système expérimenté saura modifier les commandes lorsque nécessaire afin d'adapter cette procédure à n'importe quel autre système.
 
 ## Configuration préliminaire
 
@@ -14,7 +14,7 @@ Dans ce guide, nous utiliserons les programmes suivants ; certains d'entre eux p
 - NPM, version 6 ou supérieure ;
 - nginx.
 
-On commence par ajouter les dépôts de Node.js, pour avoir les dernières version (ici, la 14.x LTS) :
+On commence par ajouter les dépôts de Node.js, pour avoir les dernières versions (ici, la 14.x LTS) :
 
 ```bash
 curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
@@ -28,9 +28,9 @@ yum install nodejs nginx
 
 ### Création de la base de données PostgreSQL
 
-Toutes les tables nécessaires à l'API sont crées par l'[ORM](https://fr.wikipedia.org/wiki/Mapping_objet-relationnel), mais la base de données, ainsi qu'un utilisateur disposant des pleins droits sur celle-ci, doivent être créés manuellement :
+Toutes les tables nécessaires à l'API sont créées par l'[ORM](https://fr.wikipedia.org/wiki/Mapping_objet-relationnel), mais la base de données, ainsi qu'un utilisateur disposant des pleins droits sur celle-ci, doivent être créés manuellement :
 
-```bash+sql
+```sql
 sudo -u postgres psql
 postgres=# CREATE DATABASE pi2p_api;
 postgres=# CREATE USER pi2p_api WITH ENCRYPTED PASSWORD 'strongPassword';
@@ -205,9 +205,9 @@ crypto.createHash("sha256").update(a).digest("base64");
 let b = crs({length: 64, type:"base64"});
 ```
 
-Une fois les deux clefs obtenus, il suffit de les insérer via :
+Une fois les deux clefs obtenues, il suffit de les insérer via :
 
-```bash+sql
+```sql
 sudo -u postgres psql
 postgres=# \u pi2p_api;
 pi2p_api=# INSERT INTO "Groups"(name, description, "createdAt", "updatedAt") VALUES('admin', 'Groupe d''administration, avec accès complet', NOW(), NOW());
@@ -224,8 +224,8 @@ Sur un serveur, on ne souhaite pas installer les outils de développement, on pr
 
 ### Des installations globales
 
-Les installations globales via NPM sont à éviter absolument, car elle ne permettent pas de déployer d'autres applications sur le serveur, et ne sont pas mises à jour automatiquement via les *hooks*.
+Les installations globales via NPM sont à éviter absolument, car elles ne permettent pas de déployer d'autres applications sur le serveur, et ne sont pas mises à jour automatiquement via les *hooks*.
 
-### Lancer les *seeders*
+### Lancement des *seeders*
 
 Les *seeders* sont des données utilisées pour les tests, les insérer sur un serveur de production crééra des failles de sécurité, notamment au vu des clefs API simplistes utilisées pour les tests. On privilégiera ainsi l'ajout manuel des données via des points d'accès API.
