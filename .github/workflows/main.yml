@@ -16,7 +16,10 @@ jobs:
       run: cd $GITHUB_WORKSPACE/Task04 && npm ci
 
     - name: Builds the project
-      run: cd $GITHUB_WORKSPACE/Task04 && npm run client:release
+      run: |
+        cd $GITHUB_WORKSPACE/Task04
+        npm run client:release
+        npm run doc
 
     - name: Creates a commit
       run: |
