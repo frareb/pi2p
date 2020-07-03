@@ -64,3 +64,5 @@ typings/
 docs/public
 reports/output
 public/files
+public/css
+public/js

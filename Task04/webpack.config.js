@@ -3,12 +3,12 @@ const path = require("path");
 const mode = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 const entry = {
-	filterSelectBoxInstGateCap: "./client/filterSelectBoxInstGateCap.js",
-	filterSelectBoxMult: "./client/filterSelectBoxMult.js",
-	comPublicationsTeam: "./client/comPublicationsTeam.js",
-	filterSelectBoxAll: "./client/filterSelectBoxAll.js",
-	visNetworkClimate: "./client/visNetworkClimate.js",
-	homePageAnimation: "./client/homePageAnimation.js",
+	filterSelectBoxInstGateCap: "./client/js/filterSelectBoxInstGateCap.js",
+	filterSelectBoxMult: "./client/js/filterSelectBoxMult.js",
+	comPublicationsTeam: "./client/js/comPublicationsTeam.js",
+	filterSelectBoxAll: "./client/js/filterSelectBoxAll.js",
+	visNetworkClimate: "./client/js/visNetworkClimate.js",
+	homePageAnimation: "./client/js/homePageAnimation.js",
 };
 
 const optimization = {

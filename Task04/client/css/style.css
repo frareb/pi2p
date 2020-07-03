@@ -1,3 +1,7 @@
+@import "../../node_modules/vis-network/styles/vis-network.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+@import "../../node_modules/aos/dist/aos.css";
+
 /* LISTE DES PUBLIS ---------------------------------------------------------*/
 #bib_publititle {
 	font-style: italic;
