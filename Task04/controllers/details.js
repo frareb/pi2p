@@ -36,12 +36,15 @@ module.exports = config => (req, res) => {
 					`No ressource found matching id ${id}`,
 			}}});
 
-			const host = Object.keys(req.headers).includes("x-forwarded-host") ?
+			const isForwarded =
+				Object.keys(req.headers).includes("x-forwarded-host");
+			const host = isForwarded ?
 				req.headers["x-forwarded-host"] :
 				req.headers["host"];
+			const protocol = isForwarded ? "https://" : "http://";
 
 			// prepare model links
-			const baseUrl = "https://" + host;
+			const baseUrl = protocol + host;
 			const data = fetched.dataValues;
 			const link = {};
 
