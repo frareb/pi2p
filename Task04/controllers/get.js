@@ -89,11 +89,14 @@ module.exports = config => (req, res) => {
 			// weird case: max page is page -1 when there are no datas
 			if(maxPage < 0) maxPage = 0;
 
-			const host = Object.keys(req.headers).includes("x-forwarded-host") ?
+			const isForwarded =
+				Object.keys(req.headers).includes("x-forwarded-host");
+			const host = isForwarded ?
 				req.headers["x-forwarded-host"] :
 				req.headers["host"];
+			const protocol = isForwarded ? "https://" : "http://";
 
-			const baseUrl = "https://" + host + req._parsedOriginalUrl.pathname;
+			const baseUrl = protocol + host + req._parsedOriginalUrl.pathname;
 			const link = {};
 
 			const paginationLinkForge = (p) =>

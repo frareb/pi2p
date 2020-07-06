@@ -16,13 +16,16 @@ jobs:
       run: cd $GITHUB_WORKSPACE/Task04 && npm ci
 
     - name: Builds the project
-      run: cd $GITHUB_WORKSPACE/Task04 && npm run client:release
+      run: |
+        cd $GITHUB_WORKSPACE/Task04
+        npm run client:release
+        npm run doc
 
     - name: Creates a commit
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add .
+        git add -f public/*
         git commit -m "Automated commit"
       
     - name: GitHub Push

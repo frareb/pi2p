@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const promisify = require("util").promisify;
 
 const visit = require("unist-util-visit");
@@ -65,6 +66,12 @@ function filterMarkdown(readdirResult) {
 }
 
 function generateDoc(dirname) {
+	const finalDir = path.join(__dirname, resultDir);
+	
+	if(!fs.existsSync(finalDir)) {
+		fs.mkdir(finalDir, (e) => { if(e) console.error(e); });
+	}
+
 	readdir(`${__dirname}/${dirname}`)
 		.then(filterMarkdown)
 		.then(processAllFiles)

@@ -6,7 +6,7 @@ module.exports = config => {
 		strict = true,
 	} = config;
 
-	// force id as optional fields
+	// force id as optional field
 	if(!optionalFields.includes("id")) optionalFields.push("id");
 
 	const injects = {};

@@ -3,90 +3,113 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
 		<title>{{title}}</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="https://unpkg.com/vis-network@7.6.9/styles/vis-network.min.css">
-		<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
 		<link rel="stylesheet" href="/css/style.css" />
+		<script src="../js/defaultVendors~comPublicationsTeam~filterSelectBoxAll~filterSelectBoxInstGateCap~filterSelectBoxMult~52e7ee57.js"></script>
 	</head>
 
 	<body>
-		<header>
-			<h1 class="header">PI2P project</h1>
-				<strong><nav>
-					<script>
-						function myFunction() {
-							const x = document.getElementById("myTopnav");
-							if (x.className === "topnav") {
-							 x.className += " responsive";
-							} else {
-							 x.className = "topnav";
-							}
-						 }
-					</script>
+		<header class="header">
+			<h1 class="header__title">PI2P project</h1>
 
-					<div class="topnav" id="myTopnav">
-					<ul>
-						<li><a href="/">Home</a></li>
-						<li class="dropdownpi2p">
-							<a href="javascript:void(0)" class="dropbtn">Climate</a>
-							<div class="dropdownpi2p-content">
-								<a href="/graphs/network">Chart: network topology</a>
-								<a href="/graphs/single">Chart: single sensor</a>
-								<a href="/graphs/multiple">Chart: multiple sensors in one site</a>
-								<a href="/graphs/sites">Chart: comparison between sites</a>
-								<a href="/reports/download">PDF: past month data reports</a>
-							</div>
-						</li>
-						<li class="dropdownpi2p">
-							<a href="javascript:void(0)" class="dropbtn">Insects</a>
-							<div class="dropdownpi2p-content">
-								<!--<a href="/">Species</a>-->
-								<!--<a href="/">Chart: single site</a>-->
-								<!--<a href="/">Chart: multiple sites</a>-->
-								<!--<a href="/">PDF: past month data reports</a>-->
-							</div>
-						</li>
-						<li class="dropdownpi2p">
-							<a href="javascript:void(0)" class="dropbtn">About</a>
-							<div class="dropdownpi2p-content">
-								<a href="/about/publications">Publications: selection</a>
-								<a href="/about/bibliography">Publications: bibliography</a>
-								<a href="/documentation/api">Documentation: server API</a>
-								<a href="/about/devrate">Data analysis: development rate</a>
-								<!--<a href="/">Data analysis: Phenology</a>-->
-								<a href="https://frareb.github.io/pi2p_docu/">Contribute: joining the network</a>
-								<!--<a href="/">Contribute: data visualization</a>-->
-								<a href="mailto:francois [point] rebaudo [arobase] ird [point] fr">Contact</a>
-							</div>
-						</li>
-					</ul>
-					</div>
-					<script>
-						// Get the container element
-						const btnContainer = document.getElementById("myTopnav");
-						// Get all buttons with class="btn" inside the container
-						const btns = btnContainer.getElementsByClassName("topnav");
-						// Loop through the buttons and add the active class to the current/clicked button
-						for (let i = 0; i < btns.length; i++) {
-							btns[i].addEventListener("click", function() {
-								const current = document.getElementsByClassName("active");
-								if (current.length > 0) {
-									current[0].className = current[0].className.replace(" active", "");
-								}
-								this.className += " active";
-							});
-						}
-					</script>
-				</nav></strong>
+			<nav class="header__nav nav">
+				<ul class="nav__container">
+					<li class="nav__item">
+						<a class="nav__item__link" href="/">Home</a>
+					</li>
+
+					<li class="[ nav__item nav__item--dropdown ]">
+						<a href="#" class="nav__item__link">Climate</a>
+
+						<ul class="nav__container nav__container__dropdown">
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/network">Chart: network topology</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/single">Chart: single sensor</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/multiple">Chart: multiple sensors in one site</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/sites">Chart: comparison between sites</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/reports/download">PDF: past month data reports</a>
+							</li>
+						</ul>
+					</li>
+
+					<li class="[ nav__item nav__item--dropdown ]">
+						<a href="#" class="nav__item__link">Insects</a>
+
+						<ul class="nav__container nav__container__dropdown">
+							<!--<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/network">Species</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/single">Chart: single site</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/multiple">Chart: multiple sites</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/graphs/download">PDF: past month data reports</a>
+							</li>-->
+						</ul>
+					</li>
+
+					<li class="[ nav__item nav__item--dropdown ]">
+						<a href="#" class="nav__item__link">About</a>
+
+						<ul class="nav__container nav__container__dropdown">
+							<li class="nav__item">
+								<a class="nav__item__link" href="/about/publications">Publications: selection</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/about/bibliography">Publications: bibliography</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/documentation/api">Documentation: server API</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="/about/devrate">Data analysis: development rate</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="https://frareb.github.io/pi2p_docu/">Contribute: joining the network</a>
+							</li>
+
+							<li class="nav__item">
+								<a class="nav__item__link" href="mailto:francois [point] rebaudo [arobase] ird [point] fr">Contact</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
 		</header>
 
-		{{{body}}}
+		<main>
+			{{{body}}}
+		</main>
 
-		<div class="footer">
+		<footer class="footer">
 			<p>
-				This projet is funded by ANR grant number ANR-19-CE32-0001.<br> <a href="/legal">Legal notice</a> - <a href="mailto:francois [point] rebaudo [arobase] ird [point] fr">Contact</a>
+				This projet is funded by ANR grant number ANR-19-CE32-0001.<br />
+				<a href="/legal">Legal notice</a> - <a href="mailto:francois [point] rebaudo [arobase] ird [point] fr">Contact</a>
 			</p>
-		</div>
+		</footer>
 	</body>
 </html>

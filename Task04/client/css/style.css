@@ -1,21 +1,25 @@
-/* LISTE DES PUBLIS ---------------------------------------------------------*/
+@import "../../node_modules/vis-network/styles/vis-network.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+@import "../../node_modules/aos/dist/aos.css";
+
+/* PUBLICATIONS LIST ---------------------------------------------------------*/
 #bib_publititle {
 	font-style: italic;
 	font-weight: bold;
 }
 
-#publiGroup{
+#publiGroup {
 	line-height: 1.35;
 	margin-left: 2em;
 	text-indent:-2em;
 }
 
-#bib_btn{
+#bib_btn {
 	border: none;
 	padding: 0;
 }
 
-#bib_abstract{
+#bib_abstract {
 	background-color: lightgray;
 	text-indent:0em;
 }
@@ -39,15 +43,8 @@
 	height: 100%;
 }
 
-/* IMAGES -------------------------------------------------------------------*/
-img{
-	/*RESPONSIVE*/
-	max-width: 80%;
-	height: auto;
-}
-.animsition-link {
-	/* width: 200px;
-	height: 200px;*/
+/* HOMEPAGE -------------------------------------------------------------------*/
+.home-animation__container {
 	margin: 0px auto;
 	padding-top: 0px;
 	background: white;
@@ -56,18 +53,18 @@ img{
 	font-size: 3em;
 }
 
+.home-animation__image {
+	max-width: 80%;
+	height: auto;
+}
+
 .swiper-wrapper {
 	padding: 0;
 	margin: 0;
 	width: 100%;
 	height: 100%;
 }
-.a {
-	/* background: yellowgreen; */
-}
-.b {
-	/* background: lightblue; */
-}
+
 .a,
 .b {
 	display: flex;
@@ -117,29 +114,29 @@ form{
 }
 
 /* HEADER -------------------------------------------------------------------*/
-.header {
+.header__title {
 	background-color: #F1F1F1;
 	/*background: transparent url("/static/img/photo_wallpaperHeader.jpg");*/
 	text-align: center;
 	padding: 10px;
-	/*color: #f2f2f2;*/
 	margin: 0 auto;
 }
 
 /* NAVIGATION BAR ------------------------------------------------------------*/
-ul {
+.nav__container {
+	display: flex;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+}
+
+.header__nav .nav__container {
 	overflow: hidden;
 	background-color: #333;
+	font-weight: bold;
 }
 
-li{
-	float: left;
-}
-
-li a, .dropbtn {
+.nav__item__link {
 	display: inline-block;
 	color: white;
 	text-align: center;
@@ -147,15 +144,11 @@ li a, .dropbtn {
 	text-decoration: none;
 }
 
-li a:hover, .dropdownpi2p:hover .dropbtn {
-	background-color: #653356ff;
+.nav__item__link:hover {
+	background-color: #653356;
 }
 
-li.dropdownpi2p {
-	display: inline-block;
-}
-
-.dropdownpi2p-content {
+.nav__container__dropdown {
 	display: none;
 	position: absolute;
 	background-color: #f9f9f9;
@@ -164,31 +157,31 @@ li.dropdownpi2p {
 	z-index: 1;
 }
 
-.dropdownpi2p-content a {
+.nav__container .nav__item:hover > .nav__container__dropdown {
+	display: inherit;
+}
+
+.nav__container__dropdown .nav__item__link {
 	color: black;
 	padding: 12px 16px;
 	text-decoration: none;
 	display: block;
 	text-align: left;
+	background-color: #f9f9f9;
 }
 
-.dropdownpi2p-content a:hover {background-color: #f1f1f1;}
-
-.dropdownpi2p:hover .dropdownpi2p-content {
-	display: block;
+.nav__container__dropdown .nav__item__link:hover {
+	background-color: #f1f1f1;
 }
 
 /* FOOTER -------------------------------------------------------------------*/
 .footer {
-	/*position: fixed;*/
 	padding: 5px;
-	/*left: 0;*/
-	/*bottom: 0;*/
-	/*width: 100%;*/
 	background-color: #ddd;
 	color: black;
 	text-align: center;
 }
+
 .footer a {
 	color: gray;
 }
