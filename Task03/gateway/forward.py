@@ -16,6 +16,7 @@ GW_KEY = "firstGatewayKey"
 SENSOR_MAP = {
         b"T": 1,
         b"H": 2,
+        b"U": 3,
 }
 PKT_FORMAT = "<cfHb"
 
@@ -44,7 +45,12 @@ while True:
         if s_id == 0 and s_type in SENSOR_MAP:
             endpoint = BASE_URL + str(SENSOR_MAP[s_type]) + "/datas"
             headers = { "Authorization": "Bearer " + GW_KEY }
-            req = requests.post(endpoint, headers = headers, json = { "value": s_val, "createdAt": round((time.time() - s_time) * 1000) })
+            data = {
+                "value": s_val,
+                "createdAt": round((time.time() - s_time) * 1000)
+            }
+
+            req = requests.post(endpoint, headers = headers, json = data)
             print(req.status_code)
         else:
             print("Malicious packet!")

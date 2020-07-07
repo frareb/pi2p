@@ -115,8 +115,11 @@ void loop() {
   
   // Read sensors values
   sensors_event_t humidity_results;
+  sensors_event_t temperature_results;
+
   ds18b20.requestTemperatures();
   dht.humidity().getEvent(&humidity_results);
+  dht.temperature().getEvent(&temperature_results);
 
   // Forge and send packets
   RadioPacket pkt;
@@ -136,8 +139,18 @@ void loop() {
   pkt.hi.id = 0;
   pkt_send_with_queue(&pkt);
 
+  delay(500);
+  sleep_enter(1);
+
+  pkt.hi.type = 'U';
+  pkt.hi.value = temperature_results.temperature;
+  pkt.hi.timeshift = 0;
+  pkt.hi.id = 0;
+  pkt_send_with_queue(&pkt);
+
   // Sleep for a minute
-  sleep_enter(6);
+  delay(500);
+  sleep_enter(5);
 }
 
 void pkt_send_with_queue(RadioPacket *pkt) {
