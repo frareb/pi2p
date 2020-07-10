@@ -1,4 +1,4 @@
-const bodyParser = require("./body");
+const BodyParser = require("./body");
 
 module.exports = config => async (req, res) => {
 	const postprocessor = typeof config.postprocessor === "function" ?
@@ -6,13 +6,16 @@ module.exports = config => async (req, res) => {
 		(d => d);
 
 	const id = req.params.modelId;
+
+	config.strict = false;
+	config.body = undefined;
+
+	const localParser = BodyParser.fromConfig(config);
+
 	let bodyOpts = {};
 
 	try {
-		bodyOpts = bodyParser(Object.assign(config, {
-			body: req.body,
-			strict: false,
-		}));
+		bodyOpts = localParser.validate(req.body);
 	} catch(message) {
 		// send client-side error
 		return res.status(400).json({ meta: { error: { message }}});

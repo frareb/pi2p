@@ -1,65 +1,105 @@
-module.exports = config => {
-	const {
-		model,
-		optionalFields,
-		inject = {},
-		strict = true,
-	} = config;
-
-	// force id as optional field
-	if(!optionalFields.includes("id")) optionalFields.push("id");
-
-	const injects = {};
-	const bodyOpts = {};
-
-	// execute injectors if any
-	for(const [field, injector] of Object.entries(inject)) {
-		if(typeof injector === "function") {
-			injects[field] = injector();
-		} else {
-			injects[field] = injector;
-		}
+class BodyParser {
+	constructor(model, strict = true) {
+		this.model = model;
+		this.strictMode = strict;
+		this.optionalFields = ["id"];
+		this.injectors = {};
 	}
 
-	const body = Object.assign({}, config.body, injects);
+	validate(body) {
+		const bodyOpts = {};
 
-	for(const [field, checker] of Object.entries(model.rawAttributes)) {
-		// id should not be user-defined AT ALL
-		if(field === "id") continue;
+		// execute injectors if any
+		const injects = this.executeInjectors();
+		body = Object.assign({}, body, injects);
 
-		if(optionalFields.includes(field)) {
-			// simply skip undefined optional parameters
-			if(!body[field]) continue;
-			// optionalFields are forbidden in unstrict mode
-			if(!strict) throw `${field} is not allowed in body`;
-		}
+		const modelAttributes = Object.entries(this.model.rawAttributes);
 
-		let fieldValue = body[field];
+		for(const [field, checker] of modelAttributes) {
+			// id should not be user-defined AT ALL
+			if(field === "id") continue;
 
-		// discard null or undefined fields:
-		// - on unstrict mode or;
-		// - when null is explicitely allowed.
-		if(	(checker.allowNull === true || !strict) &&
-			(fieldValue === null || typeof fieldValue === "undefined")) {
-			continue;
-		}
+			if(this.optionalFields.includes(field)) {
+				// simply skip undefined optional parameters
+				if(!body[field]) continue;
+				// optionalFields are forbidden in unstrict mode
+				if(!this.strictMode) throw `${field} is not allowed in body`;
+			}
+	
+			let fieldValue = body[field];
 
-		// check body params and insert if valid
-		try {
-			// special preprocessing for Dates
-			if(checker.type.constructor.name === "DATE") {
-				// allow both timestamp and date literal
-				if(typeof fieldValue === "number" || Number(fieldValue))
-					fieldValue = Number(fieldValue);
-
-				fieldValue = new Date(fieldValue);
+			// discard null or undefined fields:
+			// - on unstrict mode or;
+			// - when null is explicitely allowed.
+			if(	(checker.allowNull === true || !this.strictMode) &&
+				(fieldValue === null || typeof fieldValue === "undefined")) {
+				continue;
 			}
 
-			if(checker.type.validate(fieldValue)) bodyOpts[field] = fieldValue;
-		} catch(e) {
-			throw e.toString();
+			// check body params and insert if valid
+			try {
+				// special preprocessing for Dates
+				if(checker.type.constructor.name === "DATE") {
+					fieldValue = BodyParser.formatDate(fieldValue);
+				}
+	
+				if(checker.type.validate(fieldValue))
+					bodyOpts[field] = fieldValue;
+			} catch(e) {
+				throw e.toString();
+			}
 		}
+	
+		return bodyOpts;
 	}
 
-	return bodyOpts;
-};
+	// Legacy
+	static fromConfig(config) {
+		const {
+			model,
+			optionalFields,
+			inject = {},
+			strict = true,
+		} = config;
+
+		const parser = new BodyParser(model, strict);
+
+		parser.addOptionalFields(optionalFields);
+		parser.addInjectors(inject);
+
+		return typeof config.body === "object" ?
+			parser.validate(config.body) : parser;
+	}
+
+	addOptionalFields(fields) {
+		this.optionalFields.push(...fields);
+	}
+
+	addInjectors(injectors) {
+		Object.assign(this.injectors, injectors);
+	}
+
+	executeInjectors() {
+		const injects = {};
+
+		for(const [field, injector] of Object.entries(this.injectors)) {
+			if(typeof injector === "function") {
+				injects[field] = injector();
+			} else {
+				injects[field] = injector;
+			}
+		}
+
+		return injects;
+	}
+
+	static formatDate(dateField) {
+		// allow both timestamp and date literal
+		if(typeof dateField === "number" || Number(dateField))
+			dateField = Number(dateField);
+
+		return new Date(dateField);
+	}
+}
+
+module.exports = BodyParser;
