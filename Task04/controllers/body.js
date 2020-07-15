@@ -79,6 +79,10 @@ class BodyParser {
 		Object.assign(this.injectors, injectors);
 	}
 
+	setStrictMode(value) {
+		this.strictMode = value;
+	}
+
 	executeInjectors() {
 		const injects = {};
 
