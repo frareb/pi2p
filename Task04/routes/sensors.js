@@ -4,6 +4,7 @@ const controllers = require("../controllers");
 const models = require("../models");
 const sequelize = require("sequelize");
 
+const formatDate = controllers.body.formatDate;
 const DataType = sequelize.DataTypes;
 const Op = sequelize.Op;
 
@@ -41,11 +42,14 @@ router.post("/:sensorId/datas", (req, res) => {
 // delete datas from date to date
 router.delete("/:sensorId/datas", (req, res) => {
 	const sensorId = req.params.sensorId;
-	const { start, end } = req.query;
+	let { start, end } = req.query;
 	const filter = {};
 
 	// filter by creation date
 	try {
+		start = formatDate(start);
+		end = formatDate(end);
+
 		DataType.DATE().validate(start);
 		DataType.DATE().validate(end);
 
@@ -56,7 +60,9 @@ router.delete("/:sensorId/datas", (req, res) => {
 			},
 		});
 	// eslint-disable-next-line no-empty
-	} catch(e) {}
+	} catch(e) {
+		console.log(e);
+	}
 
 	controllers.delete({
 		model: models.Datas,

@@ -24,7 +24,10 @@ beforeAll(async () => {
 });
 
 describe("body parser", () => {
-	const bodyParser = controllers.body;
+	const BodyParser = controllers.body;
+
+	const localParser = new BodyParser(model);
+	localParser.addOptionalFields(["createdAt", "updatedAt"]);
 
 	test("correctly parse body", () => {
 		const body = {
@@ -32,11 +35,7 @@ describe("body parser", () => {
 			countryCode: "FRA",
 		};
 
-		const result = bodyParser({
-			model,
-			optionalFields: ["createdAt", "updatedAt"],
-			body,
-		});
+		const result = localParser.validate(body);
 
 		expect(result).toEqual(body);
 	});
@@ -47,13 +46,9 @@ describe("body parser", () => {
 			countryCode: "FRA",
 		};
 
-		const result = bodyParser({
-			model,
-			optionalFields: ["createdAt", "updatedAt"],
-			body: Object.assign({}, body, {
-				dummy: "value",
-			}),
-		});
+		const result = localParser.validate(Object.assign({}, body, {
+			dummy: "value",
+		}));
 
 		expect(result).toEqual(body);
 	});
@@ -65,31 +60,9 @@ describe("body parser", () => {
 			createdAt: new Date(2042, 5, 25),
 		};
 
-		const result = bodyParser({
-			model,
-			optionalFields: ["createdAt", "updatedAt"],
-			body,
-		});
+		const result = localParser.validate(body);
 
 		expect(result).toEqual(body);
-	});
-
-	test("allow injectors", () => {
-		const result = bodyParser({
-			model,
-			optionalFields: ["createdAt", "updatedAt"],
-			body: {},
-			inject: {
-				name: "IRD",
-				countryCode: () => "FRA",
-				dummy: "value",
-			},
-		});
-
-		expect(result).toEqual({
-			name: "IRD",
-			countryCode: "FRA",
-		});
 	});
 
 	test("strict mode - disallow empty", () => {
@@ -98,11 +71,7 @@ describe("body parser", () => {
 		};
 
 		try {
-			bodyParser({
-				model,
-				optionalFields: ["createdAt", "updatedAt"],
-				body,
-			});
+			localParser.validate(body);
 		} catch(e) {
 			// eslint-disable-next-line max-len
 			return expect(e).toEqual("SequelizeValidationError: undefined is not a valid string");
@@ -117,12 +86,9 @@ describe("body parser", () => {
 			countryCode: "FRA",
 		};
 
-		const result = bodyParser({
-			model,
-			optionalFields: ["createdAt", "updatedAt"],
-			body,
-			strict: false,
-		});
+		localParser.setStrictMode(false);
+
+		const result = localParser.validate(body);
 
 		expect(result).toEqual(body);
 	});
@@ -135,18 +101,28 @@ describe("body parser", () => {
 		};
 
 		try {
-			bodyParser({
-				model,
-				optionalFields: ["createdAt", "updatedAt"],
-				body,
-				strict: false,
-			});
+			localParser.validate(body);
 		} catch(e) {
 			return expect(e).toEqual("createdAt is not allowed in body");
 		}
 
 		// force fail
 		return expect(true).toEqual(false);
+	});
+
+	test("allow injectors", () => {
+		localParser.setStrictMode(false);
+		localParser.addInjectors({
+			name: "IRD",
+			countryCode: () => "FRA",
+			dummy: "value",
+		});
+		const result = localParser.validate({});
+
+		expect(result).toEqual({
+			name: "IRD",
+			countryCode: "FRA",
+		});
 	});
 });
 

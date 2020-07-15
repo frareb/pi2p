@@ -1,7 +1,8 @@
-const bodyParser = require("./body");
+const BodyParser = require("./body");
 const sequelize = require("sequelize");
 const merge = require("deepmerge");
 
+const formatDate = BodyParser.formatDate;
 const DataType = sequelize.DataTypes;
 const Op = sequelize.Op;
 
@@ -13,21 +14,17 @@ module.exports = config => (req, res) => {
 	} = req.query;
 
 	const page = parseInt(req.query.page) || 0;
-	const page_size = parseInt(req.query.page_size) || config.pageSize || 10; 
+	const page_size = parseInt(req.query.page_size) || config.pageSize || 10;
 
-	let specificFilter = {};
+	const localParser = new BodyParser(config.model, false);
+	localParser.addOptionalFields(["createdAt", "updatedAt"]);
+
+	const specificFilter = {};
 
 	// filter by creation date
 	try {
-		// allow both timestamp and date literal
-		if(	(typeof start === "number" || Number(start)) &&
-			(typeof end === "number" || Number(end))) {
-			start = Number(start);
-			end = Number(end);
-		}
-
-		start = new Date(start);
-		end = new Date(end);
+		start = formatDate(start);
+		end = formatDate(end);
 
 		DataType.DATE().validate(start);
 		DataType.DATE().validate(end);
@@ -54,12 +51,13 @@ module.exports = config => (req, res) => {
 		"Missing page_size or page number",
 	}}});
 
-	const headerParams = bodyParser({
-		model: config.model,
-		body: req.query,
-		optionalFields: ["createdAt", "updatedAt"],
-		strict: false,
-	});
+	let headerParams;
+
+	try {
+		headerParams = localParser.validate(req.query);
+	} catch(error) {
+		return res.status(500).json({meta: {error}});
+	}
 
 	const findArgs = merge.all([config.find, specificFilter, {
 		where: headerParams,
