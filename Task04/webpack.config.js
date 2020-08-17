@@ -9,6 +9,7 @@ const entry = {
 	filterSelectBoxAll: "./client/js/filterSelectBoxAll.js",
 	visNetworkClimate: "./client/js/visNetworkClimate.js",
 	homePageAnimation: "./client/js/homePageAnimation.js",
+	dashboardClimate: "./client/js/dashboardClimate.js",
 };
 
 const optimization = {

@@ -2,7 +2,7 @@
 
 **Responsable** : Titouan
 
-**Date de restitution** : ?
+**Date de restitution** : Juillet 2020
 
 Une fois les données récupérées par la *gateway*, il faut fournir une interface permettant d'enregistrer ces données en base de données ; par la même occasion, cette interface permettra également de récupérer ces données par la suite afin de réaliser des graphes interactifs côté client.
 

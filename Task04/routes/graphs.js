@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
+// dashboard of institutes and gateways
+router.get("/dashboard", function(req, res) {
+	res.render("graphs/dashboard", { title: "PI2P" });
+});
+
 // Network of institutes and gateways
 router.get("/network", function(req, res) {
 	res.render("graphs/network", { title: "PI2P" });
