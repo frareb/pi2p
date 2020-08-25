@@ -4,6 +4,13 @@ import $ from "jquery";
 
 const div = document.getElementById('dashClimate');
 
+const headingTitle = document.getElementById('dashTitle');
+
+let workOnProgress = document.createElement("span");
+workOnProgress.setAttribute("id", "dash_headingTitle");
+workOnProgress.textContent = 'Dashboard: please wait, data is being loaded...';
+headingTitle.appendChild(workOnProgress);
+
 const urlBase = ""; //http://localhost:3000
 const urlListInst = `${urlBase}/institutes?page_size=1000`;
 $.getJSON(urlListInst, function(x) {
@@ -62,18 +69,16 @@ $.getJSON(urlListInst, function(x) {
 							sensName.textContent = `${yy.data.name} `;
 							let sensDescrp = document.createElement("span");
 							sensDescrp.setAttribute("id", "dash_sensDescrp");
-							sensDescrp.textContent = `${yy.data.description} `;
+							sensDescrp.textContent = `${yy.data.description} (`;
 							let sensUnit = document.createElement("span");
 							sensUnit.setAttribute("id", "dash_sensUnit");
-							sensUnit.textContent = `(${yy.data.unit}; `;
+							sensUnit.textContent = `${yy.data.unit}; `;
 							let sensModel = document.createElement("span");
 							sensModel.setAttribute("id", "dash_sensModel");
-							sensModel.textContent = `${yy.data.model})`;
+							sensModel.textContent = `${yy.data.model}); `;
 
 							li2.appendChild(sensName);
 							li2.appendChild(sensDescrp);
-							li2.appendChild(sensUnit);
-							li2.appendChild(sensModel);
 
 							const timestampNow = Date.now();
 							const timestamp7h = timestampNow - (7*60*60*1000);
@@ -87,8 +92,19 @@ $.getJSON(urlListInst, function(x) {
 								}
 								let lastInfo = document.createElement("span");
 								lastInfo.setAttribute("id", "dash_lastInfo");
-								lastInfo.textContent = `: ${lastValue}; ${timestamp}`;
+								lastInfo.textContent = `${lastValue}`;
+								let lastinfoTimestamp = document.createElement("span");
+								lastinfoTimestamp.setAttribute("id", "dash_lastInfo");
+								lastinfoTimestamp.textContent = `${timestamp}`;
+
 								li2.appendChild(lastInfo);
+								li2.appendChild(sensUnit);
+								li2.appendChild(sensModel);
+								li2.appendChild(lastinfoTimestamp);
+
+								if ((k + 1) == y.metadata.link.sensors.length) {
+									workOnProgress.textContent = 'Dashboard';
+								}
 							});
 
 							ul2.appendChild(li2);
