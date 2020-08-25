@@ -5,6 +5,8 @@ import $ from "jquery";
 import box from "plotly.js/lib/box";
 import Plotly from "plotly.js/lib/index-basic";
 
+const waitMsg = document.getElementById('networkWait');
+
 // Register boxplot
 Plotly.register([
 	box,
@@ -13,10 +15,6 @@ Plotly.register([
 // Formulaire pour afficher les données d"un capteur
 // avec des select boxes : institut puis filtrage
 // sur les gateways puis sur les capteurs.
-// Problème : la fonction de moyenne mobile fait une moyenne
-// sur un nombre de points plutôt que sur une période de temps
-// ce qui posera problème si deux capteurs ont des données à des
-// pas de temps différents.
 
 const urlBase = ""; //"http://localhost:3000"
 
@@ -46,7 +44,6 @@ $("#selectGate").on("change",function(){
 	selectSens.options.length = 0;
 	selectSens.options[selectSens.options.length] = new Option("...", null)
 	const value = $(this).val();
-	// console.log("gatewayId: ", value);
 	const urlListSens = `${urlBase}/sensors?gatewayId=${value}&page_size=100`;
 	$.getJSON(urlListSens, function(x) {
 		for (let i = 0; i < x.data.length; i++) {
@@ -57,16 +54,16 @@ $("#selectGate").on("change",function(){
 $("#selectSens").on("change",function(){
 	const sensorId = $(this).val();
 	const makeGraph = getChartChoice();
+	waitMsg.textContent = ' Please wait, data is being loaded...';
 	askAPIandMakegraph(sensorId, makeGraph)
 });
 $("#selectChart").on("change",function(){
 	const makeGraph = getChartChoice();
-	// console.log(makeGraph);
 	const sensorId = document.getElementById("selectSens").value;
-	// console.log(sensorId);
 	if (sensorId != ""){
 		askAPIandMakegraph(sensorId, makeGraph)
 	}
+	waitMsg.textContent = '';
 });
 
 function askAPIandMakegraph(sensorId, makeGraph){
@@ -79,10 +76,14 @@ function askAPIandMakegraph(sensorId, makeGraph){
 				const nameGateway = len2.data.name;
 				$.getJSON(`${urlBase}/Institutes/${instituteId}`, function(len3) {
 					const nameInst = len3.data.name;
+					waitMsg.textContent = ' Please wait, the chart is being created...';
 					makeGraph(sensorId, nameVar, nameInst, nameGateway)
 				});
 			});
 		});
+		// .done(function(){
+		// 	waitMsg.textContent = '';
+		// })
 	}
 };
 
@@ -108,29 +109,28 @@ function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) 
 	const timestamp30d = timestampNow - (30*24*60*60*1000); // -30 days
 
 	const myURL = `${urlBase}/Sensors/${sensorId}/datas?start=${timestamp30d}&end=${timestampNow}`;
-	// console.log(myURL);
 	const myX = [];
 	const myY = [];
 
 	Plotly.d3.json(myURL, function(error, x) {
 		if (x.data.length > 1){
 			// Mo. Av. modified from: https://stackoverflow.com/questions/60211628/moving-average-of-time-series-objects-in-array
-			const sortDates = (xxx) => [].slice.call(xxx).sort((a, b) => new Date(a.createdAt) - new Date (b.createdAt));
-			const getAverage = (data) => [].slice.call(data).reduce((acc, val) => acc + val.value, 0) / data.length;
-			const computeMovingAverage = (data, period) => {
-				const movingAverages = [];
-				const sortedData = sortDates(data);
-				// if the period is greater than the length of the dataset
-				// then return the average of the whole dataset
-				if (period > sortedData.length) {
-					return getAverage(data);
-				}
-				for (let x = 0; x + period - 1 < sortedData.length; x += 1) {
-					movingAverages.push(getAverage(sortedData.slice(x, x + period)))
-				}
-				return movingAverages;
-			}
-			const oneDayMovingAverage = computeMovingAverage(x.data, 60*24);
+			// const sortDates = (xxx) => [].slice.call(xxx).sort((a, b) => new Date(a.createdAt) - new Date (b.createdAt));
+			// const getAverage = (data) => [].slice.call(data).reduce((acc, val) => acc + val.value, 0) / data.length;
+			// const computeMovingAverage = (data, period) => {
+			// 	const movingAverages = [];
+			// 	const sortedData = sortDates(data);
+			// 	// if the period is greater than the length of the dataset
+			// 	// then return the average of the whole dataset
+			// 	if (period > sortedData.length) {
+			// 		return getAverage(data);
+			// 	}
+			// 	for (let x = 0; x + period - 1 < sortedData.length; x += 1) {
+			// 		movingAverages.push(getAverage(sortedData.slice(x, x + period)))
+			// 	}
+			// 	return movingAverages;
+			// }
+			// const oneDayMovingAverage = computeMovingAverage(x.data, 60*24);
 			// ici 60*24 est une approximation car il y a un peu moins de
 			// une mesure par minute, et il peut y avoir des trous dans la
 			// série temporelle...
@@ -143,11 +143,11 @@ function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) 
 				x: myX,
 				y: myY,
 				name: "raw" }
-			const myMATrace = { // trace with moving average
-				line: {color: "#cc291b"},
-				x: myX,
-				y: oneDayMovingAverage.reverse(),
-				name: "1d mov. av." }
+			// const myMATrace = { // trace with moving average
+			// 	line: {color: "#cc291b"},
+			// 	x: myX,
+			// 	y: oneDayMovingAverage.reverse(),
+			// 	name: "1d mov. av." }
 			const myLayout = {
 				autosize: true,
 				margin: {
@@ -229,9 +229,15 @@ function makeSimpleLineSensorWithMA(sensorId=1, nameVar, nameInst, nameGateway) 
 					}
 				}]
 			}
-			Plotly.newPlot(document.getElementById("myChart"), [myTrace, myMATrace], myLayout, config);
+			// Plotly.newPlot(document.getElementById("myChart"), [myTrace], myLayout, config); // myMATrace
+			let myPlot = document.getElementById("myChart");
+			Plotly.newPlot(myPlot, [myTrace], myLayout, config); // myMATrace
+			myPlot.on('plotly_afterplot', function(){
+				waitMsg.textContent = '';
+			});
 		} else {
 			console.log("no data");
+			waitMsg.textContent = 'No data';
 		};
 	});
 };
@@ -351,54 +357,7 @@ function makeSimpleBoxplotSensor(sensorId=1, nameVar, nameInst, nameGateway) {
 			Plotly.newPlot(document.getElementById("myChart"), myTrace, layout, config);
 		} else {
 			console.log("no data");
+			waitMsg.textContent = 'No data';
 		};
 	});
 };
-
-
-
-// A basculer sur un fichier à part colors.js
-//
-// // FUNCTIONS TO GET X COLORS FROM X TO X : GRADIENT
-// function hex (c) {
-//	 const s = "0123456789abcdef";
-//	 let i = parseInt (c);
-//	 if (i == 0 || isNaN (c))
-//		 return "00";
-//	 i = Math.round (Math.min (Math.max (0, i), 255));
-//	 return s.charAt ((i - i % 16) / 16) + s.charAt (i % 16);
-// }
-// // Convert an RGB triplet to a hex string
-// function convertToHex (rgb) {
-//	 return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
-// }
-// // Remove "#" in color hex string
-// function trim (s) { return (s.charAt(0) == "#") ? s.substring(1, 7) : s }
-// // Convert a hex string to an RGB triplet
-// function convertToRGB (hex) {
-//	 const color = [];
-//	 color[0] = parseInt ((trim(hex)).substring (0, 2), 16);
-//	 color[1] = parseInt ((trim(hex)).substring (2, 4), 16);
-//	 color[2] = parseInt ((trim(hex)).substring (4, 6), 16);
-//	 return color;
-// }
-// function generateColor(colorStart,colorEnd,colorCount){
-//	 // The beginning of your gradient
-//	 const start = convertToRGB (colorStart);
-//	 // The end of your gradient
-//	 const end = convertToRGB (colorEnd);
-//	 // The number of colors to compute
-//	 const len = colorCount;
-//	 // Alpha blending amount
-//	 let alpha = 0.0;
-//	 const saida = [];
-//	 for (let i = 0; i < len; i++) {
-//		 const c = [];
-//		 alpha += (1.0/len);
-//		 c[0] = start[0] * alpha + (1 - alpha) * end[0];
-//		 c[1] = start[1] * alpha + (1 - alpha) * end[1];
-//		 c[2] = start[2] * alpha + (1 - alpha) * end[2];
-//		 saida.push(convertToHex (c));
-//	 }
-//	 return saida;
-// }
