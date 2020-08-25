@@ -2,6 +2,12 @@
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "../../node_modules/aos/dist/aos.css";
 
+/* NETWORK ------------------------------------------------------------------*/
+#networkWait {
+	font-weight: bold;
+	color: red;
+}
+
 /* DASHBOARD -----------------------------------------------------------------*/
 #dash_instituteName {
 	font-weight: bold;

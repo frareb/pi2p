@@ -36,6 +36,9 @@ const options = {
 };
 const network = new Network(container, data, options);
 
+const waitMsg = document.getElementById('networkWait');
+waitMsg.textContent = ' Please wait, data is being loaded...';
+
 const urlBase = "";
 const urlListInst = `${urlBase}/institutes?page_size=1000`;
 $.getJSON(urlListInst, function(x) {
@@ -94,7 +97,13 @@ $.getJSON(urlListInst, function(x) {
 					});
 					data.nodes.update(nodesArrayUpdate);
 					data.edges.update(edgesArrayUpdate);
-				});
+				// });
+				}).done(function(){
+					waitMsg.textContent = '';
+				})
+				// if ((i + 1) == z.data.length) {
+				// 	waitMsg.textContent = '';
+				// }
 			};
 		});
 	});
