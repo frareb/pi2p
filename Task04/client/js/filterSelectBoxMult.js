@@ -1,6 +1,7 @@
 "use strict";
 
 const urlBase = "";
+const waitMsg = document.getElementById('networkWait');
 
 import { getRandomColor } from "./colors.js";
 import $ from "jquery";
@@ -55,6 +56,7 @@ $("#selectGate").on("change",function(){
 	});
 });
 $("#selectUnit").on("change",function(){
+	waitMsg.textContent = ' Please wait, data is being loaded...';
 	const varId = $(this).val();
 	const varName = listSensNameFilter[varId];
 	// console.log(urlListSens);
@@ -79,12 +81,8 @@ $("#selectUnit").on("change",function(){
 });
 
 
-
-
-
-
-
 function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
+	waitMsg.textContent = ' Please wait, the chart is being created...';
 	const timestampNow = Date.now();
 	const timestamp30d = timestampNow - (30*24*60*60*1000); // -30 days
 
@@ -179,23 +177,31 @@ function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 					}
 				}]
 			}
+			let myPlot = document.getElementById("myChart");
 			if (add == false){
 				const myTrace = { // trace with raw data
 					line: {color: "#17BECF"},
 					x: myX,
 					y: myY,
 					name: lab }
-				Plotly.newPlot(document.getElementById("myChart"), [myTrace], myLayout, config);
+				Plotly.newPlot(myPlot, [myTrace], myLayout, config);
+				myPlot.on('plotly_afterplot', function(){
+					waitMsg.textContent = '';
+				});
 			} else {
 				const myTrace = { // trace with raw data
 					line: {color: getRandomColor()},
 					x: myX,
 					y: myY,
 					name: lab }
-				Plotly.addTraces(document.getElementById("myChart"), [myTrace]);
+				Plotly.addTraces(myPlot, [myTrace]);
+				myPlot.on('plotly_afterplot', function(){
+					waitMsg.textContent = '';
+				});
 			}
 		} else {
 			console.log("no data");
+			waitMsg.textContent = 'No data';
 		};
 	});
 };
