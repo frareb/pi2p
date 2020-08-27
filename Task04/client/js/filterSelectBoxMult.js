@@ -66,19 +66,167 @@ $("#selectUnit").on("change",function(){
 		for (let i = 0; i < x.data.length; i++) {
 			if (x.data[i].name == varName){
 				sensorIds.push(x.data[i].id);
-				sensorLab.push(`${x.data[i].name} ${x.data[i].description}`);
+				// sensorLab.push(`${x.data[i].name} ${x.data[i].description}`);
+				sensorLab.push(`${x.data[i].description}`);
 			};
 		};
 		// console.log("sensorIds", sensorIds);
+
+		const timestampNow = Date.now();//i
+		const timestamp30d = timestampNow - (30*24*60*60*1000);//i
+		const allUrls = [];//i
 		for (let i = 0; i < sensorIds.length; i++) {
-			if (i == 0){
-				makeSimpleLineSensor(sensorIds[i], varName, false, sensorLab[i])
-			} else {
-				makeSimpleLineSensor(sensorIds[i], varName, true, sensorLab[i])
-			}
+			allUrls.push($.ajax(`${urlBase}/Sensors/${sensorIds[i]}/datas?start=${timestamp30d}&end=${timestampNow}`)); //i
+		// 	if (i == 0){
+		// 		makeSimpleLineSensor(sensorIds[i], varName, false, sensorLab[i])
+		// 	} else {
+		// 		setTimeout(function () {
+		// 			makeSimpleLineSensor(sensorIds[i], varName, true, sensorLab[i])
+		// 		}, 800);
+		// 	}
 		};
+		// console.log("allUrls", allUrls);
+		const allTraces = [];//i
+		$.when.apply(0, allUrls).then(function() {//i
+			for (let argNum = 0; argNum < arguments.length; argNum++) {//i
+				// console.log("arguments[argNum]", arguments[argNum]);
+				// console.log("arguments[argNum].length", arguments[argNum].length);
+				let myCurrentX = [];
+				let myCurrentY = [];
+				if(arguments[argNum][1] == "success"){
+					for (let i = 0; i < arguments[argNum][0].data.length; i++) {//i
+						myCurrentX.push(new Date(arguments[argNum][0].data[i].createdAt)); //i
+						myCurrentY.push(arguments[argNum][0].data[i].value);//i
+					};
+				} else {
+					if (arguments[argNum] !== "success" & arguments[argNum].hasOwnProperty('data')) {
+						for (let i = 0; i < arguments[argNum].data.length; i++) {//i
+							myCurrentX.push(new Date(arguments[argNum].data[i].createdAt)); //i
+							myCurrentY.push(arguments[argNum].data[i].value);//i
+						};
+					}
+				}
+				allTraces.push({ // trace with raw data
+					line: {color: getRandomColor()},
+					x: myCurrentX,
+					y: myCurrentY,
+					name: sensorLab[argNum] })
+			};
+		}).done(function(){
+			// console.log("allTraces[0].x.length", allTraces[0].x.length);
+			if(allTraces.length > 0){
+				if(allTraces[0].x.length > 4){
+					makeSimpleLineSensorFromTrace(allTraces, varName);
+				} else {
+					waitMsg.textContent = 'No or not enough data';
+				}
+			}else {
+				waitMsg.textContent = 'No data';
+			}
+		});
+		// console.log(allUrls);//i
+		// makeSimpleLineSensorFromTrace(allTraces, varName);
 	});
 });
+
+function makeSimpleLineSensorFromTrace(allTraces, nameVar, lab="") {
+	waitMsg.textContent = ' Please wait, the chart is being created...';
+	// console.log("allTraces", allTraces);//i
+	// console.log(allTraces.length);
+	// if (allTraces[0].y.length > 0){
+		const tNow = new Date();//i
+		let t30d = new Date();
+		t30d = new Date(t30d.setMonth(t30d.getMonth() - 1));//i
+		const myLayout = {
+			autosize: true,
+			margin: {
+				l: 30,
+				r: 20,
+				b: 0,
+				t: 80,
+				pad: 4
+			},
+			showlegend: true,
+			legend: {
+				x: 0,
+				xanchor: "left",
+				y: 1
+			},
+			title: `${nameVar}`,
+			xaxis: {
+				automargin: true,
+				autorange: true,
+				rangeselector: { buttons: [
+					{
+						count: 1,
+						label: "24h",
+						step: "day",
+						stepmode: "backward"
+					},
+					{
+						count: 2,
+						label: "2d",
+						step: "day",
+						stepmode: "backward"
+					},
+					{
+						count: 7,
+						label: "1w",
+						step: "day",
+						stepmode: "backward"
+					},
+					{
+						step: "all",
+						label: "30d"
+					}
+				]},
+				rangeslider: {range: [
+					`${t30d.getFullYear()}-${t30d.getMonth() + 1}-${t30d.getDate()}`,
+					`${tNow.getFullYear()}-${tNow.getMonth() + 1}-${tNow.getDate()}`
+				]}, //[allTraces[0].x[0], allTraces[0].x[x.length - 1]]},
+				type: "date"
+			},
+			yaxis: {
+				automargin: true,
+				hoverformat: ".1f"
+			}
+		}
+		const config = {
+			responsive: true,
+			editable: true,
+			// modeBarButtonsToAdd: [{
+			// 	name: "Download data",
+			// 	icon: Plotly.Icons.disk,
+			// 	click: function(gd) {
+			// 		const json = x.data;
+			// 		const fields = Object.keys(json[0])
+			// 		const replacer = function(key, value) { return value === null ? "" : value }
+			// 		let csv = json.map(function(row){
+			// 			return fields.map(function(fieldName){
+			// 				return JSON.stringify(row[fieldName], replacer)
+			// 			}).join(",")
+			// 		})
+			// 		csv.unshift(fields.join(",")) // add header column
+			// 		csv = csv.join("\r\n");
+			// 		const text = csv;
+			//
+			// 		const blob = new Blob([text], {type: "text/plain"});
+			// 		let a = document.createElement("a");
+			// 		const object_URL = URL.createObjectURL(blob);
+			// 		a.href = object_URL;
+			// 		a.download = "data.csv";
+			// 		document.body.appendChild(a);
+			// 		a.click();
+			// 		URL.revokeObjectURL(object_URL);
+			// 	}
+			// }]
+		}
+		let myPlot = document.getElementById("myChart");
+		Plotly.newPlot(myPlot, allTraces, myLayout, config);
+		myPlot.on('plotly_afterplot', function(){
+			waitMsg.textContent = '';
+		});
+};
 
 
 function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
@@ -194,7 +342,8 @@ function makeSimpleLineSensor(sensorId=1, nameVar, add=false, lab="") {
 					x: myX,
 					y: myY,
 					name: lab }
-				Plotly.addTraces(myPlot, [myTrace]);
+				Plotly.addTraces(myPlot, [myTrace]); // supprimer le setTimeout et
+																						 // attendre le premier plot ?
 				myPlot.on('plotly_afterplot', function(){
 					waitMsg.textContent = '';
 				});
