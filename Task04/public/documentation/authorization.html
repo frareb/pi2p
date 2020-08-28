@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Gestion des permissions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/github.min.css">
+  </head>
+  <body>
+    <h1>Gestion des permissions</h1>
+    <h2>Principe général</h2>
+    <p>Plutôt qu'une gestion d'accès par utilisateur, le contrôle d'accès mis en place propose une séparation en groupes, avec un affinage possible au sein des groupes pour l'accès à certaines URL. Chaque groupe dispose d'une ou plusieurs clefs d'API, lui donnant accès aux ressources de son groupe, et éventuellement à des ressources spécifiques.</p>
+    <p>Ces clefs d'API sont générées aléatoirement et cryptographiquement sûres ; pour être prise en compte, la clef doit être ajoutée dans l'entête <code>Authorization</code> de la requête, sous forme de <code>Bearer</code>. Une clef invalide ou une absence de clef fera automatiquement basculer l'utilisateur dans le groupe par défaut.</p>
+    <h2>Modèles de données</h2>
+    <p>Le modèle <code>Groups</code> permet d'identifier un groupe par son nom (<code>name</code>), qui est l'identifiant unique utilisé dans le fichier de configuration pour gérer les permissions, et par une description (<code>description</code>), qui n'est pas utilisée par le système d'authentification, et sert simplement renseigner la raison d'être du groupe pour l'administrateur de l'API.</p>
+    <p>Le modèle <code>ApiKeys</code> décrit une clef d'accès (<code>key</code>) ; associée logiquement à un groupe (<code>groupId</code>), ces clefs possèdent également une clef étrangère (<code>gatewayId</code>), permettant la gestion fine des permissions pour les <em>gateways</em>. Chacune d'entre elle n'étant alors qu'en mesure de poster des données pour ses propres capteurs. De même que pour les groupes, chaque clef peut contenir une description, non utilisée par le logiciel, permettant de l'identifier (<code>description</code>).</p>
+    <h2>Organisation du code</h2>
+    <p>Le code de la gestion d'accès se décompose globalement en trois fichiers :</p>
+    <ul>
+      <li>un plugin fonctionnant comme <em>middleware</em> express, et gérant les accès de façon générique ; il est très modulaire afin de pouvoir changer les méthodes d'authentification simplement (<code>authorization/plugin.js</code>) ;</li>
+      <li>un <em>authenticator</em> (ou authentificateur), module pour le plugin sus-mentionné, qui renvoie les permissions associées à une clef d'accès via des requêtes en base de données (<code>authorization/authenticator.js</code>) ;</li>
+      <li>un fichier de configuration de groupes, qui devrait idéalement disparaître à terme, et qui spécifie quel groupe a accès à quelles ressources (<code>/config/auth.json</code>).</li>
+    </ul>
+    <h2>Configuration générale du plugin</h2>
+    <p>Le plugin de gestion des permissions (<code>authorization/plugin.js</code>) contrôle toutes les requêtes passant par <em>express</em>. Il joue donc un rôle central dans l'application, et doit être configuré correctement. L'objet de configuration va comme suit :</p>
+    <ul>
+      <li><code>groups</code> : description des permissions des groupes ;</li>
+      <li><code>default</code> : groupe utilisé en l'absence de clef d'accès, ou lorsqu'elle est invalide ;</li>
+      <li><code>authenticator</code> : fonction appelée pour récupérer les permissions associées à une clef.</li>
+    </ul>
+    <h3>Description des permissions des groupes</h3>
+    <p>L'objet de description des permissions (<code>/config/auth.json</code>) doit contenir, <em>a minima</em>, les permissions associées au groupe par défaut ; il peut éventuellement gérer d'autres groupes si nécessaire. Les clefs correspondent au nom du groupe, et les valeurs sont un autre objet clef-valeur, associant à l'URL d'une requête les méthodes d'accès autorisés.</p>
+    <pre><code class="hljs language-json">{
+    <span class="hljs-attr">"admin"</span>: {
+        <span class="hljs-attr">"/(.*)"</span>: [<span class="hljs-string">"GET"</span>, <span class="hljs-string">"POST"</span>, <span class="hljs-string">"DELETE"</span>, <span class="hljs-string">"PATCH"</span>]
+    },
+    <span class="hljs-attr">"guest"</span>: {
+        <span class="hljs-attr">"/institutes(.*)"</span>: [<span class="hljs-string">"GET"</span>]
+    }
+}
+</code></pre>
+    <p>L'objet ci-dessus confère au groupe <code>admin</code> le droit d'exécuter les méthodes <em>GET</em>, <em>POST</em>, <em>PATCH</em> et <em>DELETE</em> sur tous les points d'accès, et au groupe <code>guest</code> le droit d'exécuter une méthode <em>GET</em> sur toutes les URL commençant par <code>/institutes</code>, ainsi, <code>/institutes/1</code> est valide, mais pas <code>/sensors</code> par exemple. Pour plus d'informations sur la manière dont les URL sont traitées, voir la documentation de <a href="https://www.npmjs.com/package/path-to-regexp">path-to-regexp</a>.</p>
+    <h3>Description de l'authentificateur</h3>
+    <p>Un authentificateur est une fonction, à laquelle on passe une clef d'accès, et qui renvoie la liste des permissions associées ; ici (<code>authorization/authenticator.js</code>), il fonctionne par requête en base de données, mais toute autre méthode peut être mise en place facilement. L'objet retourné contient les clefs suivantes :</p>
+    <ul>
+      <li><code>group</code> : le groupe dans lequel se trouve la clef d'accès ;</li>
+      <li><code>props</code> (optionnel) : les paramètres permettant la gestion d'accès différenciée.</li>
+    </ul>
+    <h3>Gestion d'accès différenciés dans un groupe</h3>
+    <p>Les URL peuvent contenir des paramètres, et leur accès est alors limité aux paramètres autorisés par l'authentificateur. Par exemple, pour limiter l'accès à certains capteurs, on pourra donner des accès aux <em>gateways</em> comme suit, dans le fichier de description des permissions :</p>
+    <pre><code class="hljs language-json">{
+    <span class="hljs-attr">"gateway"</span>: {
+        <span class="hljs-attr">"/sensors/:sensorId/datas"</span>: [<span class="hljs-string">"POST"</span>]
+    }
+}
+</code></pre>
+    <p>Ici, si l'authentificateur retourne simplement le groupe <code>gateway</code>, aucun accès ne sera conféré ; il faut qu'il retourne également <code>{ props: { sensorId: [1, 5] } }</code>, par exemple, qui permettra au possesseur de la clef en question d'accéder à <code>/sensors/1/datas</code> et <code>/sensors/5/datas</code> mais pas à <code>/sensors/3/datas</code>.</p>
+    <h2>Groupes utilisés</h2>
+    <p>Dans l'API REST ici réalisée, on distingue trois groupes distincts :</p>
+    <ul>
+      <li><code>guest</code>, qui peut uniquement accèder aux informations non-sensibles (<em>gateways</em>, instituts, capteurs, données, etc) ;</li>
+      <li><code>gateway</code>, dont le seul droit est d'ajouter des données aux capteurs que possède la <em>gateway</em> (filtrés via des accès différenciés) ;</li>
+      <li><code>admin</code>, qui dispose de tous les droits sur tous les points d'accès.</li>
+    </ul>
+  </body>
+</html>
