@@ -54,6 +54,7 @@ $("#selectVar").on("change",function(){
 	for (let i = 0; i < mySensorIndex.length; i++) {
 		mySensorIds.push(sensorIds[mySensorIndex[i]]);
 	}
+	// console.log("mySensorIds", mySensorIds);
 	const mySensorIdsCorrespName = [];
 	for(let k = 0; k < mySensorIds.length; k++){
 		let myLab = [];
@@ -72,8 +73,6 @@ $("#selectVar").on("change",function(){
 			});
 		}
 	};
-	// console.log(mySensorIds.length);
-	// console.log("mySensorIds", mySensorIds);
 	const allUrls = [];//i
 	for (let ii = 0; ii < mySensorIds.length; ii++) {
 		allUrls.push($.ajax(`${urlBase}/Sensors/${mySensorIds[ii]}/datas?start=${timestamp30d}&end=${timestampNow}`)); //i
@@ -93,7 +92,7 @@ $("#selectVar").on("change",function(){
 					line: {color: getRandomColor()},
 					x: myCurrentX,
 					y: myCurrentY,
-					name: mySensorIdsCorrespName[argNum]//getName(() => console.log("test"))
+					name: mySensorIds[argNum] // mySensorIdsCorrespName[argNum] // TODO fix bug in name
 				});
 			} else {
 				if (arguments[argNum] !== "success" & arguments[argNum].hasOwnProperty('data')) {
@@ -105,7 +104,7 @@ $("#selectVar").on("change",function(){
 						line: {color: getRandomColor()},
 						x: myCurrentX,
 						y: myCurrentY,
-						name: mySensorIdsCorrespName[argNum]// mySensorIds[argNum]
+						name: mySensorIds[argNum] // mySensorIdsCorrespName[argNum] // TODO fix bug in name
 					});
 					// pushTraces();
 				}
@@ -121,6 +120,7 @@ $("#selectVar").on("change",function(){
 		} else {
 			waitMsg.textContent = 'No data';
 		}
+		// console.log(mySensorIdsCorrespName);
 	});
 });
 
