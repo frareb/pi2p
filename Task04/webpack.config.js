@@ -10,6 +10,7 @@ const entry = {
 	visNetworkClimate: "./client/js/visNetworkClimate.js",
 	homePageAnimation: "./client/js/homePageAnimation.js",
 	dashboardClimate: "./client/js/dashboardClimate.js",
+	dashboardClimateFIDAIICA: "./client/js/dashboardClimateFIDAIICA.js",
 };
 
 const optimization = {

@@ -26,4 +26,10 @@ router.get("/sites", function(req, res) {
 	res.render("graphs/sites", { title: "PI2P" });
 });
 
+// dashboard of FIDA-IICA and gateways
+router.get("/dashboardfi", function(req, res) {
+	res.render("graphs/dashboardfi", { title: "PI2P" });
+});
+
+
 module.exports = router;
