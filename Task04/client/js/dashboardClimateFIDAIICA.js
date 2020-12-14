@@ -92,6 +92,10 @@ let targets01 = [];
 let gauges01 = [];
 let targets02 = [];
 let gauges02 = [];
+let gateNames = [];
+for (let i = 1; i < 11; ++i) {
+	document.getElementById(`title${i}`).textContent = "no data";
+};
 for (let i = 1; i < 11; ++i) {
 	targets01[(i-1)] = document.getElementById(`gaugeTemp${i}`);
 	gauges01[(i-1)] = new Gauge(targets01[(i-1)]).setOptions(optsTEMP);
@@ -153,6 +157,7 @@ $.getJSON(urlListInst, function(x) {
 			let gateName = document.createElement("span");
 			gateName.setAttribute("id", "dash_gateName");
 			gateName.textContent = `${y.data.name} `;
+			gateNames[j] = y.data.name;
 			let gateId = document.createElement("span");
 			gateId.setAttribute("id", "dash_gateId");
 			gateId.textContent = `(id: ${y.data.id}; `;
@@ -217,6 +222,7 @@ $.getJSON(urlListInst, function(x) {
 								gauges02[j].setTextField(document.getElementById(`gaugeRhValue${j+1}`));
 							};
 						};
+						document.getElementById(`title${j+1}`).textContent = gateNames[j];
 
 						if ((k + 1) == y.metadata.link.sensors.length) {
 							workOnProgress.textContent = 'Dashboard';
