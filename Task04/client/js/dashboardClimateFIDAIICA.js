@@ -2,6 +2,120 @@
 
 import $ from "jquery";
 
+var optsTEMP = {
+	angle: 0, // The span of the gauge arc
+	lineWidth: 0.5, // The line thickness
+	radiusScale: 1, // Relative radius
+	pointer: {
+		length: 0.6, // // Relative to gauge radius
+		strokeWidth: 0.08, // The thickness
+		color: '#000000' // Fill color
+	},
+	limitMax: false,     // If false, max value increases automatically if value > maxValue
+	limitMin: false,     // If true, the min value of the gauge will be fixed
+	colorStart: '#6FADCF',   // Colors
+	colorStop: '#8FC0DA',    // just experiment with them
+	strokeColor: '#E0E0E0',  // to see which ones work best for you
+	generateGradient: true,
+	highDpiSupport: true,     // High resolution support
+	staticLabels: {
+		font: "10px sans-serif",  // Specifies font
+		labels: [0, 5, 10, 25, 30, 40],  // Print labels at these values
+		color: "#000000",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+	},
+	renderTicks: {
+		divisions: 4,
+		divWidth: 1.1,
+		divLength: 0.7,
+		divColor: "#333333",
+		subDivisions: 3,
+		subLength: 0.5,
+		subWidth: 0.6,
+		subColor: "#666666"
+	},
+	staticZones: [
+		{strokeStyle: "#F03E3E", min: 0, max: 5}, // Red from 100 to 130
+		{strokeStyle: "#FFDD00", min: 5, max: 10}, // Yellow
+		{strokeStyle: "#30B32D", min: 10, max: 25}, // Green
+		{strokeStyle: "#FFDD00", min: 25, max: 30}, // Yellow
+		{strokeStyle: "#F03E3E", min: 30, max: 40}  // Red
+	],
+};
+var optsRH = {
+	angle: 0, // The span of the gauge arc
+	lineWidth: 0.5, // The line thickness
+	radiusScale: 1, // Relative radius
+	pointer: {
+		length: 0.6, // // Relative to gauge radius
+		strokeWidth: 0.08, // The thickness
+		color: '#000000' // Fill color
+	},
+	limitMax: false,     // If false, max value increases automatically if value > maxValue
+	limitMin: false,     // If true, the min value of the gauge will be fixed
+	colorStart: '#6FADCF',   // Colors
+	colorStop: '#8FC0DA',    // just experiment with them
+	strokeColor: '#E0E0E0',  // to see which ones work best for you
+	generateGradient: true,
+	highDpiSupport: true,     // High resolution support
+	staticLabels: {
+		font: "10px sans-serif",  // Specifies font
+		labels: [0, 25, 50, 75, 100],  // Print labels at these values
+		color: "#000000",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+	},
+	renderTicks: {
+		divisions: 4,
+		divWidth: 1.1,
+		divLength: 0.7,
+		divColor: "#333333",
+		subDivisions: 3,
+		subLength: 0.5,
+		subWidth: 0.6,
+		subColor: "#666666"
+	},
+};
+let z = 1;
+// const target01 = document.getElementById(`gaugeTemp${z}`); // your canvas element
+// const gauge01 = new Gauge(target01).setOptions(optsTEMP); // create sexy gauge!
+// gauge01.maxValue = 40; // set max gauge value
+// gauge01.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+// gauge01.animationSpeed = 32; // set animation speed (32 is default value)
+// const target02 = document.getElementById(`gaugeRh${z}`); // your canvas element
+// const gauge02 = new Gauge(target02).setOptions(optsRH); // create sexy gauge!
+// gauge02.maxValue = 100; // set max gauge value
+// gauge02.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+// gauge02.animationSpeed = 32; // set animation speed (32 is default value)
+
+
+let targets01 = [];
+let gauges01 = [];
+let targets02 = [];
+let gauges02 = [];
+for (let i = 1; i < 11; ++i) {
+	targets01[(i-1)] = document.getElementById(`gaugeTemp${i}`);
+	gauges01[(i-1)] = new Gauge(targets01[(i-1)]).setOptions(optsTEMP);
+	gauges01[(i-1)].maxValue = 40;
+	gauges01[(i-1)].setMinValue(0);
+	gauges01[(i-1)].animationSpeed = 32;
+	gauges01[(i-1)].set(0);
+
+	targets02[(i-1)] = document.getElementById(`gaugeRh${i}`);
+	gauges02[(i-1)] = new Gauge(targets02[(i-1)]).setOptions(optsRH);
+	gauges02[(i-1)].maxValue = 100;
+	gauges02[(i-1)].setMinValue(0);
+	gauges02[(i-1)].animationSpeed = 32;
+	gauges02[(i-1)].set(0);
+}
+
+
+// gauge01.set(20); // set actual value
+// gauge01.setTextField(document.getElementById('gaugeTempValue1'));
+// gauge02.set(50); // set actual value
+// gauge02.setTextField(document.getElementById('gaugeRhValue1'));
+
+
+
 const div = document.getElementById('dashClimateFIDAIICA');
 
 const headingTitle = document.getElementById('dashTitle');
@@ -93,6 +207,16 @@ $.getJSON(urlListInst, function(x) {
 						li2.appendChild(sensUnit);
 						//li2.appendChild(sensModel);
 						li2.appendChild(lastinfoTimestamp);
+
+						if(yy.data.name == "Temperature"){
+							gauges01[j].set(lastValue); // set actual value
+							gauges01[j].setTextField(document.getElementById(`gaugeTempValue${j+1}`));
+						}else{
+							if(yy.data.name == "RH"){
+								gauges02[j].set(lastValue); // set actual value
+								gauges02[j].setTextField(document.getElementById(`gaugeRhValue${j+1}`));
+							};
+						};
 
 						if ((k + 1) == y.metadata.link.sensors.length) {
 							workOnProgress.textContent = 'Dashboard';
