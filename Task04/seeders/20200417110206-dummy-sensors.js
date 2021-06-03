@@ -67,6 +67,15 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
+				gatewayId: 1,
+				name: "battery voltage",
+				unit: " V",
+				model: "",
+				description: " test",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
 				gatewayId: 3,
 				name: "Temperature",
 				unit: " °C",
