@@ -71,7 +71,7 @@ function formatBiblio(divId, biblioURL) {
 
 				let myAbstractBtn = document.createElement("BUTTON");
 				myAbstractBtn.setAttribute("id", "bib_btn");
-				myAbstractBtn.innerHTML = ">";
+				myAbstractBtn.innerHTML = "ABSTRACT";
 				myAbstractBtn.addEventListener("click", function() {
 					if (myAbstract.style.display == "none") {
 						myAbstract.style.display = "block";
@@ -108,3 +108,8 @@ const biblioURL = "https://api.zotero.org/groups/2520377/items?key=axXEhVlBUnltr
 const divId = "publiGroup";
 
 formatBiblio(divId, biblioURL);
+
+const biblioURL2 = "https://api.zotero.org/groups/4344761/items?key=axXEhVlBUnltrZujRGzSf9Gf";
+const divId2 = "publiProject";
+
+formatBiblio(divId2, biblioURL2);
