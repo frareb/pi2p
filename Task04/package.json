@@ -52,7 +52,7 @@
     "remark-parse": "^8.0.2",
     "remark-rehype": "^7.0.0",
     "sequelize-cli": "^5.5.1",
-    "sqlite3": "^4.2.0",
+    "sqlite3": "^5.0.0",
     "timsort": "^0.3.0",
     "unified": "^9.0.0",
     "unist-util-visit": "^2.0.2",
