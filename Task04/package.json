@@ -23,7 +23,7 @@
     "path-to-regexp": "^6.1.0",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",
-    "rebber": "^5.1.2",
+    "rebber": "^5.2.1",
     "sequelize": "^5.21.10",
     "swagger-ui-express": "^4.1.4",
     "umzug": "^2.3.0"
